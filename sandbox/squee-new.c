@@ -4,8 +4,6 @@
 #include "squee-structures.h"
 
 int main(int argc, char* argv[]) {
-
-
     if (1 == argc) {
         printf("usage: \n");
         printf("\n");
@@ -15,11 +13,11 @@ int main(int argc, char* argv[]) {
     }
 
     int i = 0;
-    for(i = 0; i == argc; i++) {
+    for(i = 0; i < argc - 1; i++) {
         printf("%i %s \n", i, argv[i]);
     }
-    printf("\n file %i %s \n", i, argv[i]);
-    // open(argv[i], O_RDWR | O_CREAT);
+    printf("\n file argc: %i i: %i %s \n", argc, i, argv[argc-1]);
+    open(argv[argc - 1], O_RDWR | O_CREAT);
 
     return(0);
 }

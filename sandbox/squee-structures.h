@@ -1,9 +1,16 @@
-#ifdef SQUEE_STRUCTURES_H
+#ifndef SQUEE_STRUCTURES_H
 #define SQUEE_STRUCTURES_H
 
-typedef struct header 
-    char *field;
-    header *next;
-} header; 
+typedef enum { INT, STRING } Field_t;
+
+typedef struct Header {
+    char *field_name;
+    Field_t *field_t;
+    struct Header *next;
+} Header;
+
+typedef struct Database {
+    Header *header;
+} Database;
 
 #endif
