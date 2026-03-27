@@ -2,13 +2,12 @@
 
 #include "squee-structures.h"
 
-/*
-Header* squee_make_header() {
-    Header header* = new (Database*)malloc(sizeof(Database));
+Header* squee_new_header() {
+    Header *header = (Header*)malloc(sizeof(Header));
+    return header;
 }
-*/
 
-Database* squee_make_database() {
+Database* squee_new_database() {
     Database *db = (Database*) malloc(sizeof(Database));
     return db;
 }
