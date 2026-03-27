@@ -13,12 +13,13 @@ typedef struct Table {
     Header *header;
 } Table;
 
+// how to have more than one table?
 typedef struct Database {
     Table *table;
 } Database;
 
 Header* squee_new_header();
-Table* squee_new_table();
+Table* squee_new_table(int begin, int end, char* cols[]);
 Database* squee_new_database();
 
 #endif
