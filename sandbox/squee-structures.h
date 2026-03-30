@@ -21,5 +21,7 @@ typedef struct Database {
 Header* squee_new_header();
 Table* squee_new_table(int begin, int end, char* cols[]);
 Database* squee_new_database();
+void squee_print_header(Header*);
+void squee_print_table(Table*);
 
 #endif

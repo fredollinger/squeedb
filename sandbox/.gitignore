@@ -1,3 +1,9 @@
-squee
-squee-new
+# Object files
 *.o
+
+# Database files
+file.db
+
+# Executables
+squee-new-table
+squee-new-database

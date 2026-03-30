@@ -1,6 +1,6 @@
 .PHONY: force
 
-all: squee-new-database
+all: squee-new-database squee-new-table
 
 clean:
 	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures
