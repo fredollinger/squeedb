@@ -4,15 +4,15 @@
 
 #include "squee-structures.h"
 
-Header* squee_new_header(char* cols[], int size) {
+Header* squee_new_header(int begin, int end, char* cols[]) {
     // TODO loop through all of them
 
     Header *header = (Header*)malloc(sizeof(Header) + 1);
     header->next = NULL;
-    for (int i = begin; i <= size; i++) {
+    for (int i = begin; i < end; i++) {
         Header *neu = (Header*)malloc(sizeof(Header) + 1);
         neu->next = NULL;
-        printf("col: %s \n", cols[i]);
+        printf("squee_new_header(): [%s] \n", cols[i]);
         strcpy(neu->field_name, cols[i]);
         header->next = neu;
     }
@@ -20,18 +20,13 @@ Header* squee_new_header(char* cols[], int size) {
 }
 
 Table* squee_new_table(int begin, int end, char* cols[]) {
+    int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
-
-    printf("squee_new_table() begin: %i, end: %i \n", begin, end);
-
-    for (int i = begin; i <= end; i++) {
-        printf("col: %s \n", cols[i]);
-    }
- 
+    tbl->header = squee_new_header(begin, end, cols);
     return tbl;
 }
 
-void squee_print_header(Database *db) {
+void squee_print_header(Header *hdr) {
     printf("squee_print_header() STUB \n");
 }
 

@@ -14,7 +14,14 @@ int main(int argc, char* argv[]) {
         return(0);
     }
     
-    Table *tbl = squee_new_table(0, argc - 2, argv);
+/*
+    int i;
+    for(i = 0; i < argc - 1; i++) {
+        printf("%i %s \n", i, argv[i]);
+    }
+*/
+
+    Table *tbl = squee_new_table(0, argc - 1, argv);
 
     // 1. check to see if the file exists, if it does not then error out 
 
