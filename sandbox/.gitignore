@@ -8,3 +8,6 @@ file.db
 # Executables
 squee-new-table
 squee-new-database
+
+# VSCode
+.vscode

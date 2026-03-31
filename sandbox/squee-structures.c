@@ -4,19 +4,35 @@
 
 #include "squee-structures.h"
 
-Header* squee_new_header(int begin, int end, char* cols[]) {
-    // TODO loop through all of them
+// insert the new item right after the head
+/*
+node* linked_list_insert(int key, node *ptr) {
+    node *neu = malloc(sizeof(node));
+    neu->key = key;
+    neu->next = ptr->next;
+    ptr->next = neu;
+    return neu;
+}
 
-    Header *header = (Header*)malloc(sizeof(Header) + 1);
-    header->next = NULL;
+*/
+
+Header* squee_new_header(int begin, int end, char* cols[]) {
+    Header *head = (Header*)malloc(sizeof(Header));
+    Header *tail = (Header*)malloc(sizeof(Header));
+    head->next = tail;
+    tail->next = NULL;
+    head->field_name = NULL;
+    tail->field_name = NULL;
+
     for (int i = begin; i < end; i++) {
-        Header *neu = (Header*)malloc(sizeof(Header) + 1);
-        neu->next = NULL;
         printf("squee_new_header(): [%s] \n", cols[i]);
+        Header *neu = (Header*)malloc(sizeof(Header));
+        neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
         strcpy(neu->field_name, cols[i]);
-        header->next = neu;
+        neu->next = head->next;
+        head->next = neu;
     }
-    return header;
+    return head;
 }
 
 Table* squee_new_table(int begin, int end, char* cols[]) {
@@ -27,7 +43,7 @@ Table* squee_new_table(int begin, int end, char* cols[]) {
 }
 
 void squee_print_header(Header *hdr) {
-    printf("squee_print_header() STUB \n");
+    // printf("squee_print_header() STUB \n");
 }
 
 Database* squee_new_database() {
@@ -35,8 +51,6 @@ Database* squee_new_database() {
     return db;
 }
 
-/*
 void squee_print_Table(Table *tbl) {
     Table *tbl_p = tbl;
 }
-*/

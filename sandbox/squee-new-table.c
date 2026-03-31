@@ -13,15 +13,14 @@ int main(int argc, char* argv[]) {
         printf("\n");
         return(0);
     }
-    
-/*
-    int i;
-    for(i = 0; i < argc - 1; i++) {
-        printf("%i %s \n", i, argv[i]);
-    }
-*/
 
     Table *tbl = squee_new_table(0, argc - 1, argv);
+    Header *hdr_p = tbl->header;
+
+    while (NULL != hdr_p) {
+        printf("main(): Field Name: %s \n", hdr_p->field_name);
+        hdr_p = hdr_p->next;
+    }
 
     // 1. check to see if the file exists, if it does not then error out 
 
