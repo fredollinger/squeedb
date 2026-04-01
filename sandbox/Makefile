@@ -1,6 +1,6 @@
 .PHONY: force
 
-all: squee-new-database squee-new-table
+all: squee-new-database squee-create-table
 
 clean:
 	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures
@@ -11,13 +11,13 @@ squee-structures.o:
 squee-new-database: force squee-structures.o
 	cc $@.c -g squee-structures.o -o $@
 
-squee-new-table: force squee-structures.o
+squee-create-table: force squee-structures.o
 	cc $@.c -g squee-structures.o -o $@
 
-test: squee-new-database squee-new-table
+test: squee-new-database squee-create-table
 	./squee-new-database file.db
-	./squee-new-table column1 column2 column3 column4 file.db
-	# lldb -- ./squee-new-table column1 column2 column3 column4 file.db
+	./squee-create-table column1 column2 column3 column4 file.db
+	# lldb -- ./squee-create-table column1 column2 column3 column4 file.db
 
 unit/test-squee-structures: squee-structures.o
 	cc -g -I. $@.c squee-structures.o -o $@
