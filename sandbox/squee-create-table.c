@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     if (1 == argc) {
         printf("usage: \n");
         printf("\n");
-        printf("./squee-new-table column1 column2 filename");
+        printf("./squee-new-table table_name column1 column2 filename.db");
         printf("\n");
         return(0);
     }

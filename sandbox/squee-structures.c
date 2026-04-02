@@ -13,7 +13,6 @@ node* linked_list_insert(int key, node *ptr) {
     ptr->next = neu;
     return neu;
 }
-
 */
 
 Header* squee_new_header(int begin, int end, char* cols[]) {
@@ -25,6 +24,7 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
     tail->next = NULL;
     head->field_name = NULL;
     tail->field_name = NULL;
+    Header *curr = head;
 
     for (int i = begin; i < end; i++) {
         printf("squee_new_header(): [%i] [%s] \n", i, cols[i]);
@@ -33,8 +33,9 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
         // TODO Once we get a real parser, we won't just assume that this is INT
         neu->field_t = INT;
         strcpy(neu->field_name, cols[i]);
-        neu->next = head->next;
-        head->next = neu;
+        curr->next = neu;
+        neu->next = curr->next->next;
+        curr = neu;
     }
     return head;
 }
