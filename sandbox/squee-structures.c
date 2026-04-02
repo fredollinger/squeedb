@@ -25,7 +25,7 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
     tail->field_name = NULL;
 
     for (int i = begin; i < end; i++) {
-        printf("squee_new_header(): [%s] \n", cols[i]);
+        printf("squee_new_header(): [%i] [%s] \n", i, cols[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
         strcpy(neu->field_name, cols[i]);
@@ -35,10 +35,15 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
     return head;
 }
 
-Table* squee_new_table(int begin, int end, char* cols[]) {
+Table* squee_new_table(char *name, int begin, int end, char* cols[]) {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
-    tbl->header = squee_new_header(begin, end, cols);
+    size_t name_len = strlen(name);
+    // malloc(name_len + 1);
+    // printf("name len: %i \n", name_len);
+    // tbl->name = (char*)malloc(strlen(cols[1]) + 1);
+    // strlcpy(tbl->name, name, name_len);
+    tbl->header = squee_new_header(begin + 2, end, cols);
     return tbl;
 }
 

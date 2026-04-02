@@ -12,6 +12,7 @@ typedef struct Header {
 } Header;
 
 typedef struct Table {
+    char *name;
     Header *header;
 } Table;
 
@@ -26,7 +27,7 @@ typedef struct Database {
 
 Database* squee_new_database();
 Header* squee_new_header(int begin, int end, char* cols[]);
-Table* squee_new_table(int begin, int end, char* cols[]);
+Table* squee_new_table(char* name, int begin, int end, char* cols[]);
 
 // Print Functions
 

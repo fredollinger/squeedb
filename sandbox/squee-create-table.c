@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
         return(0);
     }
 
-    Table *tbl = squee_new_table(0, argc - 1, argv);
+    Table *tbl = squee_new_table(argv[1], 0, argc - 1, argv);
     Header *hdr_p = tbl->header;
 
     while (NULL != hdr_p) {
