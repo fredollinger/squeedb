@@ -6,7 +6,7 @@
 file.db
 
 # Executables
-squee-new-table
+squee-create-table
 squee-new-database
 
 # VSCode

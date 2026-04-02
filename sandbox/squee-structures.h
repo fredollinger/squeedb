@@ -3,7 +3,8 @@
 
 // Datatypes
 
-typedef enum { INT, STRING } Field_t;
+// The data type that the field holds
+typedef enum { INT, FLOAT, STRING, DATE, HEAD, TAIL } Field_t;
 
 typedef struct Header {
     char *field_name;

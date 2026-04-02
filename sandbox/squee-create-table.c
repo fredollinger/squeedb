@@ -18,7 +18,9 @@ int main(int argc, char* argv[]) {
     Header *hdr_p = tbl->header;
 
     while (NULL != hdr_p) {
-        printf("main(): Field Name: %s \n", hdr_p->field_name);
+        if (hdr_p->field_t == INT) {
+            printf("main(): Field Name: %s \n", hdr_p->field_name);
+        }
         hdr_p = hdr_p->next;
     }
 

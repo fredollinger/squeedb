@@ -20,6 +20,8 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
     Header *head = (Header*)malloc(sizeof(Header));
     Header *tail = (Header*)malloc(sizeof(Header));
     head->next = tail;
+    head->field_t = HEAD;
+    tail->field_t = TAIL;
     tail->next = NULL;
     head->field_name = NULL;
     tail->field_name = NULL;
@@ -28,6 +30,8 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
         printf("squee_new_header(): [%i] [%s] \n", i, cols[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
+        // TODO Once we get a real parser, we won't just assume that this is INT
+        neu->field_t = INT;
         strcpy(neu->field_name, cols[i]);
         neu->next = head->next;
         head->next = neu;
