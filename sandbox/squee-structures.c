@@ -44,10 +44,11 @@ Table* squee_new_table(char *name, int begin, int end, char* cols[]) {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
     size_t name_len = strlen(name);
-    // malloc(name_len + 1);
+    printf("squee_new_table() Table name [%s] \n", name);
+    tbl->name = (char*)malloc(name_len + 1);
+    strlcpy(tbl->name, name, name_len);
     // printf("name len: %i \n", name_len);
     // tbl->name = (char*)malloc(strlen(cols[1]) + 1);
-    // strlcpy(tbl->name, name, name_len);
     tbl->header = squee_new_header(begin + 2, end, cols);
     return tbl;
 }
