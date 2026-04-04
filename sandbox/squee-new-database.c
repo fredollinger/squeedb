@@ -12,7 +12,21 @@ int main(int argc, char* argv[]) {
         return(0);
     }
 
-    open(argv[argc - 1], O_RDWR | O_CREAT);
+    FILE *fd = fopen(argv[argc - 1], "w");
+    if (NULL == fd) {
+        printf("%s: Error writing to %s \n", argv[0], argv[argc - 1]);
+        return(1);
+    }
+
+    fprintf(fd, "SQUEE format 3");
+    fclose(fd);
+/*
+    if (NULL == fclose(fd)){
+        squee_new_database_error();
+    }
+*/
+
+    // BOM = "SQUEE format 3"
 
     return(0);
 }
