@@ -15,16 +15,10 @@ int main(int argc, char* argv[]) {
     }
 
     Table *tbl = squee_new_table(argv[1], 0, argc - 1, argv);
-    Header *hdr_p = tbl->header;
 
     printf("tbl->name [%s] \n", tbl->name);
 
-    while (NULL != hdr_p) {
-        if (hdr_p->field_t == INT) {
-            printf("main(): Field Name: %s \n", hdr_p->field_name);
-        }
-        hdr_p = hdr_p->next;
-    }
+    squee_print_header(tbl->header);
 
     // 1. check to see if the file exists, if it does not then error out 
 

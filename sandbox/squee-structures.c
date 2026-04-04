@@ -27,7 +27,6 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
     Header *curr = head;
 
     for (int i = begin; i < end; i++) {
-        printf("squee_new_header(): [%i] [%s] \n", i, cols[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
         // TODO Once we get a real parser, we won't just assume that this is INT
@@ -44,17 +43,20 @@ Table* squee_new_table(char *name, int begin, int end, char* cols[]) {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
     size_t name_len = strlen(name);
-    printf("squee_new_table() Table name [%s] \n", name);
     tbl->name = (char*)malloc(name_len + 1);
     strlcpy(tbl->name, name, name_len);
-    // printf("name len: %i \n", name_len);
-    // tbl->name = (char*)malloc(strlen(cols[1]) + 1);
     tbl->header = squee_new_header(begin + 2, end, cols);
     return tbl;
 }
 
 void squee_print_header(Header *hdr) {
-    // printf("squee_print_header() STUB \n");
+    Header *hdr_p = hdr;
+    while (NULL != hdr_p) {
+        if (hdr_p->field_t == INT) {
+            printf("main(): Field Name: %s \n", hdr_p->field_name);
+        }
+        hdr_p = hdr_p->next;
+    }
 }
 
 Database* squee_new_database() {
