@@ -31,6 +31,7 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
         neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
         // TODO Once we get a real parser, we won't just assume that this is INT
         neu->field_t = SQUEE_INT;
+        printf("squee_new_header adding %i \n", neu->field_t);
         strcpy(neu->field_name, cols[i]);
         curr->next = neu;
         neu->next = curr->next->next;
@@ -51,7 +52,7 @@ Table* squee_new_table(char *name, int begin, int end, char* cols[]) {
 
 // Given the field type print a header
 void squee_print_field_type(Header *hdr) {
-    printf(" squee_print_field_type STUB ");
+    printf("current field %i SQUEE_INT %i ", hdr->field_t, SQUEE_INT);
     switch(hdr->field_t){
         case SQUEE_INT:
             printf("INT");
@@ -66,8 +67,8 @@ void squee_print_header(Header *hdr) {
     Header *hdr_p = hdr;
     while (NULL != hdr_p) {
         if (hdr_p->field_t == SQUEE_INT) {
-            printf("main(): Field Name: %s ", hdr_p->field_name);
-            squee_print_field_type(hdr);
+            printf("main(): Field Name: %s %i ", hdr_p->field_name, hdr_p->field_t);
+            squee_print_field_type(hdr_p);
             printf("\n");
         }
         hdr_p = hdr_p->next;
