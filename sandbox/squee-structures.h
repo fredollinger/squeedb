@@ -4,7 +4,7 @@
 // Datatypes
 
 // The data type that the field holds
-typedef enum { INT, FLOAT, STRING, DATE, HEAD, TAIL } Field_t;
+typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_HEAD, SQUEE_TAIL } Field_t;
 
 typedef struct Header {
     char *field_name;
