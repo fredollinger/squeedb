@@ -6,6 +6,8 @@
 file.db
 
 # Executables
+squeectl
+squee-add-row
 squee-create-table
 squee-new-database
 

@@ -1,13 +1,16 @@
 .PHONY: force
 
-all: squee-new-database squee-create-table squee-add-row
+all: squee-new-database squee-create-table squee-add-row squeectl
 
 clean:
-	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures
+	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures squeectl
 	rm -fr *.dSYM
 
 squee-structures.o: force
 	cc -g -c squee-structures.c
+
+squeectl: force squee-structures.o
+	cc $@.c -g squee-structures.o -o $@
 
 squee-add-row: force squee-structures.o
 	cc $@.c -g squee-structures.o -o $@
