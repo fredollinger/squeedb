@@ -44,7 +44,7 @@ Table* squee_new_table(char *name, int begin, int end, char* cols[]) {
     Table *tbl = (Table*) malloc(sizeof(Table));
     size_t name_len = strlen(name);
     tbl->name = (char*)malloc(name_len + 1);
-    strlcpy(tbl->name, name, name_len);
+    strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header(begin + 2, end, cols);
     return tbl;
 }
