@@ -20,13 +20,6 @@ int main(int argc, char* argv[]) {
 
     fprintf(fd, "SQUEE format 3");
     fclose(fd);
-/*
-    if (NULL == fclose(fd)){
-        squee_new_database_error();
-    }
-*/
-
-    // BOM = "SQUEE format 3"
 
     return(0);
 }

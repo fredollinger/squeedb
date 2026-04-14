@@ -1,3 +1,13 @@
+# TODO
+
+## Currently working on
+
+squee-create-table.c
+
+Writing the header to the database file.
+
+After that, we will want to read that file back.
+
 1. Save to file
 
 1a. Need to save the header to a file
