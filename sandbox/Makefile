@@ -3,7 +3,7 @@
 all: squee-new-database squee-create-table squee-add-row squeectl
 
 clean:
-	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures squeectl
+	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table
 	rm -fr *.dSYM
 
 squee-structures.o: force
