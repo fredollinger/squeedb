@@ -1,15 +1,18 @@
 .PHONY: force
 
-all: squee-new-database squee-create-table squee-add-row squeectl
+all: squee-new-database squee-create-table squee-add-row squee-read-database squeectl
 
 clean:
-	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table
+	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table squee-read-database
 	rm -fr *.dSYM
 
 squee-structures.o: force
 	cc -g -c squee-structures.c
 
 squeectl: force squee-structures.o
+	cc $@.c -g squee-structures.o -o $@
+
+squee-read-database: force squee-structures.o
 	cc $@.c -g squee-structures.o -o $@
 
 squee-add-row: force squee-structures.o
@@ -25,6 +28,7 @@ test: squee-new-database squee-create-table
 	./squee-new-database file.db
 	./squee-create-table table_name column1 column2 column3 column4 file.db
 	./squee-add-row 1 2 3 4 file.db
+	./squee-read-database file.db
 	# lldb -- ./squee-create-table column1 column2 column3 column4 file.db
 
 unit/test-squee-structures: squee-structures.o

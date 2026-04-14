@@ -9,11 +9,26 @@ int main(int argc, char* argv[]) {
     if (1 == argc) {
         printf("usage: \n");
         printf("\n");
-        printf("./squee-new-table table_name column1 column2 filename.db");
+        printf("Read database into memory \n");
+        printf("Usage \n\n");
+        printf("./squee-read-database filename.db");
         printf("\n");
         return(0);
     }
 
+    FILE *fd = fopen(argv[argc - 1], "r");
+    if (NULL == fd) {
+        printf("%s: Error opening to %s \n", argv[0], argv[argc - 1]);
+        return(1);
+    }
+
+    Table *tbl = squee_new_empty_table();
+
+    // TODO READ Table Name
+
+    fclose(fd);
+
+/*
     Table *tbl = squee_new_table(argv[1], 0, argc - 1, argv);
     printf("tbl->name [%s] \n", tbl->name);
     squee_print_header(tbl->header);
@@ -25,7 +40,6 @@ int main(int argc, char* argv[]) {
     }
 
     fprintf(fd, "SQUEE format 3%c", SQUEE_START_OF_TEXT);
-    fprintf(fd, "%s%c",tbl->name, SQUEE_UNIT_SEPARATOR);
 
     Header *hdr_p = tbl->header;
     while (NULL != hdr_p) {
@@ -41,6 +55,7 @@ int main(int argc, char* argv[]) {
     fprintf(fd, "%c", SQUEE_END_OF_FILE);
 
     fclose(fd);
+*/
 
     return(0);
 }

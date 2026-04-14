@@ -34,7 +34,9 @@ typedef struct Database {
 // New Functions
 
 Database* squee_new_database();
+Header* squee_new_empty_header();
 Header* squee_new_header(int begin, int end, char* cols[]);
+Table* squee_new_empty_table();
 Table* squee_new_table(char* name, int begin, int end, char* cols[]);
 
 // Print Functions

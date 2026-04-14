@@ -5,11 +5,12 @@
 # Database files
 file.db
 
+# VSCode
+.vscode
+
 # Executables
 squeectl
 squee-add-row
 squee-create-table
 squee-new-database
-
-# VSCode
-.vscode
+squee-read-database

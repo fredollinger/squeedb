@@ -2,11 +2,9 @@
 
 ## Currently working on
 
-squee-create-table.c
+squee-read-database.c
 
-Writing the header to the database file.
-
-After that, we will want to read that file back.
+Read header will want to read that file back.
 
 1. Save to file
 
@@ -23,3 +21,7 @@ After that, we will want to read that file back.
 4. Unified binary
 
 4a. Once we get our parser, we can unify all the commands in a single binary
+
+## Complete
+
+Writing the header to the database file.

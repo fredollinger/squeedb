@@ -15,7 +15,43 @@ node* linked_list_insert(int key, node *ptr) {
 }
 */
 
+/*
+    Header *tail = (Header*)malloc(sizeof(Header));
+    head->next = tail;
+    head->field_t = SQUEE_HEAD;
+    tail->field_t = SQUEE_TAIL;
+    tail->next = NULL;
+    head->field_name = NULL;
+    tail->field_name = NULL;
+    Header *curr = head;
+
+    for (int i = begin; i < end; i++) {
+        Header *neu = (Header*)malloc(sizeof(Header));
+        neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
+        // TODO Once we get a real parser, we won't just assume that this is INT
+        neu->field_t = SQUEE_INT;
+        printf("squee_new_header adding %i \n", neu->field_t);
+        strcpy(neu->field_name, cols[i]);
+        curr->next = neu;
+        neu->next = curr->next->next;
+        curr = neu;
+    }
+*/
+
+Header* squee_new_empty_header() {
+    Header *head = (Header*)malloc(sizeof(Header));
+    Header *tail = (Header*)malloc(sizeof(Header));
+    head->next = tail;
+    head->field_t = SQUEE_HEAD;
+    tail->field_t = SQUEE_TAIL;
+    tail->next = NULL;
+    head->field_name = NULL;
+    tail->field_name = NULL;
+    return head;
+}
+
 Header* squee_new_header(int begin, int end, char* cols[]) {
+    // TODO refactor into Header* squee_new_empty_header()
     Header *head = (Header*)malloc(sizeof(Header));
     Header *tail = (Header*)malloc(sizeof(Header));
     head->next = tail;
@@ -38,6 +74,12 @@ Header* squee_new_header(int begin, int end, char* cols[]) {
         curr = neu;
     }
     return head;
+}
+
+Table* squee_new_empty_table() {
+    int i;
+    Table *tbl = (Table*) malloc(sizeof(Table));
+    return tbl;
 }
 
 Table* squee_new_table(char *name, int begin, int end, char* cols[]) {
