@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "squee-structures.h"
@@ -18,6 +19,11 @@ int main(int argc, char* argv[]) {
 
     int buffer_size = 10000;
     char buffer[buffer_size];
+    char *pbuffer = buffer;
+    char *tok;
+    char squee_start_of_text[2] = { SQUEE_START_OF_TEXT, '\0' };
+    char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
+    size_t len;
 
     printf("opening file %s \n", argv[argc - 1]);
 
@@ -31,6 +37,14 @@ int main(int argc, char* argv[]) {
 
     while(fgets(buffer, buffer_size, fd)) {
         printf("%s", buffer);
+        tok = strsep(&pbuffer, squee_start_of_text);
+        printf("start of string [%s] \n", tok);
+        tok = strsep(&pbuffer, squee_unit_separator); 
+        len = strlen(tok);
+        tbl->name = (char*)malloc(len + 1);
+        strncpy(tbl->name, tok, len);
+        printf("table name [%s] \n", tbl->name);
+        // fprintf(fd, "%s%c",tbl->name, SQUEE_UNIT_SEPARATOR);
     }
 
     // TODO READ Table Name
