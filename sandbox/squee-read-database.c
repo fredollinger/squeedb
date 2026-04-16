@@ -23,6 +23,8 @@ int main(int argc, char* argv[]) {
     char *tok;
     char squee_start_of_text[2] = { SQUEE_START_OF_TEXT, '\0' };
     char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
+    char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
+    char squee_end_of_text[2] =  { SQUEE_END_OF_TEXT, '\0' };
     size_t len;
 
     printf("opening file %s \n", argv[argc - 1]);
@@ -44,10 +46,14 @@ int main(int argc, char* argv[]) {
         tbl->name = (char*)malloc(len + 1);
         strncpy(tbl->name, tok, len);
         printf("table name [%s] \n", tbl->name);
-        // fprintf(fd, "%s%c",tbl->name, SQUEE_UNIT_SEPARATOR);
+        //tok = strsep(&pbuffer, squee_end_of_text); 
+        // printf("headers [%s] \n", tok);
+        tok = strsep(&pbuffer, squee_record_separator);
+        while(NULL != tok) {
+            printf("column [%s] \n", tok);
+            tok = strsep(&pbuffer, squee_record_separator);
+        }
     }
-
-    // TODO READ Table Name
 
     fclose(fd);
 
