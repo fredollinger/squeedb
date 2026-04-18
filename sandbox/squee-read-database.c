@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     int buffer_size = 10000;
     char buffer[buffer_size];
     char *pbuffer = buffer;
-    char *tok;
+    char *tok, *col, *type;
     char squee_start_of_text[2] = { SQUEE_START_OF_TEXT, '\0' };
     char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
     char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
@@ -46,13 +46,20 @@ int main(int argc, char* argv[]) {
         tbl->name = (char*)malloc(len + 1);
         strncpy(tbl->name, tok, len);
         printf("table name [%s] \n", tbl->name);
-        //tok = strsep(&pbuffer, squee_end_of_text); 
-        // printf("headers [%s] \n", tok);
-        tok = strsep(&pbuffer, squee_record_separator);
+        type = strsep(&pbuffer, squee_record_separator);
+        col = strsep(&type, squee_unit_separator);
+        printf("column [%s] [%s] \n", col, type);
+/*
+        Header *head = squee_new_empty_header();
+        Header *curr = head;
+        tbl->header = head;
         while(NULL != tok) {
             printf("column [%s] \n", tok);
+            //curr = squee_header_add_column(); // todo need to get field_t
             tok = strsep(&pbuffer, squee_record_separator);
+            tok = strsep(&pbuffer, squee_unit_separator);
         }
+*/
     }
 
     fclose(fd);
