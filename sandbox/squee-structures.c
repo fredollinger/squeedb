@@ -4,40 +4,6 @@
 
 #include "squee-structures.h"
 
-// insert the new item right after the head
-/*
-node* linked_list_insert(int key, node *ptr) {
-    node *neu = malloc(sizeof(node));
-    neu->key = key;
-    neu->next = ptr->next;
-    ptr->next = neu;
-    return neu;
-}
-*/
-
-/*
-    Header *tail = (Header*)malloc(sizeof(Header));
-    head->next = tail;
-    head->field_t = SQUEE_HEAD;
-    tail->field_t = SQUEE_TAIL;
-    tail->next = NULL;
-    head->field_name = NULL;
-    tail->field_name = NULL;
-    Header *curr = head;
-
-    for (int i = begin; i < end; i++) {
-        Header *neu = (Header*)malloc(sizeof(Header));
-        neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
-        // TODO Once we get a real parser, we won't just assume that this is INT
-        neu->field_t = SQUEE_INT;
-        printf("squee_new_header adding %i \n", neu->field_t);
-        strcpy(neu->field_name, cols[i]);
-        curr->next = neu;
-        neu->next = curr->next->next;
-        curr = neu;
-    }
-*/
-
 Header* squee_new_empty_header() {
     Header *head = (Header*)malloc(sizeof(Header));
     Header *tail = (Header*)malloc(sizeof(Header));
