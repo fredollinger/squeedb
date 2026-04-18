@@ -17,17 +17,8 @@ Header* squee_new_empty_header() {
 }
 
 Header* squee_new_header(int begin, int end, char* cols[]) {
-    // TODO refactor into Header* squee_new_empty_header()
-    Header *head = (Header*)malloc(sizeof(Header));
-    Header *tail = (Header*)malloc(sizeof(Header));
-    head->next = tail;
-    head->field_t = SQUEE_HEAD;
-    tail->field_t = SQUEE_TAIL;
-    tail->next = NULL;
-    head->field_name = NULL;
-    tail->field_name = NULL;
+    Header *head = squee_new_empty_header();
     Header *curr = head;
-
     for (int i = begin; i < end; i++) {
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
