@@ -42,23 +42,25 @@ int main(int argc, char* argv[]) {
     Header *curr_header = tbl->header;
 
     while(fgets(buffer, buffer_size, fd)) {
-        // printf("%s", buffer);
         tok = strsep(&pbuffer, squee_start_of_text);
-        // printf("start of string [%s] \n", tok);
         tok = strsep(&pbuffer, squee_unit_separator); 
         len = strlen(tok);
         tbl->name = (char*)malloc(len + 1);
         strncpy(tbl->name, tok, len);
-        // printf("table name [%s] \n", tbl->name);
-        type_s = strsep(&pbuffer, squee_record_separator);
-        col = strsep(&type_s, squee_unit_separator);
-        type = strtol(type_s, &endptr, 10);
-        // printf("column [%s] [%i] \n", col, type);
-        curr_header = squee_header_add_column(curr_header, col, type);
+
+        while(1) {
+            type_s = strsep(&pbuffer, squee_record_separator);
+            if (type_s[0] == SQUEE_END_OF_TEXT || type_s[0] == '\0') {
+                printf("end of record [%s] [%s] \n", col, type_s);
+                break;
+            }
+            col = strsep(&type_s, squee_unit_separator);
+            type = strtol(type_s, &endptr, 10);
+            curr_header = squee_header_add_column(curr_header, col, type);
+        }
     }
 
     fclose(fd);
-
     squee_print_header(tbl->header);
 
     return(0);
