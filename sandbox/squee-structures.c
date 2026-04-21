@@ -16,6 +16,16 @@ Header* squee_new_empty_header() {
     return head;
 }
 
+Header* squee_header_add_column(Header *last, char *header_name, int field_type) {
+    Header *neu = (Header*)malloc(sizeof(Header));
+    neu->field_name = (char*)malloc(strlen(header_name) + 1);
+    neu->field_t = field_type;
+    strcpy(neu->field_name, header_name);
+    neu->next = last->next;
+    last->next = neu;
+    return neu;
+}
+
 Header* squee_new_header(int begin, int end, char* cols[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
