@@ -32,7 +32,7 @@ typedef struct Database {
 // Functions
 
 // New Functions
-Database* squee_new_database();
+Database* squee_new_empty_database();
 
 // Table Creation
 Table* squee_new_empty_table();
