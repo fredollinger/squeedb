@@ -36,7 +36,6 @@ int main(int argc, char* argv[]) {
     }
 
     Database *db = squee_new_empty_database();
-    db->table->header = squee_new_empty_header();
     Header *curr_header = db->table->header;
 
     while(fgets(buffer, buffer_size, fd)) {

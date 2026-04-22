@@ -86,6 +86,7 @@ void squee_print_header(Header *hdr) {
 Database* squee_new_empty_database() {
     Database *db = (Database*) malloc(sizeof(Database));
     db->table = squee_new_empty_table();
+    db->table->header = squee_new_empty_header();
     return db;
 }
 
