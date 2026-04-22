@@ -47,4 +47,7 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
 void squee_print_header(Header*);
 void squee_print_table(Table*);
 
+// IO
+Database* squee_read_database_from_file(char *file);
+
 #endif

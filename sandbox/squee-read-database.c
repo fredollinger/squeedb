@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
             }
             else if (type_s[0] == '\0') {
                 printf("Error reading file, premature end of file \n");
+                return(1);
             }
             col = strsep(&type_s, squee_unit_separator);
             type = strtol(type_s, &endptr, 10);

@@ -93,3 +93,53 @@ Database* squee_new_empty_database() {
 void squee_print_Table(Table *tbl) {
     Table *tbl_p = tbl;
 }
+
+Database* squee_read_database_from_file(char *file) {
+    int buffer_size = 10000;
+    int type = 0;
+    char *endptr = NULL;
+    char buffer[buffer_size];
+    char *pbuffer = buffer;
+    char *tok, *col, *type_s;
+    char squee_start_of_text[2] = { SQUEE_START_OF_TEXT, '\0' };
+    char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
+    char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
+    char squee_end_of_text[2] =  { SQUEE_END_OF_TEXT, '\0' };
+    size_t len;
+
+    FILE *fd = fopen(file, "r");
+    if (NULL == fd) {
+        printf("Error opening file: %s \n", file);
+        return(NULL);
+    }
+
+    Database *db = squee_new_empty_database();
+    Header *curr_header = db->table->header;
+
+    while(fgets(buffer, buffer_size, fd)) {
+        tok = strsep(&pbuffer, squee_start_of_text);
+        tok = strsep(&pbuffer, squee_unit_separator); 
+        len = strlen(tok);
+        db->table->name = (char*)malloc(len + 1);
+        strncpy(db->table->name, tok, len);
+
+        while(1) {
+            type_s = strsep(&pbuffer, squee_record_separator);
+            if (type_s[0] == SQUEE_END_OF_TEXT) {
+                break;
+            }
+            else if (type_s[0] == '\0') {
+                printf("Error reading file, premature end of file \n");
+                return(NULL);
+            }
+            col = strsep(&type_s, squee_unit_separator);
+            type = strtol(type_s, &endptr, 10);
+            curr_header = squee_header_add_column(curr_header, col, type);
+        }
+    }
+
+    fclose(fd);
+    // Clean up all allocated memory except the db
+    return db;
+}
+
