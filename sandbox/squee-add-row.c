@@ -7,9 +7,12 @@
 
 int main(int argc, char* argv[]) {
     if (1 == argc) {
+        printf("Add a row to a database\n");
+        printf("List the data then the filename.\n");
+        printf("\n");
         printf("usage: \n");
         printf("\n");
-        printf("./[%s] table_name column1 column2 filename.db", argv[0]);
+        printf("./[%s] John Doe 42 4.25 filename.db", argv[0]);
         printf("\n");
         return(0);
     }
