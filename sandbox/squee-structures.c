@@ -63,7 +63,6 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
 // Given the field type print a header
 void squee_print_field_type(Header *hdr) {
-    printf("current field %i SQUEE_INT %i ", hdr->field_t, SQUEE_INT);
     switch(hdr->field_t){
         case SQUEE_INT:
             printf("INT");
