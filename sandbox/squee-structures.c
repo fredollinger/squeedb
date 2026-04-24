@@ -29,10 +29,14 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
 Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
+    char *endptr;
+    int type = 0;
+
     for (int i = begin; i < end; i = i + 2) {
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
-        neu->field_t = SQUEE_INT;
+        type = strtol(cols[i + 1], &endptr, 10);
+        neu->field_t = type;
         strcpy(neu->field_name, cols[i]);
         curr->next = neu;
         neu->next = curr->next->next;
@@ -64,6 +68,19 @@ void squee_print_field_type(Header *hdr) {
         case SQUEE_INT:
             printf("INT");
             break;
+        case SQUEE_FLOAT:
+            printf("FLOAT");
+            break;
+        case SQUEE_STRING:
+            printf("STRING");
+            break;
+        case SQUEE_DATE:
+            printf("DATE");
+            break;
+        case SQUEE_HEAD:
+            break;
+        case SQUEE_TAIL:
+            break;
         default:
             printf("UK");
             break;
@@ -73,11 +90,9 @@ void squee_print_field_type(Header *hdr) {
 void squee_print_header(Header *hdr) {
     Header *hdr_p = hdr;
     while (NULL != hdr_p) {
-        if (hdr_p->field_t == SQUEE_INT) {
-            printf("Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
-            squee_print_field_type(hdr_p);
-            printf("\n");
-        }
+        printf("Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
+        squee_print_field_type(hdr_p);
+        printf("\n");
         hdr_p = hdr_p->next;
     }
 }
