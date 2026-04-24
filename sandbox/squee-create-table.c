@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
         return(0);
     }
 
-    Table *tbl = squee_new_table(argv[1], 0, argc - 1, argv);
+    Table *tbl = squee_new_table_with_header(argv[1], 0, argc - 1, argv);
     printf("tbl->name [%s] \n", tbl->name);
     squee_print_header(tbl->header);
 

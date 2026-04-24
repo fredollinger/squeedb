@@ -26,7 +26,7 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
     return neu;
 }
 
-Header* squee_new_header(int begin, int end, char* cols[]) {
+Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
     for (int i = begin; i < end; i++) {
@@ -48,13 +48,13 @@ Table* squee_new_empty_table() {
     return tbl;
 }
 
-Table* squee_new_table(char *name, int begin, int end, char* cols[]) {
+Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[]) {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
     size_t name_len = strlen(name);
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
-    tbl->header = squee_new_header(begin + 2, end, cols);
+    tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
     return tbl;
 }
 

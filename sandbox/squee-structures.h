@@ -36,7 +36,7 @@ Database* squee_new_empty_database();
 
 // Table Creation
 Table* squee_new_empty_table();
-Table* squee_new_table(char* name, int begin, int end, char* cols[]);
+Table* squee_new_table_with_header(char* name, int begin, int end, char* cols[]);
 
 // Header Creation
 Header* squee_new_empty_header();
