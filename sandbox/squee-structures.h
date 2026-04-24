@@ -13,6 +13,16 @@
 // The data type that the field holds
 typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_HEAD, SQUEE_TAIL } Field_t;
 
+typedef struct Row {
+    struct Row *next;
+    union {
+        int i;
+        float f;
+        char* s;
+        uint64_t dt;
+    } data;
+} Row;
+
 typedef struct Header {
     char *field_name;
     Field_t field_t;
