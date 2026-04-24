@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
     Database *db = squee_new_empty_database();
     Header *curr_header = db->table->header;
 
+    printf("\n");
     while(fgets(buffer, buffer_size, fd)) {
         tok = strsep(&pbuffer, squee_start_of_text);
         tok = strsep(&pbuffer, squee_unit_separator); 

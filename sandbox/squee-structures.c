@@ -90,9 +90,11 @@ void squee_print_field_type(Header *hdr) {
 void squee_print_header(Header *hdr) {
     Header *hdr_p = hdr;
     while (NULL != hdr_p) {
-        printf("Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
-        squee_print_field_type(hdr_p);
-        printf("\n");
+        if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
+            printf("Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
+            squee_print_field_type(hdr_p);
+            printf("\n");
+        }
         hdr_p = hdr_p->next;
     }
 }
