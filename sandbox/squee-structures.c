@@ -29,10 +29,9 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
 Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
-    for (int i = begin; i < end; i++) {
+    for (int i = begin; i < end; i = i + 2) {
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
-        // TODO Once we get a real parser, we won't just assume that this is INT
         neu->field_t = SQUEE_INT;
         strcpy(neu->field_name, cols[i]);
         curr->next = neu;

@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
     Header *hdr_p = tbl->header;
     while (NULL != hdr_p) {
         if (hdr_p->field_t == SQUEE_INT) {
-            printf("main(): Field Name: %s %i ", hdr_p->field_name, hdr_p->field_t);
+            printf("\n main(): Field Name: %s %i ", hdr_p->field_name, hdr_p->field_t);
             fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
             printf("\n");
         }

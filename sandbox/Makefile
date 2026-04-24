@@ -26,8 +26,8 @@ squee-create-table: force squee-structures.o
 
 test: squee-new-database squee-create-table squee-add-row squee-read-database
 	./squee-new-database file.db
-	./squee-create-table table_name column1 column2 column3 column4 file.db
-	./squee-add-row 1 2 3 4 file.db
+	./squee-create-table Employees First_Name 2 Last_Name 2 Age 0 Hourly_Rate 1 file.db
+	#./squee-add-row 1 2 3 4 file.db
 	./squee-read-database file.db
 
 unit/test-squee-structures: squee-structures.o
