@@ -26,12 +26,6 @@ int main(int argc, char* argv[]) {
     fprintf(fd, "SQUEE format 3%c", SQUEE_START_OF_TEXT);
     fprintf(fd, "%s%c",tbl->name, SQUEE_UNIT_SEPARATOR);
 
-    Header *hdr_p = tbl->header;
-    while (NULL != hdr_p) {
-        fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
-        hdr_p = hdr_p->next;
-    }
-
     fprintf(fd, "%c", SQUEE_END_OF_TEXT);
     fprintf(fd, "%c", SQUEE_END_OF_FILE);
     fclose(fd);
