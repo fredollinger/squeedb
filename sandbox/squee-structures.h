@@ -15,6 +15,7 @@ typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_HEAD, SQU
 
 typedef struct Row {
     struct Row *next;
+    Field_t field_t;
     union {
         int i;
         float f;
@@ -52,6 +53,9 @@ Table* squee_new_table_with_header(char* name, int begin, int end, char* cols[])
 Header* squee_new_empty_header();
 Header* squee_new_header(int begin, int end, char* cols[]);
 Header* squee_header_add_column(Header *last, char *header_name, int field_type);
+
+// Row Creation
+Row* squee_new_empty_row();
 
 // Print Functions
 void squee_print_header(Header*);

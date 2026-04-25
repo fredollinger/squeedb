@@ -17,7 +17,9 @@ int main(int argc, char* argv[]) {
         return(0);
     }
 
-    printf("Squee Add Row STUB \n");
+    printf("Reading database: [%s] \n", argv[argc - 1]);
+    Database *db = squee_read_database_from_file(argv[argc - 1]);
+    squee_print_header(db->table->header);
 
     return(0);
 }

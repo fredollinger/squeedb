@@ -5,6 +5,7 @@
 
 #include "squee-structures.h"
 
+// Header Methods
 Header* squee_new_empty_header() {
     Header *head = (Header*)malloc(sizeof(Header));
     Header *tail = (Header*)malloc(sizeof(Header));
@@ -46,6 +47,7 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     return head;
 }
 
+// Table Methods
 Table* squee_new_empty_table() {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
@@ -60,6 +62,17 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
     return tbl;
+}
+
+// Row Methods
+Row* squee_new_empty_row() {
+    Row *head = (Row*)malloc(sizeof(Row));
+    Row *tail = (Row*)malloc(sizeof(Row));
+    head->next = tail;
+    head->field_t = SQUEE_HEAD;
+    tail->field_t = SQUEE_TAIL;
+    tail->next = NULL;
+    return head;
 }
 
 // Given the field type print a header
