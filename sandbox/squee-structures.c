@@ -65,19 +65,24 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 }
 
 // ROW METHODS
+/*
 Row* squee_new_empty_row() {
-    Row *head = (Row*)malloc(sizeof(Row));
-    Row *tail = (Row*)malloc(sizeof(Row));
-    head->next = tail;
-    head->field_t = SQUEE_HEAD;
-    tail->field_t = SQUEE_TAIL;
-    tail->next = NULL;
-    return head;
+    Row *row = (Row*)malloc(sizeof(Row));
+    return row;
 }
+*/
 
-Row* squee_new_row_with_header(Table *table, char* cols[], int len) { 
-     Row *row = squee_new_empty_row();
-     return row;
+Row* squee_new_row(Table *table, char* cols[], int len) { 
+    Row *row = (Row*)malloc(sizeof(Row));
+    Header *header_p = table->header->next;
+
+    for (int i = 0; i < len; i++) {
+        printf("squee_new_row() Header [%s] Item [%s] \n", header_p->field_name, cols[i]);
+        header_p = header_p->next;
+    }
+
+
+    return row;
 }
 
 void squee_print_row(Row *row) {

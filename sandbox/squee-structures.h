@@ -15,6 +15,12 @@ typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_HEAD, SQU
 
 typedef struct Row {
     struct Row *next;
+    struct RowNode *next_row_node;
+    Field_t field_t;
+} Row;
+
+typedef struct RowNode {
+    struct RowNode *next;
     Field_t field_t;
     union {
         int i;
@@ -22,7 +28,7 @@ typedef struct Row {
         char* s;
         uint64_t dt;
     } data;
-} Row;
+} RowNode;
 
 typedef struct Header {
     char *field_name;
@@ -33,6 +39,7 @@ typedef struct Header {
 typedef struct Table {
     char *name;
     Header *header;
+    Row *Row;
 } Table;
 
 // how to have more than one table?
@@ -55,8 +62,8 @@ Header* squee_new_header(int begin, int end, char* cols[]);
 Header* squee_header_add_column(Header *last, char *header_name, int field_type);
 
 // ROW CREATION
-Row* squee_new_empty_row();
-Row* squee_new_row_with_header(Table *table, char* cols[], int len);
+// Row* squee_new_empty_row();
+Row* squee_new_row(Table *table, char* cols[], int len);
 
 // Print Functions
 void squee_print_header(Header*);
