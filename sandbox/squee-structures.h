@@ -54,12 +54,14 @@ Header* squee_new_empty_header();
 Header* squee_new_header(int begin, int end, char* cols[]);
 Header* squee_header_add_column(Header *last, char *header_name, int field_type);
 
-// Row Creation
+// ROW CREATION
 Row* squee_new_empty_row();
+Row* squee_new_row_with_header(Table *table, char* cols[], int len);
 
 // Print Functions
 void squee_print_header(Header*);
 void squee_print_table(Table*);
+void squee_print_row(Row *row);
 
 // IO
 Database* squee_read_database_from_file(char *file);

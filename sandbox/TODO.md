@@ -2,15 +2,11 @@
 
 ## Currently working on
 
-squee-read-database.c
+squee-add-row.c
 
-Read header will want to read that file back.
+Finish populating a new row, saving it to disk then reading the full datastructure from disk.
 
-1. Save to file
-
-1a. Need to save the header to a file
-
-1b. Save the commands to make all the tables
+Add second row and repeat.
 
 2. Parser
 
@@ -25,3 +21,11 @@ Read header will want to read that file back.
 ## Complete
 
 Writing the header to the database file.
+
+Save to file
+
+Need to save the header to a file
+
+Save the commands to make all the tables
+
+Read header will want to read that file back.
