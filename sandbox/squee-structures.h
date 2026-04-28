@@ -72,5 +72,6 @@ void squee_print_row(Row *row);
 
 // IO
 Database* squee_read_database_from_file(char *file);
+void squee_write_database_from_file(char *file, Database *db);
 
 #endif

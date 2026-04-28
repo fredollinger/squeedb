@@ -139,6 +139,7 @@ void squee_print_Table(Table *tbl) {
     Table *tbl_p = tbl;
 }
 
+// IO
 Database* squee_read_database_from_file(char *file) {
     int buffer_size = 10000;
     int type = 0;
@@ -189,3 +190,5 @@ Database* squee_read_database_from_file(char *file) {
     return db;
 }
 
+void squee_write_database_from_file(char *file, Database *db) {
+}

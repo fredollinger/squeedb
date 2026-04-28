@@ -19,8 +19,8 @@ int main(int argc, char* argv[]) {
 
     printf("Reading database: [%s] \n", argv[argc - 1]);
     Database *db = squee_read_database_from_file(argv[argc - 1]);
-    squee_print_header(db->table->header);
-    // Row *row = squee_add_row(db->table, argv, argc - 1);
+    //squee_print_header(db->table->header);
+    Row *row = squee_add_row(db->table, argv, argc - 1);
 
     //squee_print_row(row);
 
