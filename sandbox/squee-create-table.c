@@ -14,8 +14,9 @@ int main(int argc, char* argv[]) {
         return(0);
     }
 
-    Table *tbl = squee_new_table_with_header(argv[1], 0, argc - 1, argv);
-    squee_print_header(tbl->header);
+    Database *db = squee_new_empty_database();
+    db->table = squee_new_table_with_header(argv[1], 0, argc - 1, argv);
+    // Table *tbl = squee_new_table_with_header(argv[1], 0, argc - 1, argv);
 
     FILE *fd = fopen(argv[argc - 1], "w");
     if (NULL == fd) {
@@ -24,9 +25,9 @@ int main(int argc, char* argv[]) {
     }
 
     fprintf(fd, "SQUEE format 3%c", SQUEE_START_OF_TEXT);
-    fprintf(fd, "%s%c",tbl->name, SQUEE_UNIT_SEPARATOR);
+    fprintf(fd, "%s%c",db->table->name, SQUEE_UNIT_SEPARATOR);
 
-    Header *hdr_p = tbl->header;
+    Header *hdr_p = db->table->header;
     while (NULL != hdr_p) {
         fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
         hdr_p = hdr_p->next;
