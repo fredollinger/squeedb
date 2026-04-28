@@ -63,7 +63,7 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
 
 // ROW CREATION
 // Row* squee_new_empty_row();
-Row* squee_new_row(Table *table, char* cols[], int len);
+Row* squee_add_row(Table *table, char* cols[], int len);
 
 // Print Functions
 void squee_print_header(Header*);

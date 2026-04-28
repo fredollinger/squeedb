@@ -72,15 +72,17 @@ Row* squee_new_empty_row() {
 }
 */
 
-Row* squee_new_row(Table *table, char* cols[], int len) { 
+Row* squee_add_row(Table *table, char* cols[], int len) {
     Row *row = (Row*)malloc(sizeof(Row));
     Header *header_p = table->header->next;
+    printf("squee_add_row() Header [%s] \n", header_p->field_name);
 
+/*
     for (int i = 0; i < len; i++) {
-        printf("squee_new_row() Header [%s] Item [%s] \n", header_p->field_name, cols[i]);
+        printf("squee_add_row() Header [%s] Item [%s] \n", header_p->field_name, cols[i]);
         header_p = header_p->next;
     }
-
+*/
 
     return row;
 }
@@ -118,7 +120,7 @@ void squee_print_header(Header *hdr) {
     Header *hdr_p = hdr;
     while (NULL != hdr_p) {
         if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
-            printf("Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
+            printf("squee_print_header(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
             squee_print_field_type(hdr_p);
             printf("\n");
         }
@@ -160,6 +162,7 @@ Database* squee_read_database_from_file(char *file) {
     Header *curr_header = db->table->header;
 
     while(fgets(buffer, buffer_size, fd)) {
+        printf("squee_read_database_from_file() BUFFER: [%s] \n", buffer);
         tok = strsep(&pbuffer, squee_start_of_text);
         tok = strsep(&pbuffer, squee_unit_separator); 
         len = strlen(tok);
