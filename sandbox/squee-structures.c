@@ -190,5 +190,26 @@ Database* squee_read_database_from_file(char *file) {
     return db;
 }
 
-void squee_write_database_from_file(char *file, Database *db) {
+int squee_write_database_from_file(char *file, Database *db) {
+    FILE *fd = fopen(file, "w");
+    if (NULL == fd) {
+        // TODO print errno
+        printf("Error writing to [%s] \n", file);
+        fclose(fd);
+        return(1);
+    }
+
+    fprintf(fd, "SQUEE format 3%c", SQUEE_START_OF_TEXT);
+    fprintf(fd, "%s%c",db->table->name, SQUEE_UNIT_SEPARATOR);
+
+    Header *hdr_p = db->table->header;
+    while (NULL != hdr_p) {
+        fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
+        hdr_p = hdr_p->next;
+    }
+
+    fprintf(fd, "%c", SQUEE_END_OF_TEXT);
+    fprintf(fd, "%c", SQUEE_END_OF_FILE);
+    fclose(fd);
+    return(0);
 }
