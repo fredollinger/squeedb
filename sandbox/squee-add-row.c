@@ -23,7 +23,8 @@ int main(int argc, char* argv[]) {
     //squee_print_header(db->table->header);
     Row *row = squee_add_row(db->table, argv + 1, argc - 2);
 
-    //squee_print_row(row);
+    printf("\n");
+    squee_print_row(row);
 
     // squee_print_header(db->table->header);
 
