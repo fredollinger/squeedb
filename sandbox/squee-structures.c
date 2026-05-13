@@ -74,6 +74,8 @@ Row* squee_new_empty_row() {
 
 Row* squee_add_row(Table *table, char* cols[], int len) {
     Header *header_p = table->header->next->next;
+    char *endptr; // used for string conversion
+    long value; // used for string conversion
 
     Row *row_h = (Row*)malloc(sizeof(Row));
     RowNode *row = (RowNode*)malloc(sizeof(RowNode));
@@ -88,24 +90,24 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 
         switch(row->field_t) {
             case SQUEE_INT:
-                row->data.i = (int)cols[i];
-                // printf("INT");
+                value = strtol(cols[i], &endptr, 10);
+                row->data.i = (int)value;
                 break;
             case SQUEE_FLOAT:
-                // printf("FLOAT");
+                value = strtof(cols[i], &endptr);
+                row->data.f = (float)value;
                 break;
             case SQUEE_STRING:
-                // printf("STRING");
+                row->data.s = (char*)malloc(strlen(cols[i]));
+                strcpy(row->data.s, cols[i]);
                 break;
             case SQUEE_DATE:
-                // printf("DATE");
                 break;
             case SQUEE_HEAD:
                 break;
             case SQUEE_TAIL:
                 break;
             default:
-                // printf("UK");
                 break;
         }
 
@@ -122,22 +124,20 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 }
 
 void squee_print_row(Row *row_h) {
-    // printf("squee_print_row(): STUB \n");
     RowNode *row = row_h->next_row_node;
-    // printf("squee_print_row(): Type [%i] \n", row->field_t);
     while (SQUEE_TAIL != row->field_t) {
         switch(row->field_t) {
             case SQUEE_INT:
-                printf("squee_print_row(): Type [%i] Data [%i] \n", row->field_t, row->data.i);
+                printf("squee_print_row(): INT Type [%i] Data [%i] \n", row->field_t, row->data.i);
                 break;
             case SQUEE_FLOAT:
-                // printf("FLOAT");
+                printf("squee_print_row(): FLOAT Type [%i] Data [%f] \n", row->field_t, row->data.f);
                 break;
             case SQUEE_STRING:
-                // printf("STRING");
+                printf("squee_print_row(): STRING Type [%i] Data [%s] \n", row->field_t, row->data.s);
                 break;
             case SQUEE_DATE:
-                // printf("DATE");
+                printf("squee_print_row(): DATE Type [%i] Data [%i] \n", row->field_t, row->data.i);
                 break;
             case SQUEE_HEAD:
                 break;
@@ -278,7 +278,8 @@ int squee_write_database_from_file(char *file, Database *db) {
 }
 
 void squee_print_table(Table *tbl) {
-    RowNode *node = tbl->row->next_row_node;
+    return;
+    // RowNode *node = tbl->row->next_row_node;
 
     /*
     while (SQUEE_TAIL != node->field_t) {
