@@ -26,7 +26,5 @@ int main(int argc, char* argv[]) {
     printf("\n");
     squee_print_row(row);
 
-    // squee_print_header(db->table->header);
-
     return(0);
 }

@@ -227,7 +227,7 @@ Database* squee_read_database_from_file(char *file) {
         tok = strsep(&pbuffer, squee_start_of_text);
         tok = strsep(&pbuffer, squee_unit_separator); 
         if (NULL == tok) {
-            printf("squee_read_database_from_file() DB File ended prematurely. Aborting read. \n");
+            printf("squee_read_database_to_file() DB File ended prematurely. Aborting read. \n");
         }
         len = strlen(tok);
         db->table->name = (char*)malloc(len + 1);
@@ -253,7 +253,7 @@ Database* squee_read_database_from_file(char *file) {
     return db;
 }
 
-int squee_write_database_from_file(char *file, Database *db) {
+int squee_write_database_to_file(char *file, Database *db) {
     FILE *fd = fopen(file, "w");
     if (NULL == fd) {
         // TODO print errno

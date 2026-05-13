@@ -18,9 +18,7 @@ int main(int argc, char* argv[]) {
     Database *db = squee_new_empty_database();
     db->table = squee_new_table_with_header(argv[1], 0, argc - 1, argv);
 
-    // squee_print_table(db->table);
-
-    squee_write_database_from_file(argv[argc - 1], db);
+    squee_write_database_to_file(argv[argc - 1], db);
 
     return(0);
 }
