@@ -61,6 +61,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
+    tbl->row = NULL;
     return tbl;
 }
 
@@ -125,6 +126,7 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 
 void squee_print_row(Row *row_h) {
     RowNode *row = row_h->next_row_node;
+
     while (SQUEE_TAIL != row->field_t) {
         switch(row->field_t) {
             case SQUEE_INT:
@@ -149,6 +151,7 @@ void squee_print_row(Row *row_h) {
         }
         row = row->next;
     }
+
     printf("squee_print_row(): Type [%i] \n", row->field_t);
 }
 
@@ -202,6 +205,7 @@ void squee_print_Table(Table *tbl) {
 
 // IO
 Database* squee_read_database_from_file(char *file) {
+    printf("TODO NEED TO READ THE ROWS HERE \n");
     int buffer_size = 10000;
     int type = 0;
     char *endptr = NULL;
@@ -227,7 +231,7 @@ Database* squee_read_database_from_file(char *file) {
         tok = strsep(&pbuffer, squee_start_of_text);
         tok = strsep(&pbuffer, squee_unit_separator); 
         if (NULL == tok) {
-            printf("squee_read_database_to_file() DB File ended prematurely. Aborting read. \n");
+            printf("squee_read_database_from_file() DB File ended prematurely. Aborting read. \n");
         }
         len = strlen(tok);
         db->table->name = (char*)malloc(len + 1);
@@ -265,10 +269,43 @@ int squee_write_database_to_file(char *file, Database *db) {
     fprintf(fd, "SQUEE format 3%c", SQUEE_START_OF_TEXT);
     fprintf(fd, "%s%c",db->table->name, SQUEE_UNIT_SEPARATOR);
 
+    // Write Header
     Header *hdr_p = db->table->header;
     while (NULL != hdr_p) {
         fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
         hdr_p = hdr_p->next;
+    }
+
+    // Write Row
+    if (NULL != db->table->row) {
+        RowNode *row = db->table->row->next_row_node;
+        while (SQUEE_TAIL != row->field_t) {
+            switch(row->field_t) {
+                case SQUEE_INT:
+                    printf("squee_write_db(): INT Type [%i] Data [%i] \n", row->field_t, row->data.i);
+                    break;
+                case SQUEE_FLOAT:
+                    printf("squee_write_db(): FLOAT Type [%i] Data [%f] \n", row->field_t, row->data.f);
+                    break;
+                case SQUEE_STRING:
+                    printf("squee_write_db(): STRING Type [%i] Data [%s] \n", row->field_t, row->data.s);
+                    break;
+                case SQUEE_DATE:
+                    printf("squee_write_db(): DATE Type [%i] Data [%i] \n", row->field_t, row->data.i);
+                    break;
+                case SQUEE_HEAD:
+                    break;
+                case SQUEE_TAIL:
+                    break;
+                default:
+                    // printf("UK");
+                    break;
+            }
+            row = row->next;
+        }
+    }
+    else {
+        printf("squee_write_db() not writing empty table \n");
     }
 
     fprintf(fd, "%c", SQUEE_END_OF_TEXT);
