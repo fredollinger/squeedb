@@ -39,7 +39,7 @@ typedef struct Header {
 typedef struct Table {
     char *name;
     Header *header;
-    Row *Row;
+    Row *row;
 } Table;
 
 // how to have more than one table?

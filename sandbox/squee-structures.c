@@ -224,9 +224,11 @@ Database* squee_read_database_from_file(char *file) {
     Header *curr_header = db->table->header;
 
     while(fgets(buffer, buffer_size, fd)) {
-        // printf("squee_read_database_from_file() BUFFER: [%s] \n", buffer);
         tok = strsep(&pbuffer, squee_start_of_text);
         tok = strsep(&pbuffer, squee_unit_separator); 
+        if (NULL == tok) {
+            printf("squee_read_database_from_file() DB File ended prematurely. Aborting read. \n");
+        }
         len = strlen(tok);
         db->table->name = (char*)malloc(len + 1);
         strncpy(db->table->name, tok, len);
@@ -273,4 +275,15 @@ int squee_write_database_from_file(char *file, Database *db) {
     fprintf(fd, "%c", SQUEE_END_OF_FILE);
     fclose(fd);
     return(0);
+}
+
+void squee_print_table(Table *tbl) {
+    RowNode *node = tbl->row->next_row_node;
+
+    /*
+    while (SQUEE_TAIL != node->field_t) {
+        // print("squee_print_table() node->field_t [%i] \n", node->field_t);
+        node = node->next;
+    }
+    */
 }
