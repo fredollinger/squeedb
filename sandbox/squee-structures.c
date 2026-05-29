@@ -61,7 +61,9 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
-    tbl->row = NULL;
+    Row *row = (Row*) malloc(sizeof(row));
+    row->field_t =  SQUEE_TAIL;
+    tbl->row = row;
     return tbl;
 }
 
