@@ -23,7 +23,9 @@ int main(int argc, char* argv[]) {
     Database *db = squee_read_database_from_file(argv[1]);
     squee_print_header(db->table->header);
 
-    printf("TODO NEED TO PRINT OUT THE ROW AS WELL");
+    printf("\nTODO NEED TO PRINT OUT THE ROW AS WELL\n");
+
+    squee_print_row(db->table->row);
 
     return(0);
 }

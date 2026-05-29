@@ -65,6 +65,14 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     return tbl;
 }
 
+/*
+typedef struct Row {
+    struct Row *next;
+    struct RowNode *next_row_node;
+    Field_t field_t;
+} Row;
+*/
+
 // ROW METHODS
 /*
 Row* squee_new_empty_row() {
@@ -122,6 +130,19 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
     row->field_t = SQUEE_TAIL;
     last->next = row;
     return row_h;
+}
+
+/*
+typedef struct Table {
+    char *name;
+    Header *header;
+    Row *row;
+} Table;
+*/
+
+void squee_append_row(Table *table, char* cols[], int len) {
+    // TODO First Just add one row then add more than one
+    table->row = squee_add_row(table, cols, len);
 }
 
 void squee_print_row(Row *row_h) {
