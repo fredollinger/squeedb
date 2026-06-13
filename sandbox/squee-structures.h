@@ -63,12 +63,16 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
 
 // ROW CREATION
 // Row* squee_new_empty_row();
+// Add a new row to a table
 Row* squee_add_row(Table *table, char* cols[], int len);
+// Create a new free floating row
+Row* squee_create_row(Table *table, char* cols[], int len);
 
 // Print Functions
 void squee_print_header(Header*);
 void squee_print_table(Table*);
 void squee_print_row(Row *row);
+void squee_print_row_node(RowNode *node);
 
 // IO
 Database* squee_read_database_from_file(char *file);

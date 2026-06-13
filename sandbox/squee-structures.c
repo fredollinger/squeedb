@@ -73,11 +73,12 @@ Row* squee_new_empty_row() {
 }
 */
 
-Row* squee_add_row(Table *table, char* cols[], int len) {
+Row* squee_create_row(Table *table, char* cols[], int len) {
     Header *header_p = table->header->next->next;
     char *endptr; // used for string conversion
     long value; // used for string conversion
 
+    // Header row that we need to add to the table
     Row *row_h = (Row*)malloc(sizeof(Row));
     RowNode *row = (RowNode*)malloc(sizeof(RowNode));
     row_h->field_t = SQUEE_HEAD;
@@ -114,45 +115,116 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 
         last->next = row;
         last = row;
-
         header_p = header_p->next;
     }
+    
+    // TODO: This allows for only a single row in a whole table. Need to implement more of an "insert row" here
+    // once we get a single row working.
 
+    // ADD A TAIL TO THE ROW
+    // TODO need to remove this once we get insert working
     row = (RowNode*)malloc(sizeof(RowNode));
     row->field_t = SQUEE_TAIL;
     last->next = row;
+
+    // TODO remove once we get code to insert the row instead
+    table->row = row_h;
+
     return row_h;
 }
 
-void squee_print_row(Row *row_h) {
-    RowNode *row = row_h->next_row_node;
+Row* squee_add_row(Table *table, char* cols[], int len) {
+    Header *header_p = table->header->next->next;
+    char *endptr; // used for string conversion
+    long value; // used for string conversion
 
-    while (SQUEE_TAIL != row->field_t) {
+    // Header row that we need to add to the table
+    Row *row_h = (Row*)malloc(sizeof(Row));
+    RowNode *row = (RowNode*)malloc(sizeof(RowNode));
+    row_h->field_t = SQUEE_HEAD;
+    row_h->next_row_node = row;
+    RowNode *last = row;
+
+    for (int i = 0; i < len; i++) {
+        printf("squee_add_row() Header [%s] Type [%i] Item [%s] \n", header_p->field_name, header_p->field_t, cols[i]);
+        row = (RowNode*)malloc(sizeof(RowNode));
+        row->field_t = header_p->field_t;
+
         switch(row->field_t) {
             case SQUEE_INT:
-                printf("squee_print_row(): INT Type [%i] Data [%i] \n", row->field_t, row->data.i);
+                value = strtol(cols[i], &endptr, 10);
+                row->data.i = (int)value;
                 break;
             case SQUEE_FLOAT:
-                printf("squee_print_row(): FLOAT Type [%i] Data [%f] \n", row->field_t, row->data.f);
+                value = strtof(cols[i], &endptr);
+                row->data.f = (float)value;
                 break;
             case SQUEE_STRING:
-                printf("squee_print_row(): STRING Type [%i] Data [%s] \n", row->field_t, row->data.s);
+                row->data.s = (char*)malloc(strlen(cols[i]));
+                strcpy(row->data.s, cols[i]);
                 break;
             case SQUEE_DATE:
-                printf("squee_print_row(): DATE Type [%i] Data [%i] \n", row->field_t, row->data.i);
                 break;
             case SQUEE_HEAD:
                 break;
             case SQUEE_TAIL:
                 break;
             default:
-                // printf("UK");
                 break;
         }
-        row = row->next;
-    }
 
-    printf("squee_print_row(): Type [%i] \n", row->field_t);
+        last->next = row;
+        last = row;
+        header_p = header_p->next;
+    }
+    
+    // TODO: This allows for only a single row in a whole table. Need to implement more of an "insert row" here
+    // once we get a single row working.
+
+    // ADD A TAIL TO THE ROW
+    // TODO need to remove this once we get insert working
+    row = (RowNode*)malloc(sizeof(RowNode));
+    row->field_t = SQUEE_TAIL;
+    last->next = row;
+
+    // TODO remove once we get code to insert the row instead
+    table->row = row_h;
+
+    return row_h;
+}
+
+void squee_print_row_node(RowNode *node) {
+    // TODO This prints one row node actually, but we need to iterate through all the rows
+    while (SQUEE_TAIL != node->field_t) {
+        switch(node->field_t) {
+            case SQUEE_INT:
+                printf("squee_print_row(): INT Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                break;
+            case SQUEE_FLOAT:
+                printf("squee_print_row(): FLOAT Type [%i] Data [%f] \n", node->field_t, node->data.f);
+                break;
+            case SQUEE_STRING:
+                printf("squee_print_row(): STRING Type [%i] Data [%s] \n", node->field_t, node->data.s);
+                break;
+            case SQUEE_DATE:
+                printf("squee_print_row(): DATE Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                break;
+            case SQUEE_HEAD:
+                break;
+            case SQUEE_TAIL:
+                break;
+            default:
+                break;
+        }
+        node = node->next;
+    }
+}
+
+// TODO iterate through rows via row->next till we get to the tail
+void squee_print_row(Row *row_h) {
+    RowNode *node = row_h->next_row_node;
+    // squee_print_row_node(next_row_node);
+    printf("squee_print_row(): Type [%i] \n", node->field_t);
 }
 
 // Given the field type print a header
