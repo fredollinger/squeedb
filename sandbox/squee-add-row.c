@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
     squee_write_database_to_file(argv[argc - 1], db);
 
     // printf("\n");
-    squee_append_row(db->table, argv + 1, argc - 2);
+    // squee_append_row(db->table, argv + 1, argc - 2);
 
     squee_write_database_to_file(argv[argc - 1], db);
 

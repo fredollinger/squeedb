@@ -61,19 +61,9 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
-    Row *row = (Row*) malloc(sizeof(row));
-    row->field_t =  SQUEE_TAIL;
-    tbl->row = row;
+    tbl->row = NULL;
     return tbl;
 }
-
-/*
-typedef struct Row {
-    struct Row *next;
-    struct RowNode *next_row_node;
-    Field_t field_t;
-} Row;
-*/
 
 // ROW METHODS
 /*
@@ -159,14 +149,6 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
         printf("squee_add_row() Header [%s] Type [%i] Item [%s] \n", header_p->field_name, header_p->field_t, cols[i]);
         row = (RowNode*)malloc(sizeof(RowNode));
         row->field_t = header_p->field_t;
-
-void squee_append_row(Table *table, char* cols[], int len) {
-    // TODO First Just add one row then add more than one
-    table->row = squee_add_row(table, cols, len);
-}
-
-void squee_print_row(Row *row_h) {
-    RowNode *row = row_h->next_row_node;
 
         switch(row->field_t) {
             case SQUEE_INT:
