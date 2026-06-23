@@ -70,7 +70,7 @@ Row* squee_create_row(Table *table, char* cols[], int len);
 // Create a new row from the strings and return it
 Row* squee_add_row(Table *table, char* cols[], int len);
 // given a table, append a row onto it
-void squee_append_row(Table *table, char* cols[], int len);
+void squee_append_row(Table *table, Row *row);
 
 // Print Functions
 void squee_print_header(Header*);

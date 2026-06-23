@@ -61,6 +61,11 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
+    // FKO TODO NOT DONE, make this a linked list with a START and END
+    Row *head_row = (Row*) malloc(sizeof(Row));
+    head_row->field_t = SQUEE_HEAD;
+    Row *tail_row = (Row*) malloc(sizeof(Row));
+    tail_row->field_t = SQUEE_TAIL;
     tbl->row = NULL;
     return tbl;
 }
@@ -133,6 +138,12 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
     return row_h;
 }
 
+// TODO NOT DONE FKO
+// Take a new row and add it to the linked list
+void squee_append_row(Table *table, Row *row) {
+}
+
+// TODO NOT DONE FKO We probably need to rewrite this
 Row* squee_add_row(Table *table, char* cols[], int len) {
     Header *header_p = table->header->next->next;
     char *endptr; // used for string conversion
