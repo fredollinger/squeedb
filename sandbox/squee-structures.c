@@ -54,6 +54,7 @@ Table* squee_new_empty_table() {
     return tbl;
 }
 
+// TODO F?KKO FIXME THIS IS BROKEN
 Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[]) {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
@@ -61,11 +62,16 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
-    // FKO TODO NOT DONE, make this a linked list with a START and END
-    Row *head_row = (Row*) malloc(sizeof(Row));
-    head_row->field_t = SQUEE_HEAD;
+
+    tbl->row = squee_new_empty_row();
     Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
+
+    Row *head_row = (Row*) malloc(sizeof(Row));
+    head_row->field_t = SQUEE_HEAD;
+    head_row->next = tail_row;
+
+    tbl->row = head_row;
     tbl->row = NULL;
     return tbl;
 }
@@ -77,6 +83,16 @@ Row* squee_new_empty_row() {
     return row;
 }
 */
+
+Row* squee_new_empty_row() {
+    Row *head = (Row*)malloc(sizeof(Row));
+    Row *tail = (Row*)malloc(sizeof(Row));
+    head->next = tail;
+    head->field_t = SQUEE_HEAD;
+    tail->field_t = SQUEE_TAIL;
+    tail->next = NULL;
+    return head;
+}
 
 Row* squee_create_row(Table *table, char* cols[], int len) {
     Header *header_p = table->header->next->next;
@@ -91,7 +107,7 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
     RowNode *last = row;
 
     for (int i = 0; i < len; i++) {
-        printf("squee_add_row() Header [%s] Type [%i] Item [%s] \n", header_p->field_name, header_p->field_t, cols[i]);
+        // printf("squee_create_row() Header [%s] Type [%i] Item [%s] \n", header_p->field_name, header_p->field_t, cols[i]);
         row = (RowNode*)malloc(sizeof(RowNode));
         row->field_t = header_p->field_t;
 
@@ -141,6 +157,10 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
 // TODO NOT DONE FKO
 // Take a new row and add it to the linked list
 void squee_append_row(Table *table, Row *row) {
+    struct RowNode *node = row->next_row_node;
+    while (SQUEE_TAIL !=  node->next->field_t) {
+        printf("squee_append_row(): %i \n", node->field_t);
+    }
 }
 
 // TODO NOT DONE FKO We probably need to rewrite this
@@ -171,7 +191,7 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
                 row->data.f = (float)value;
                 break;
             case SQUEE_STRING:
-                row->data.s = (char*)malloc(strlen(cols[i]));
+                row->data.s = (char*)malloc(strlen(cols[i] + 1));
                 strcpy(row->data.s, cols[i]);
                 break;
             case SQUEE_DATE:
@@ -362,6 +382,7 @@ int squee_write_database_to_file(char *file, Database *db) {
     // Write Row
     if (NULL != db->table->row) {
         RowNode *row = db->table->row->next_row_node;
+        // TODO FIXME THE NEXT LINE SEGFAULTS`
         while (SQUEE_TAIL != row->field_t) {
             switch(row->field_t) {
                 case SQUEE_INT:
