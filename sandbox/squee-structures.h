@@ -73,6 +73,7 @@ Row* squee_add_row(Table *table, char* cols[], int len);
 void squee_append_row(Table *table, Row *row);
 
 // Print Functions
+void squee_print_field_type(Field_t field_t);
 void squee_print_header(Header*);
 void squee_print_table(Table*);
 void squee_print_row(Row *row);

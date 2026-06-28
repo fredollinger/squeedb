@@ -64,25 +64,21 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
 
     tbl->row = squee_new_empty_row();
+/*
     Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
 
     Row *head_row = (Row*) malloc(sizeof(Row));
     head_row->field_t = SQUEE_HEAD;
     head_row->next = tail_row;
-
     tbl->row = head_row;
-    tbl->row = NULL;
+*/
+
+    // tbl->row = NULL;
     return tbl;
 }
 
 // ROW METHODS
-/*
-Row* squee_new_empty_row() {
-    Row *row = (Row*)malloc(sizeof(Row));
-    return row;
-}
-*/
 
 Row* squee_new_empty_row() {
     Row *head = (Row*)malloc(sizeof(Row));
@@ -229,16 +225,16 @@ void squee_print_row_node(RowNode *node) {
     while (SQUEE_TAIL != node->field_t) {
         switch(node->field_t) {
             case SQUEE_INT:
-                printf("squee_print_row(): INT Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                printf("squee_print_row_node(): INT Type [%i] Data [%i] \n", node->field_t, node->data.i);
                 break;
             case SQUEE_FLOAT:
-                printf("squee_print_row(): FLOAT Type [%i] Data [%f] \n", node->field_t, node->data.f);
+                printf("squee_print_row_node(): FLOAT Type [%i] Data [%f] \n", node->field_t, node->data.f);
                 break;
             case SQUEE_STRING:
-                printf("squee_print_row(): STRING Type [%i] Data [%s] \n", node->field_t, node->data.s);
+                printf("squee_print_row_node(): STRING Type [%i] Data [%s] \n", node->field_t, node->data.s);
                 break;
             case SQUEE_DATE:
-                printf("squee_print_row(): DATE Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                printf("squee_print_row_node(): DATE Type [%i] Data [%i] \n", node->field_t, node->data.i);
                 break;
             case SQUEE_HEAD:
                 break;
@@ -253,14 +249,15 @@ void squee_print_row_node(RowNode *node) {
 
 // TODO iterate through rows via row->next till we get to the tail
 void squee_print_row(Row *row_h) {
-    RowNode *node = row_h->next_row_node;
+    
+    // RowNode *node = row_h->next_row_node;
     // squee_print_row_node(next_row_node);
-    printf("squee_print_row(): Type [%i] \n", node->field_t);
+    // printf("squee_print_row(): Type [%i] \n", node->field_t);
 }
 
 // Given the field type print a header
-void squee_print_field_type(Header *hdr) {
-    switch(hdr->field_t){
+void squee_print_field_type(Field_t field_t) {
+    switch(field_t){
         case SQUEE_INT:
             printf("INT");
             break;
@@ -288,7 +285,7 @@ void squee_print_header(Header *hdr) {
     while (NULL != hdr_p) {
         if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
             printf("squee_print_header(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
-            squee_print_field_type(hdr_p);
+            squee_print_field_type(hdr_p->field_t);
             printf("\n");
         }
         hdr_p = hdr_p->next;
