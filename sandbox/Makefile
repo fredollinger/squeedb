@@ -3,7 +3,7 @@
 all: squee-new-database squee-create-table squee-add-row squee-read-database squeectl
 
 clean:
-	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table squee-read-database
+	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table squee-read-database smoke/test-squee-row
 	rm -fr *.dSYM
 
 squee-structures.o: force
@@ -39,5 +39,11 @@ test: squee-new-database squee-create-table squee-add-row squee-read-database
 unit/test-squee-structures: squee-structures.o
 	cc -g -I. $@.c squee-structures.o -o $@
 
+smoke/test-squee-row: squee-structures.o force
+	cc -g -I. $@.c squee-structures.o -o $@
+
 unit: unit/test-squee-structures
 	./unit/test-squee-structures
+
+smoke: smoke/test-squee-row
+	lldb -- ./smoke/test-squee-row
