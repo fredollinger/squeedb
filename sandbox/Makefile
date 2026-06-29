@@ -1,5 +1,7 @@
 .PHONY: force
 
+CC=clang
+
 all: squee-new-database squee-create-table squee-add-row squee-read-database squeectl
 
 clean:
@@ -7,22 +9,22 @@ clean:
 	rm -fr *.dSYM
 
 squee-structures.o: force
-	cc -g -c squee-structures.c
+	${CC} -g -c squee-structures.c
 
 squeectl: force squee-structures.o
-	cc $@.c -g squee-structures.o -o $@
+	${CC} $@.c -g squee-structures.o -o $@
 
 squee-read-database: force squee-structures.o
-	cc $@.c -g squee-structures.o -o $@
+	${CC} $@.c -g squee-structures.o -o $@
 
 squee-add-row: force squee-structures.o
-	cc $@.c -g squee-structures.o -o $@
+	${CC} $@.c -g squee-structures.o -o $@
 
 squee-new-database: force squee-structures.o
-	cc $@.c -g squee-structures.o -o $@
+	${CC} $@.c -g squee-structures.o -o $@
 
 squee-create-table: force squee-structures.o
-	cc $@.c -g squee-structures.o -o $@
+	${CC} $@.c -g squee-structures.o -o $@
 
 row: squee-add-row
 	./squee-add-row John Doe 42 4.25 file.db
@@ -37,10 +39,10 @@ test: squee-new-database squee-create-table squee-add-row squee-read-database
 	./squee-read-database file.db
 
 unit/test-squee-structures: squee-structures.o
-	cc -g -I. $@.c squee-structures.o -o $@
+	${CC} -g -I. $@.c squee-structures.o -o $@
 
 smoke/test-squee-row: squee-structures.o force
-	cc -g -I. $@.c squee-structures.o -o $@
+	${CC} -g -I. $@.c squee-structures.o -o $@
 
 unit: unit/test-squee-structures
 	./unit/test-squee-structures
