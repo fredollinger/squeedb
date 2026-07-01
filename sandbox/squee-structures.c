@@ -81,13 +81,15 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 // ROW METHODS
 
 Row* squee_new_empty_row() {
-    Row *head = (Row*)malloc(sizeof(Row));
-    Row *tail = (Row*)malloc(sizeof(Row));
+    Row *row = (Row*)malloc(sizeof(Row));
+    RowNode *head = (RowNode*)malloc(sizeof(RowNode));
+    RowNode *tail = (RowNode*)malloc(sizeof(RowNode));
+    row->next_row_node = head;
     head->next = tail;
     head->field_t = SQUEE_HEAD;
     tail->field_t = SQUEE_TAIL;
     tail->next = NULL;
-    return head;
+    return row;
 }
 
 Row* squee_create_row(Table *table, char* cols[], int len) {
@@ -237,8 +239,10 @@ void squee_print_row_node(RowNode *node) {
                 printf("squee_print_row_node(): DATE Type [%i] Data [%i] \n", node->field_t, node->data.i);
                 break;
             case SQUEE_HEAD:
+                printf("squee_print_row_node(): HEAD Type [%i] Data [%i] \n", node->field_t, node->data.i);
                 break;
             case SQUEE_TAIL:
+                printf("squee_print_row_node(): TAIL Type [%i] Data [%i] \n", node->field_t, node->data.i);
                 break;
             default:
                 break;
@@ -251,7 +255,7 @@ void squee_print_row_node(RowNode *node) {
 void squee_print_row(Row *row_h) {
     
     // RowNode *node = row_h->next_row_node;
-    // squee_print_row_node(next_row_node);
+    squee_print_row_node(row_h->next_row_node);
     // printf("squee_print_row(): Type [%i] \n", node->field_t);
 }
 
