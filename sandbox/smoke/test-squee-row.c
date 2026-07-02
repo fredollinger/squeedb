@@ -1,4 +1,5 @@
 // #include <fcntl.h>
+#include <stddef.h>
 #include <stdint.h>
 // #include <stdio.h>
 // #include <string.h>
@@ -9,5 +10,6 @@
 int main() {
     // Test create empty row
     Row *row = squee_new_empty_row();
+    squee_print_row(NULL);
     squee_print_row(row);
 }

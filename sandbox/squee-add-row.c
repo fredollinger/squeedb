@@ -24,9 +24,9 @@ int main(int argc, char* argv[]) {
 
     //Row *row = squee_add_row(db->table, argv + 1, argc - 2);
     Row *row = squee_create_row(db->table, argv + 1, argc - 2);
+    squee_print_row(row);
     // squee_append_row(db->table, row);
 
-    // squee_print_row(db->table->row);
     // squee_print_row_node(row->next_row_node);
     // squee_print_row(db->table->row);
     //printf("\n");

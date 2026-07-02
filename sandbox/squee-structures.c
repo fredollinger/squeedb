@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -253,6 +254,7 @@ void squee_print_row_node(RowNode *node) {
 
 // TODO iterate through rows via row->next till we get to the tail
 void squee_print_row(Row *row_h) {
+    if (NULL == row_h) return;
     
     // RowNode *node = row_h->next_row_node;
     squee_print_row_node(row_h->next_row_node);
