@@ -35,12 +35,15 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     char *endptr;
     int type = 0;
 
+    printf("squee_new_header_with_columns() begin [%i] end [%i] \n", begin, end);
+
     for (int i = begin; i < end; i = i + 2) {
         Header *neu = (Header*)malloc(sizeof(Header));
-        neu->field_name = (char*)malloc(strlen(cols[1]) + 1);
+        neu->field_name = (char*)malloc(strlen(cols[i]) + 1);
         type = strtol(cols[i + 1], &endptr, 10);
         neu->field_t = type;
         strcpy(neu->field_name, cols[i]);
+        printf("squee_new_header_with_columns() [%s] \n", neu->field_name);
         curr->next = neu;
         neu->next = curr->next->next;
         curr = neu;
@@ -62,8 +65,8 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     size_t name_len = strlen(name);
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
-    tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
-
+    tbl->header = squee_new_header_with_columns(begin, end, cols);
+    squee_print_header(tbl->header);
     tbl->row = NULL;
 
 /*
@@ -77,6 +80,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 */
 
     // tbl->row = NULL;
+
     return tbl;
 }
 

@@ -16,6 +16,7 @@ int main(int argc, char* argv[]) {
     }
 
     Database *db = squee_new_empty_database();
+    printf("argc [%i] \n");
     db->table = squee_new_table_with_header(argv[1], 0, argc - 1, argv);
     squee_write_database_to_file(argv[argc - 1], db);
 
