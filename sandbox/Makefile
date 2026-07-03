@@ -48,5 +48,5 @@ unit: unit/test-squee-structures
 	./unit/test-squee-structures
 
 smoke: smoke/test-squee-row
-	#lldb -- ./smoke/test-squee-row
-	./smoke/test-squee-row
+	lldb -- ./smoke/test-squee-row
+	# ./smoke/test-squee-row

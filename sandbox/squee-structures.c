@@ -55,7 +55,7 @@ Table* squee_new_empty_table() {
     return tbl;
 }
 
-// TODO F?KKO FIXME THIS IS BROKEN
+// TODO FKO FIXME THIS IS BROKEN
 Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[]) {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
@@ -64,7 +64,8 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin + 2, end, cols);
 
-    tbl->row = squee_new_empty_row();
+    tbl->row = NULL;
+
 /*
     Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
@@ -201,21 +202,19 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
                 break;
             default:
                 break;
-        }
 
+        }
         last->next = row;
         last = row;
         header_p = header_p->next;
     }
     
+    RowNode *tail = (RowNode*)malloc(sizeof(RowNode));
+    tail->field_t = SQUEE_TAIL;
+    last->next = tail;
+
     // TODO: This allows for only a single row in a whole table. Need to implement more of an "insert row" here
     // once we get a single row working.
-
-    // ADD A TAIL TO THE ROW
-    // TODO need to remove this once we get insert working
-    row = (RowNode*)malloc(sizeof(RowNode));
-    row->field_t = SQUEE_TAIL;
-    last->next = row;
 
     // TODO remove once we get code to insert the row instead
     table->row = row_h;
@@ -252,13 +251,19 @@ void squee_print_row_node(RowNode *node) {
     }
 }
 
+// Given a row, find the last element (before the tail)
+RowNode* squee_end_of_row(Row *row_h) {
+    return NULL;
+}
+
 // TODO iterate through rows via row->next till we get to the tail
 void squee_print_row(Row *row_h) {
     if (NULL == row_h) return;
-    
-    // RowNode *node = row_h->next_row_node;
-    squee_print_row_node(row_h->next_row_node);
-    // printf("squee_print_row(): Type [%i] \n", node->field_t);
+    RowNode *row_n = row_h->next_row_node;
+    while (SQUEE_TAIL != row_h->next_row_node->field_t) {
+        squee_print_row_node(row_n);
+        row_n = row_n->next;
+    }
 }
 
 // Given the field type print a header
