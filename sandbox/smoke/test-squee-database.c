@@ -8,8 +8,7 @@
 #include "squee-structures.h"
 
 int main() {
-    // Test create empty row
-    Row *row = squee_new_empty_row();
-    squee_print_row(NULL);
-    squee_print_row(row);
+	char *cols[] = {"John", "Doe", "42", "4.25"};
+    Database *db = squee_new_empty_database();
+    db->table = squee_new_table_with_header("Employees", 0, 3, cols);
 }

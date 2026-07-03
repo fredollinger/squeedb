@@ -15,3 +15,4 @@ squee-create-table
 squee-new-database
 squee-read-database
 smoke/test-squee-row
+smoke/test-squee-database

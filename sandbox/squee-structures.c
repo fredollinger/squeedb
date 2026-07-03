@@ -223,6 +223,7 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 }
 
 void squee_print_row_node(RowNode *node) {
+    printf("squee_print_row_node(): INT Type [%i] Data [%i] \n", node->field_t, node->data.i);
     // TODO This prints one row node actually, but we need to iterate through all the rows
     while (SQUEE_TAIL != node->field_t) {
         switch(node->field_t) {
@@ -257,12 +258,12 @@ RowNode* squee_end_of_row(Row *row_h) {
 }
 
 // TODO iterate through rows via row->next till we get to the tail
-void squee_print_row(Row *row_h) {
-    if (NULL == row_h) return;
-    RowNode *row_n = row_h->next_row_node;
-    while (SQUEE_TAIL != row_h->next_row_node->field_t) {
-        squee_print_row_node(row_n);
-        row_n = row_n->next;
+void squee_print_row(Row *row) {
+    if (NULL == row) return;
+    RowNode *node = row->next_row_node;
+    while (SQUEE_TAIL != node->next->field_t) {
+        squee_print_row_node(node);
+        node = node->next;
     }
 }
 
