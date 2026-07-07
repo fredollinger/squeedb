@@ -262,7 +262,6 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 }
 
 void squee_print_row_node(RowNode *node) {
-    printf("squee_print_row_node(): INT Type [%i] Data [%i] \n", node->field_t, node->data.i);
     // TODO This prints one row node actually, but we need to iterate through all the rows
     while (SQUEE_TAIL != node->field_t) {
         switch(node->field_t) {
@@ -289,9 +288,11 @@ void squee_print_row_node(RowNode *node) {
         }
         node = node->next;
     }
+    printf("squee_print_row_node(): TAIL Type [%i] Data [%i] \n", node->field_t, node->data.i);
 }
 
 // Given a row, find the last element (before the tail)
+// DELETE ME
 RowNode* squee_end_of_row(Row *row_h) {
     return NULL;
 }
@@ -300,10 +301,7 @@ RowNode* squee_end_of_row(Row *row_h) {
 void squee_print_row(Row *row) {
     if (NULL == row) return;
     RowNode *node = row->next_row_node;
-    while (SQUEE_TAIL != node->next->field_t) {
-        squee_print_row_node(node);
-        node = node->next;
-    }
+    squee_print_row_node(node);
 }
 
 // Given the field type print a header
