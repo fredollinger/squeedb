@@ -7,6 +7,7 @@ all: squee-new-database squee-create-table squee-add-row squee-read-database squ
 clean:
 	rm -f squee-new-database file.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table squee-read-database smoke/test-squee-database
 	rm -fr *.dSYM
+	cd smoke && rm -fr *.dSYM
 
 squee-structures.o: force
 	${CC} -g -c squee-structures.c
