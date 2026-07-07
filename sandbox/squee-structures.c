@@ -29,40 +29,6 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
     return neu;
 }
 
-// TODO MOVE TO ROW METHODS
-Row* squee_create_row(Table *table, char* cols[], int len) {
-    Row *row = squee_new_empty_row();
-    Header *hdr_p = table->header;
-    RowNode *prev = row->next_row_node;
-
-    printf("\n");
-
-    while (NULL != hdr_p) {
-        if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
-            printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
-            squee_print_field_type(hdr_p->field_t);
-            printf("\n");
-
-            RowNode *node = (RowNode*)malloc(sizeof(RowNode));
-            node->field_t = hdr_p->field_t;
-            node->data.i = 55;
-            prev->next = node;
-            node->next = prev->next->next;
-            prev = node;
-        }
-        hdr_p = hdr_p->next;
-    }
-
-/*
-    for (int i = 0; i < len; i = i + 1) {
-       printf("squee_create_row() HEADER field_name [%s] \n", header->field_name);
-       header = header->next; 
-    }
-*/
-
-    return row;
-}
-
 Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
@@ -119,6 +85,39 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 }
 
 // ROW METHODS
+
+Row* squee_create_row(Table *table, char* cols[], int len) {
+    Row *row = squee_new_empty_row();
+    Header *hdr_p = table->header;
+    RowNode *prev = row->next_row_node;
+
+    printf("\n");
+
+    while (NULL != hdr_p) {
+        if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
+            printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
+            squee_print_field_type(hdr_p->field_t);
+            printf("\n");
+
+            RowNode *node = (RowNode*)malloc(sizeof(RowNode));
+            node->field_t = hdr_p->field_t;
+            node->data.i = 55;
+            prev->next = node;
+            node->next = prev->next->next;
+            prev = node;
+        }
+        hdr_p = hdr_p->next;
+    }
+
+/*
+    for (int i = 0; i < len; i = i + 1) {
+       printf("squee_create_row() HEADER field_name [%s] \n", header->field_name);
+       header = header->next; 
+    }
+*/
+
+    return row;
+}
 
 Row* squee_new_empty_row() {
     Row *row = (Row*)malloc(sizeof(Row));
