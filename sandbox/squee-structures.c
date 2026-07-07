@@ -89,23 +89,54 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 Row* squee_create_row(Table *table, char* cols[], int len) {
     Row *row = squee_new_empty_row();
     Header *hdr_p = table->header;
-    RowNode *prev = row->next_row_node;
+    RowNode *curr = row->next_row_node;
+    long value; // used for string conversion
+    char *endptr;
 
     printf("\n");
-
+    int i = 0;
     while (NULL != hdr_p) {
         if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
-            printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
+            // printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
             squee_print_field_type(hdr_p->field_t);
             printf("\n");
 
-            RowNode *node = (RowNode*)malloc(sizeof(RowNode));
-            node->field_t = hdr_p->field_t;
-            node->data.i = 55;
-            prev->next = node;
-            node->next = prev->next->next;
-            prev = node;
+            RowNode *neu = (RowNode*)malloc(sizeof(RowNode));
+            neu->field_t = hdr_p->field_t;
+
+            printf("squee_create_row(): Field Name: %s Field value: %s ", hdr_p->field_name, cols[i]);
+
+            // TODO copy col data into the Row
+            switch(neu->field_t) {
+                case SQUEE_INT:
+                    value = strtol(cols[i], &endptr, 10);
+                    neu->data.i = (int)value;
+                    break;
+                case SQUEE_FLOAT:
+                    value = strtof(cols[i], &endptr);
+                    neu->data.f = (float)value;
+                    break;
+                case SQUEE_STRING:
+                    neu->data.s = (char*)malloc(strlen(cols[i]));
+                    strcpy(neu->data.s, cols[i]);
+                    break;
+                case SQUEE_DATE:
+                    break;
+                case SQUEE_HEAD:
+                    break;
+                case SQUEE_TAIL:
+                    break;
+                default:
+                    break;
+            }
+
+            printf("squee_create_row() [%s] \n", hdr_p->field_name);
+            curr->next = neu;
+            neu->next = curr->next->next;
+            curr = neu;
+
         }
+        i = i + 1;
         hdr_p = hdr_p->next;
     }
 
