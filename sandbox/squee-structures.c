@@ -97,7 +97,7 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
     int i = 0;
     while (NULL != hdr_p) {
         if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
-            // printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
+            printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
             squee_print_field_type(hdr_p->field_t);
             printf("\n");
 
@@ -131,8 +131,8 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
             }
 
             printf("squee_create_row() [%s] \n", hdr_p->field_name);
+            neu->next = curr->next;
             curr->next = neu;
-            neu->next = curr->next->next;
             curr = neu;
 
         }
