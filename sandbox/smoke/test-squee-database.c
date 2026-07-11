@@ -13,7 +13,7 @@ int main() {
     Database *db = squee_new_empty_database();
     db->table = squee_new_table_with_header("Employees", 0, 8, cols_header);
     squee_print_header(db->table->header);
-    Row *row = squee_create_row(db->table, cols_data, 8);
-    // Row *row = squee_new_empty_row();
+    Row *row = squee_create_row(db->table, cols_data, 4);
     squee_print_row(row);
+    squee_write_database_to_file("smoke.db", db);
 }

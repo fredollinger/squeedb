@@ -96,10 +96,16 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
     printf("\n");
     int i = 0;
     while (NULL != hdr_p) {
-        if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
+        // TODO IF WE MEET THIS THEN WE NEED TO CONTINUE INSTEAD OF WHAT WE ARE DOING
+        // if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
+            printf("squee_create_row(): %i cols [%s] \n", i, cols[i]);
             printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
             squee_print_field_type(hdr_p->field_t);
             printf("\n");
+
+            // FKO TODO remove the next 2
+            hdr_p = hdr_p->next;
+            continue;
 
             RowNode *neu = (RowNode*)malloc(sizeof(RowNode));
             neu->field_t = hdr_p->field_t;
@@ -135,7 +141,7 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
             curr->next = neu;
             curr = neu;
 
-        }
+        // }
         i = i + 1;
         hdr_p = hdr_p->next;
     }
@@ -247,7 +253,8 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
     RowNode *last = row;
 
     for (int i = 0; i < len; i++) {
-        printf("squee_add_row() Header [%s] Type [%i] Item [%s] \n", header_p->field_name, header_p->field_t, cols[i]);
+        printf("squee_add_row() Item [%s] \n", cols[i]);
+        // printf("squee_add_row() Header [%s] Type [%i] Item [%s] \n", header_p->field_name, header_p->field_t, cols[i]);
         row = (RowNode*)malloc(sizeof(RowNode));
         row->field_t = header_p->field_t;
 
