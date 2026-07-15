@@ -14,6 +14,7 @@ int main() {
     db->table = squee_new_table_with_header("Employees", 0, 8, cols_header);
     squee_print_header(db->table->header);
     Row *row = squee_create_row(db->table, cols_data, 4);
-    squee_print_row(row);
+    squee_append_row(db->table, row);
+    squee_print_row(db->table->row);
     squee_write_database_to_file("smoke.db", db);
 }

@@ -67,19 +67,15 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin, end, cols);
     squee_print_header(tbl->header);
-    tbl->row = NULL;
 
-/*
-    Row *tail_row = (Row*) malloc(sizeof(Row));
+    Row *row = (Row*)malloc(sizeof(Row));
+    RowNode *tail_row = (RowNode*) malloc(sizeof(RowNode));
     tail_row->field_t = SQUEE_TAIL;
-
-    Row *head_row = (Row*) malloc(sizeof(Row));
+    RowNode *head_row = (RowNode*) malloc(sizeof(RowNode));
     head_row->field_t = SQUEE_HEAD;
     head_row->next = tail_row;
-    tbl->row = head_row;
-*/
-
-    // tbl->row = NULL;
+    row->next_row_node = head_row;
+    tbl->row = row;
 
     return tbl;
 }
@@ -88,6 +84,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
 Row* squee_create_row(Table *table, char* cols[], int len) {
     Row *row = squee_new_empty_row();
+    row->id = -1; // we only give it an id when we insert it into the table
     Header *hdr_p = table->header;
     RowNode *curr = row->next_row_node;
     long value; // used for string conversion
@@ -233,13 +230,17 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
 // TODO NOT DONE FKO
 // Take a new row and add it to the linked list
 void squee_append_row(Table *table, Row *row) {
+    table->row = row;
+#if 0
     struct RowNode *node = row->next_row_node;
     while (SQUEE_TAIL !=  node->next->field_t) {
         printf("squee_append_row(): %i \n", node->field_t);
     }
+#endif
 }
 
 // TODO NOT DONE FKO We probably need to rewrite this
+#if 0
 Row* squee_add_row(Table *table, char* cols[], int len) {
     Header *header_p = table->header->next->next;
     char *endptr; // used for string conversion
@@ -298,6 +299,7 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 
     return row_h;
 }
+#endif
 
 void squee_print_row_node(RowNode *node) {
     // TODO This prints one row node actually, but we need to iterate through all the rows

@@ -17,6 +17,7 @@ typedef struct Row {
     struct Row *next;
     struct RowNode *next_row_node;
     Field_t field_t;
+    int id;
 } Row;
 
 typedef struct RowNode {
@@ -40,6 +41,7 @@ typedef struct Table {
     char *name;
     Header *header;
     Row *row;
+    int next_row_id; // the id that the next inserted row is going to get
 } Table;
 
 // how to have more than one table?
@@ -64,11 +66,9 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
 // ROW CREATION
 Row* squee_new_empty_row();
 // Add a new row to a table
-Row* squee_add_row(Table *table, char* cols[], int len);
+// Row* squee_add_row(Table *table, char* cols[], int len);
 // Create a new free floating row
 Row* squee_create_row(Table *table, char* cols[], int len);
-// Create a new row from the strings and return it
-Row* squee_add_row(Table *table, char* cols[], int len);
 // given a table, append a row onto it
 void squee_append_row(Table *table, Row *row);
 

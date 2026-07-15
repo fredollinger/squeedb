@@ -2,7 +2,11 @@
 
 ## Currently working on
 
-squee-add-row.c
+Need to implement code to actually write to the file
+squee_write_database_to_file("smoke.db", db);
+
+// Need to actually append multiple rows rather than erasing the current row
+squee-append-row()
 
 Finish populating a new row, saving it to disk then reading the full datastructure from disk.
 
