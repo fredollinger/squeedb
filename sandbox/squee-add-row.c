@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 
 	char *cols_data[] = {"John", "Doe", "42", "4.25"};
     // TODO do not hard code
-    Row *row = squee_create_row(db->table, cols_data, c + 1);
+    Row *row = squee_create_row(db->table, cols_data, 4);
     // squee_print_row(row);
     printf("\nEND squee-add-row.c\n");
     
