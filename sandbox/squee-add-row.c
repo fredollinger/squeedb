@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
     // squee_print_row(row);
     printf("\nEND squee-add-row.c\n");
     
-    // squee_append_row(db->table, row);
+    squee_append_row(db->table, row);
 
     // squee_print_row_node(row->next_row_node);
     // squee_print_row(db->table->row);

@@ -17,6 +17,7 @@ typedef struct Row {
     struct Row *next;
     struct RowNode *next_row_node;
     Field_t field_t;
+    int id;
 } Row;
 
 typedef struct RowNode {
@@ -40,6 +41,7 @@ typedef struct Table {
     char *name;
     Header *header;
     Row *row;
+    int row_id;
 } Table;
 
 // how to have more than one table?
