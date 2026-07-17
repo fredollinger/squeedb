@@ -2,6 +2,8 @@
 
 ## Currently working on
 
+Reading the database
+
 squee-add-row.c
 
 Finish populating a new row, saving it to disk then reading the full datastructure from disk.
