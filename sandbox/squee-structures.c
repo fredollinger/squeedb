@@ -231,9 +231,9 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
 // Take a new row and add it to the linked list
 void squee_append_row(Table *table, Row *row) {
     Row *prev = table->row;
-    while (SQUEE_TAIL !=  row->next->field_t) {
-        printf("squee_append_row(): %i \n", row->field_t);
-        prev = row->next;
+    while (SQUEE_TAIL != prev->next->field_t) {
+        printf("squee_append_row(): %i \n", prev->field_t);
+        prev = prev->next;
     }
     Row *last = prev->next;
     prev->next = row;
@@ -341,14 +341,22 @@ RowNode* squee_end_of_row(Row *row_h) {
     return NULL;
 }
 
-// TODO iterate through rows via row->next till we get to the tail
+// print all a single row
 void squee_print_row(Row *row) {
+    RowNode *node = row->next_row_node;
+    while (SQUEE_TAIL != node->next->field_t) {
+        squee_print_row_node(node);
+    } 
+}
+
+// print a all rows
+void squee_print_rows(Row *row) {
+    // TODO NOT DONE
     Row *curr = row;
     if (NULL == row) return;
     while (SQUEE_TAIL != curr->next->field_t) {
-        printf("print_row() type [%i] \n", row->field_t);
+        printf("print_row() type [%i] \n", curr->field_t);
         RowNode *node = curr->next_row_node;
-        printf("print_row() node [%i] \n", node);
         squee_print_row_node(node);
         curr = curr->next;
     }
