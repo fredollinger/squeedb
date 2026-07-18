@@ -70,14 +70,9 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
     Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
-    tail_row->next_row_node = NULL;
-    tail_row->next = NULL;
-
     Row *head_row = (Row*) malloc(sizeof(Row));
     head_row->field_t = SQUEE_HEAD;
     head_row->next = tail_row;
-    head_row->next_row_node = NULL;
-
     tbl->row = head_row;
 
     return tbl;
@@ -87,7 +82,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
 Row* squee_create_row(Table *table, char* cols[], int len) {
     Row *row = squee_new_empty_row();
-    row->id = -1; // we only give it an id when we insert it into the table
+    row->id = -1;
     Header *hdr_p = table->header;
     RowNode *curr = row->next_row_node;
     long value; // used for string conversion
@@ -246,7 +241,6 @@ void squee_append_row(Table *table, Row *row) {
 }
 
 // TODO NOT DONE FKO We probably need to rewrite this
-#if 0
 Row* squee_add_row(Table *table, char* cols[], int len) {
     Header *header_p = table->header->next->next;
     char *endptr; // used for string conversion
@@ -305,7 +299,6 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 
     return row_h;
 }
-#endif
 
 void squee_print_row_node(RowNode *node) {
     // TODO This prints one row node actually, but we need to iterate through all the rows

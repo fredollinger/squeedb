@@ -41,7 +41,7 @@ typedef struct Table {
     char *name;
     Header *header;
     Row *row;
-    int next_row_id; // the id that the next inserted row is going to get
+    int row_id; // the id that the next inserted row is going to get
 } Table;
 
 // how to have more than one table?
