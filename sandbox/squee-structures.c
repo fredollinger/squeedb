@@ -70,8 +70,10 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
     Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
+    tail_row->next_row_node = NULL;
     Row *head_row = (Row*) malloc(sizeof(Row));
     head_row->field_t = SQUEE_HEAD;
+    head_row->next_row_node = NULL;
     head_row->next = tail_row;
     tbl->row = head_row;
 
@@ -302,32 +304,35 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 
 void squee_print_row_node(RowNode *node) {
     // TODO This prints one row node actually, but we need to iterate through all the rows
-    while (SQUEE_TAIL != node->field_t) {
-        switch(node->field_t) {
+    // TODO copy the row node instead of invalidating it
+    if (NULL == node) return;
+    RowNode *curr = node;
+    while (SQUEE_TAIL != curr->field_t) {
+        switch(curr->field_t) {
             case SQUEE_INT:
-                printf("squee_print_row_node(): INT Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                printf("squee_print_row_curr(): INT Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
                 break;
             case SQUEE_FLOAT:
-                printf("squee_print_row_node(): FLOAT Type [%i] Data [%f] \n", node->field_t, node->data.f);
+                printf("squee_print_row_curr(): FLOAT Type [%i] Data [%f] \n", curr->field_t, curr->data.f);
                 break;
             case SQUEE_STRING:
-                printf("squee_print_row_node(): STRING Type [%i] Data [%s] \n", node->field_t, node->data.s);
+                printf("squee_print_row_curr(): STRING Type [%i] Data [%s] \n", curr->field_t, curr->data.s);
                 break;
             case SQUEE_DATE:
-                printf("squee_print_row_node(): DATE Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                printf("squee_print_row_curr(): DATE Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
                 break;
             case SQUEE_HEAD:
-                printf("squee_print_row_node(): HEAD Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                printf("squee_print_row_curr(): HEAD Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
                 break;
             case SQUEE_TAIL:
-                printf("squee_print_row_node(): TAIL Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                printf("squee_print_row_curr(): TAIL Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
                 break;
             default:
                 break;
         }
-        node = node->next;
+        curr = curr->next;
     }
-    printf("squee_print_row_node(): TAIL Type [%i] Data [%i] \n", node->field_t, node->data.i);
+    printf("squee_print_row_node(): TAIL Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
 }
 
 // Given a row, find the last element (before the tail)
@@ -338,9 +343,15 @@ RowNode* squee_end_of_row(Row *row_h) {
 
 // TODO iterate through rows via row->next till we get to the tail
 void squee_print_row(Row *row) {
+    Row *curr = row;
     if (NULL == row) return;
-    RowNode *node = row->next_row_node;
-    squee_print_row_node(node);
+    while (SQUEE_TAIL != curr->next->field_t) {
+        printf("print_row() type [%i] \n", row->field_t);
+        RowNode *node = curr->next_row_node;
+        printf("print_row() node [%i] \n", node);
+        squee_print_row_node(node);
+        curr = curr->next;
+    }
 }
 
 // Given the field type print a header
@@ -466,6 +477,7 @@ int squee_write_database_to_file(char *file, Database *db) {
     }
 
     // Write Row
+#if 0
     if (NULL != db->table->row) {
         RowNode *row = db->table->row->next_row_node;
         // TODO FIXME THE NEXT LINE SEGFAULTS`
@@ -497,6 +509,7 @@ int squee_write_database_to_file(char *file, Database *db) {
     else {
         printf("squee_write_db() not writing empty table \n");
     }
+#endif
 
     fprintf(fd, "%c", SQUEE_END_OF_TEXT);
     fprintf(fd, "%c", SQUEE_END_OF_FILE);
