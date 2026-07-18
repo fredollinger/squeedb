@@ -68,14 +68,17 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->header = squee_new_header_with_columns(begin, end, cols);
     squee_print_header(tbl->header);
 
-    Row *row = (Row*)malloc(sizeof(Row));
-    RowNode *tail_row = (RowNode*) malloc(sizeof(RowNode));
+    Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
-    RowNode *head_row = (RowNode*) malloc(sizeof(RowNode));
+    tail_row->next_row_node = NULL;
+    tail_row->next = NULL;
+
+    Row *head_row = (Row*) malloc(sizeof(Row));
     head_row->field_t = SQUEE_HEAD;
     head_row->next = tail_row;
-    row->next_row_node = head_row;
-    tbl->row = row;
+    head_row->next_row_node = NULL;
+
+    tbl->row = head_row;
 
     return tbl;
 }
@@ -230,13 +233,16 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
 // TODO NOT DONE FKO
 // Take a new row and add it to the linked list
 void squee_append_row(Table *table, Row *row) {
-    table->row = row;
-#if 0
-    struct RowNode *node = row->next_row_node;
-    while (SQUEE_TAIL !=  node->next->field_t) {
-        printf("squee_append_row(): %i \n", node->field_t);
+    Row *prev = table->row;
+    while (SQUEE_TAIL !=  row->next->field_t) {
+        printf("squee_append_row(): %i \n", row->field_t);
+        prev = row->next;
     }
-#endif
+    Row *last = prev->next;
+    prev->next = row;
+    row->next = last;
+    table->row_id = table->row_id + 1;
+    row->id = table->row_id;
 }
 
 // TODO NOT DONE FKO We probably need to rewrite this
@@ -384,6 +390,7 @@ void squee_print_header(Header *hdr) {
 Database* squee_new_empty_database() {
     Database *db = (Database*) malloc(sizeof(Database));
     db->table = squee_new_empty_table();
+    db->table->row_id = 0;
     db->table->header = squee_new_empty_header();
     return db;
 }

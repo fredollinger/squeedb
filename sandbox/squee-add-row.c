@@ -34,10 +34,18 @@ int main(int argc, char* argv[]) {
     }
 
 	char *cols_data[] = {"John", "Doe", "42", "4.25"};
-    Row *row = squee_create_row(db->table, cols_data, c + 1);
-    squee_append_row(db->table, row);
-    squee_print_row(db->table->row);
+    // TODO do not hard code
+    Row *row = squee_create_row(db->table, cols_data, 4);
+    // squee_print_row(row);
     printf("\nEND squee-add-row.c\n");
+    
+    squee_append_row(db->table, row);
+
+    // squee_print_row_node(row->next_row_node);
+    // squee_print_row(db->table->row);
+    //printf("\n");
+
+    //squee_write_database_to_file(argv[argc - 1], db);
 
     squee_write_database_to_file(argv[argc - 1], db);
 

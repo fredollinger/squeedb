@@ -3,7 +3,7 @@
 *.dSYM
 
 # Database files
-file.db
+*.db
 
 # VSCode
 .vscode
