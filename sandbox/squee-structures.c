@@ -344,6 +344,7 @@ RowNode* squee_end_of_row(Row *row_h) {
 // print all a single row
 void squee_print_row(Row *row) {
     RowNode *node = row->next_row_node;
+    if (NULL == node) return;
     while (SQUEE_TAIL != node->next->field_t) {
         squee_print_row_node(node);
     } 
@@ -413,7 +414,6 @@ void squee_print_Table(Table *tbl) {
 
 // IO
 Database* squee_read_database_from_file(char *file) {
-    printf("TODO NEED TO READ THE ROWS HERE \n");
     int buffer_size = 10000;
     int type = 0;
     char *endptr = NULL;
@@ -460,6 +460,7 @@ Database* squee_read_database_from_file(char *file) {
         }
     }
 
+    printf("TODO NEED TO READ THE ROWS HERE \n");
     fclose(fd);
     // Clean up all allocated memory except the db
     return db;
