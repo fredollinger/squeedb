@@ -6,9 +6,13 @@
 // Delimiters
 #define SQUEE_UNIT_SEPARATOR 0x1F
 #define SQUEE_RECORD_SEPARATOR 0x1E
-#define SQUEE_START_OF_TEXT 0x02
-#define SQUEE_END_OF_TEXT 0x03
-#define SQUEE_END_OF_FILE 0x04
+#define SQUEE_UNIT_SEPARATOR    0x1F
+#define SQUEE_RECORD_SEPARATOR  0x1E
+#define SQUEE_START_HEADER      0x02
+#define SQUEE_END_HEADER        0x03
+#define SQUEE_START_ROW         0x04
+#define SQUEE_END_ROW           0x05
+#define SQUEE_END_FILE       0x06
 
 // The data type that the field holds
 typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_HEAD, SQUEE_TAIL } Field_t;

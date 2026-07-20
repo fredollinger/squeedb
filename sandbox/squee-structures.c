@@ -429,10 +429,10 @@ Database* squee_read_database_from_file(char *file) {
     char buffer[buffer_size];
     char *pbuffer = buffer;
     char *tok, *col, *type_s;
-    char squee_start_of_text[2] = { SQUEE_START_OF_TEXT, '\0' };
+    char squee_start_of_text[2] = { SQUEE_START_HEADER, '\0' };
     char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
     char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
-    char squee_end_of_text[2] =  { SQUEE_END_OF_TEXT, '\0' };
+    char squee_end_of_text[2] =  { SQUEE_END_HEADER, '\0' };
     size_t len;
 
     FILE *fd = fopen(file, "r");
@@ -457,7 +457,7 @@ Database* squee_read_database_from_file(char *file) {
 
         while(1) {
             type_s = strsep(&pbuffer, squee_record_separator);
-            if (type_s[0] == SQUEE_END_OF_TEXT) {
+            if (type_s[0] == SQUEE_END_HEADER) {
                 break;
             }
             else if (type_s[0] == '\0') {
@@ -485,7 +485,7 @@ int squee_write_database_to_file(char *file, Database *db) {
         return(1);
     }
 
-    fprintf(fd, "SQUEE format 3%c", SQUEE_START_OF_TEXT);
+    fprintf(fd, "SQUEE format 3%c", SQUEE_START_HEADER);
     fprintf(fd, "%s%c",db->table->name, SQUEE_UNIT_SEPARATOR);
 
     // Write Header
@@ -494,6 +494,7 @@ int squee_write_database_to_file(char *file, Database *db) {
         fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
         hdr_p = hdr_p->next;
     }
+    fprintf(fd, "%c", SQUEE_END_HEADER);
 
     // Write Row
 #if 0
@@ -530,8 +531,7 @@ int squee_write_database_to_file(char *file, Database *db) {
     }
 #endif
 
-    fprintf(fd, "%c", SQUEE_END_OF_TEXT);
-    fprintf(fd, "%c", SQUEE_END_OF_FILE);
+    fprintf(fd, "%c", SQUEE_END_FILE);
     fclose(fd);
     return(0);
 }
