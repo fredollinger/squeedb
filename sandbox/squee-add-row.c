@@ -49,9 +49,9 @@ int main(int argc, char* argv[]) {
     // squee_print_row(db->table->row);
     //printf("\n");
 
-    //squee_write_database_to_file(argv[argc - 1], db);
-
     squee_write_database_to_file(argv[argc - 1], db);
+
+    // squee_write_database_to_file(argv[argc - 1], db);
 
     return(0);
 }

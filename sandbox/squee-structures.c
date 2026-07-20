@@ -76,6 +76,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
 Row* squee_create_row(Table *table, char* cols[], int len) {
     Row *row = squee_new_empty_row();
+    row->field_t = SQUEE_DATA;
     row->id = -1;
     Header *hdr_p = table->header;
     RowNode *curr = row->next_row_node;
@@ -353,7 +354,7 @@ void squee_print_rows(Row *row) {
     if (NULL == row) return;
     while (SQUEE_TAIL != curr->field_t) {
 
-        printf("print_row() type [");
+        printf("print_row() id [%i] type [", curr->id);
         squee_print_field_type(curr->field_t);
         printf("] \n");
 
@@ -496,11 +497,29 @@ int squee_write_database_to_file(char *file, Database *db) {
     }
     fprintf(fd, "%c", SQUEE_END_HEADER);
 
+    //printf("squee_write_database_to_file() print_rows \n");
+    // squee_print_rows(row);
+    // printf("squee_write_database_to_file() [%i] \n", row->field_t);
+    Row *row = db->table->row;
     // Write Row
-#if 0
-    if (NULL != db->table->row) {
-        RowNode *row = db->table->row->next_row_node;
-        // TODO FIXME THE NEXT LINE SEGFAULTS`
+    while (SQUEE_TAIL != row->field_t) {
+        printf("write_db() row type [%i] \n", row->field_t);
+        RowNode *node = db->table->row->next_row_node;
+        if (NULL == node) {
+            row = row->next;
+            continue;
+        }
+        squee_print_row_node(node);
+        /*
+        while (SQUEE_TAIL != node->field_t) {
+            printf("write_db() [%i] \n", node->field_t);
+            node = node->next;
+        }
+        */
+        row = row->next;
+    }
+
+        /*
         while (SQUEE_TAIL != row->field_t) {
             switch(row->field_t) {
                 case SQUEE_INT:
@@ -523,13 +542,10 @@ int squee_write_database_to_file(char *file, Database *db) {
                     // printf("UK");
                     break;
             }
-            row = row->next;
+
         }
     }
-    else {
-        printf("squee_write_db() not writing empty table \n");
-    }
-#endif
+        */
 
     fprintf(fd, "%c", SQUEE_END_FILE);
     fclose(fd);
