@@ -2,12 +2,12 @@
 
 ## Currently working on
 
-Need to implement code to actually write to the file
-squee_write_database_to_file("smoke.db", db);
-
 // Need to actually append multiple rows rather than erasing the current row
 squee-append-row()
 Reading the database
+
+Need to implement code to actually write to the file
+squee_write_database_to_file("smoke.db", db);
 
 squee-add-row.c
 

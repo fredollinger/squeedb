@@ -80,6 +80,7 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
     row->id = -1;
     Header *hdr_p = table->header;
     RowNode *curr = row->next_row_node;
+    row->next_row_node = curr;
     long value; // used for string conversion
     char *endptr;
 
@@ -94,8 +95,8 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
             printf("\n");
 
             // FKO TODO remove the next 2
-            hdr_p = hdr_p->next;
-            continue;
+            // hdr_p = hdr_p->next;
+            // continue;
 
             RowNode *neu = (RowNode*)malloc(sizeof(RowNode));
             neu->field_t = hdr_p->field_t;
@@ -136,14 +137,16 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
         hdr_p = hdr_p->next;
     }
 
-/*
-    for (int i = 0; i < len; i = i + 1) {
-       printf("squee_create_row() HEADER field_name [%s] \n", header->field_name);
-       header = header->next; 
-    }
-*/
-
     return row;
+}
+
+RowNode* squee_new_empty_row_node() {
+    RowNode *tail_row = (RowNode*) malloc(sizeof(RowNode));
+    tail_row->field_t = SQUEE_TAIL;
+    RowNode *head_row = (RowNode*) malloc(sizeof(RowNode));
+    head_row->field_t = SQUEE_HEAD;
+    head_row->next = tail_row;
+    return head_row;
 }
 
 Row* squee_new_empty_row() {
@@ -159,6 +162,7 @@ Row* squee_new_empty_row() {
     head_row->next = tail_row;
 
     return head_row;
+
 }
 
 /*
@@ -301,6 +305,7 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 void squee_print_row_node(RowNode *node) {
     // TODO This prints one row node actually, but we need to iterate through all the rows
     // TODO copy the row node instead of invalidating it
+    printf("squee_print_row_node() BEGIN \n");
     if (NULL == node) return;
     RowNode *curr = node;
     while (SQUEE_TAIL != curr->field_t) {
@@ -340,6 +345,7 @@ RowNode* squee_end_of_row(Row *row_h) {
 // print all a single row
 void squee_print_row(Row *row) {
     RowNode *node = row->next_row_node;
+    printf("squee_print_row NULL \n");
     if (NULL == node) return;
     while (SQUEE_TAIL != node->next->field_t) {
         squee_print_row_node(node);
@@ -503,13 +509,16 @@ int squee_write_database_to_file(char *file, Database *db) {
     Row *row = db->table->row;
     // Write Row
     while (SQUEE_TAIL != row->field_t) {
-        printf("write_db() row type [%i] \n", row->field_t);
+        printf("squee_write_database_to_file() row type [%i] \n", row->field_t);
         RowNode *node = db->table->row->next_row_node;
         if (NULL == node) {
+            printf("write_db() row node is null \n");
             row = row->next;
             continue;
         }
-        squee_print_row_node(node);
+        printf("squee_write_database_to_file() SQUEE_PRINT_ROW() \n");
+        squee_print_row(row);
+        // squee_print_row_node(node);
         /*
         while (SQUEE_TAIL != node->field_t) {
             printf("write_db() [%i] \n", node->field_t);

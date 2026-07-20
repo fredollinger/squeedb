@@ -69,6 +69,7 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
 
 // ROW CREATION
 Row* squee_new_empty_row();
+RowNode* squee_new_empty_row_node();
 // Add a new row to a table
 // Row* squee_add_row(Table *table, char* cols[], int len);
 // Create a new free floating row
