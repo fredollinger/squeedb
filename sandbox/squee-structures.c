@@ -68,15 +68,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->header = squee_new_header_with_columns(begin, end, cols);
     squee_print_header(tbl->header);
 
-    Row *tail_row = (Row*) malloc(sizeof(Row));
-    tail_row->field_t = SQUEE_TAIL;
-    tail_row->next_row_node = NULL;
-    Row *head_row = (Row*) malloc(sizeof(Row));
-    head_row->field_t = SQUEE_HEAD;
-    head_row->next_row_node = NULL;
-    head_row->next = tail_row;
-    tbl->row = head_row;
-
+    tbl->row = squee_new_empty_row();
     return tbl;
 }
 
@@ -154,15 +146,18 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
 }
 
 Row* squee_new_empty_row() {
-    Row *row = (Row*)malloc(sizeof(Row));
-    RowNode *head = (RowNode*)malloc(sizeof(RowNode));
-    RowNode *tail = (RowNode*)malloc(sizeof(RowNode));
-    row->next_row_node = head;
-    head->next = tail;
-    head->field_t = SQUEE_HEAD;
-    tail->field_t = SQUEE_TAIL;
-    tail->next = NULL;
-    return row;
+
+    // Create empty row list
+    Row *tail_row = (Row*) malloc(sizeof(Row));
+    tail_row->field_t = SQUEE_TAIL;
+    tail_row->next_row_node = NULL;
+
+    Row *head_row = (Row*) malloc(sizeof(Row));
+    head_row->field_t = SQUEE_HEAD;
+    head_row->next_row_node = NULL;
+    head_row->next = tail_row;
+
+    return head_row;
 }
 
 /*
@@ -353,14 +348,24 @@ void squee_print_row(Row *row) {
 // print a all rows
 void squee_print_rows(Row *row) {
     // TODO NOT DONE
+    printf("print_row() BEGIN \n");
     Row *curr = row;
     if (NULL == row) return;
-    while (SQUEE_TAIL != curr->next->field_t) {
-        printf("print_row() type [%i] \n", curr->field_t);
+    while (SQUEE_TAIL != curr->field_t) {
+
+        printf("print_row() type [");
+        squee_print_field_type(curr->field_t);
+        printf("] \n");
+
         RowNode *node = curr->next_row_node;
         squee_print_row_node(node);
         curr = curr->next;
     }
+
+    printf("print_row() type [");
+    squee_print_field_type(curr->field_t);
+    printf("] \n");
+    printf("print_row() END \n");
 }
 
 // Given the field type print a header
@@ -379,8 +384,10 @@ void squee_print_field_type(Field_t field_t) {
             printf("DATE");
             break;
         case SQUEE_HEAD:
+            printf("SQUEE_HEAD");
             break;
         case SQUEE_TAIL:
+            printf("SQUEE_TAIL");
             break;
         default:
             printf("UK");
@@ -405,6 +412,8 @@ Database* squee_new_empty_database() {
     db->table = squee_new_empty_table();
     db->table->row_id = 0;
     db->table->header = squee_new_empty_header();
+    db->table->row = squee_new_empty_row();
+
     return db;
 }
 
@@ -433,6 +442,7 @@ Database* squee_read_database_from_file(char *file) {
     }
 
     Database *db = squee_new_empty_database();
+    squee_print_rows(db->table->row);
     Header *curr_header = db->table->header;
 
     while(fgets(buffer, buffer_size, fd)) {
