@@ -90,21 +90,22 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
     printf("\n");
     int i = 0;
     while (NULL != hdr_p) {
+        if (SQUEE_HEAD == hdr_p->field_t) {
+            hdr_p = hdr_p->next;
+            continue;
+        }
+
         // TODO IF WE MEET THIS THEN WE NEED TO CONTINUE INSTEAD OF WHAT WE ARE DOING
         // if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
-        printf("squee_create_row(): %i cols [%s] \n", i, cols[i]);
-        printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
-        squee_print_field_type(hdr_p->field_t);
-        printf("\n");
-
-        // FKO TODO remove the next 2
-        // hdr_p = hdr_p->next;
-        // continue;
+        // printf("squee_create_row(): %i cols [%s] \n", i, cols[i]);
+        //printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
+        //squee_print_field_type(hdr_p->field_t);
+        //printf("\n");
 
         RowNode *neu = (RowNode*)malloc(sizeof(RowNode));
         neu->field_t = hdr_p->field_t;
 
-        printf("squee_create_row(): Field Name: %s Field value: %s ", hdr_p->field_name, cols[i]);
+        // printf("squee_create_row(): Field Name: %s Field value: %s ", hdr_p->field_name, cols[i]);
 
         // TODO copy col data into the Row
         switch(neu->field_t) {
@@ -117,8 +118,10 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
                 neu->data.f = (float)value;
                 break;
             case SQUEE_STRING:
-                neu->data.s = (char*)malloc(strlen(cols[i]));
-                strcpy(neu->data.s, cols[i]);
+                printf("squee_create_row(): STRING %i cols [%s] \n", i, cols[i]);
+                neu->data.s = strdup(cols[i]);
+                // neu->data.s = (char*)malloc(strlen(cols[i]));
+                // strcpy(neu->data.s, cols[i]);
                 break;
             case SQUEE_DATE:
                 break;
@@ -130,7 +133,7 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
                 break;
         }
 
-        printf("squee_create_row() [%s] \n", hdr_p->field_name);
+        // printf("squee_create_row() [%s] \n", hdr_p->field_name);
         neu->next = curr->next;
         curr->next = neu;
         curr = neu;
@@ -139,7 +142,6 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
         // neu->next = curr->next->next;
         // curr = neu;
 
-        // }
         i = i + 1;
         hdr_p = hdr_p->next;
 
