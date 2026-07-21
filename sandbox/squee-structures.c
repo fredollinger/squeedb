@@ -134,13 +134,13 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
         }
 
         // printf("squee_create_row() [%s] \n", hdr_p->field_name);
-        neu->next = curr->next;
-        curr->next = neu;
-        curr = neu;
-
+        // neu->next = curr->next;
         // curr->next = neu;
-        // neu->next = curr->next->next;
         // curr = neu;
+
+        curr->next = neu;
+        neu->next = curr->next->next;
+        curr = neu;
 
         i = i + 1;
         hdr_p = hdr_p->next;
@@ -363,6 +363,7 @@ void squee_print_row(Row *row) {
     if (NULL == node) return;
     while (SQUEE_TAIL != node->next->field_t) {
         squee_print_row_node(node);
+        node = node->next;
     } 
 }
 
