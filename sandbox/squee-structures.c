@@ -322,32 +322,28 @@ void squee_print_row_node(RowNode *node) {
     printf("squee_print_row_node() BEGIN \n");
     if (NULL == node) return;
     RowNode *curr = node;
-    while (SQUEE_TAIL != curr->field_t) {
-        switch(curr->field_t) {
-            case SQUEE_INT:
-                printf("squee_print_row_curr(): INT Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
-                break;
-            case SQUEE_FLOAT:
-                printf("squee_print_row_curr(): FLOAT Type [%i] Data [%f] \n", curr->field_t, curr->data.f);
-                break;
-            case SQUEE_STRING:
-                printf("squee_print_row_curr(): STRING Type [%i] Data [%s] \n", curr->field_t, curr->data.s);
-                break;
-            case SQUEE_DATE:
-                printf("squee_print_row_curr(): DATE Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
-                break;
-            case SQUEE_HEAD:
-                printf("squee_print_row_curr(): HEAD Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
-                break;
-            case SQUEE_TAIL:
-                printf("squee_print_row_curr(): TAIL Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
-                break;
-            default:
-                break;
-        }
-        curr = curr->next;
+    switch(curr->field_t) {
+        case SQUEE_INT:
+            printf("squee_print_row_node(): INT Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
+            break;
+        case SQUEE_FLOAT:
+            printf("squee_print_row_node(): FLOAT Type [%i] Data [%f] \n", curr->field_t, curr->data.f);
+            break;
+        case SQUEE_STRING:
+            printf("squee_print_row_node(): STRING Type [%i] Data [%s] \n", curr->field_t, curr->data.s);
+            break;
+        case SQUEE_DATE:
+            printf("squee_print_row_node(): DATE Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
+            break;
+        case SQUEE_HEAD:
+            printf("squee_print_row_node(): HEAD Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
+            break;
+        case SQUEE_TAIL:
+            printf("squee_print_row_node(): TAIL Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
+            break;
+        default:
+            break;
     }
-    printf("squee_print_row_node(): TAIL Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
 }
 
 // Given a row, find the last element (before the tail)
@@ -361,9 +357,12 @@ void squee_print_row(Row *row) {
     RowNode *node = row->next_row_node;
     printf("squee_print_row NULL \n");
     if (NULL == node) return;
+    int c = 0;
     while (SQUEE_TAIL != node->next->field_t) {
+        printf("%i: ", c);
         squee_print_row_node(node);
         node = node->next;
+        c = c + 1;
     } 
 }
 
