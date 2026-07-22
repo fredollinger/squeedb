@@ -366,12 +366,12 @@ void squee_print_row(Row *row) {
 
 // print a all rows
 void squee_print_rows(Row *row) {
-    printf("print_row() BEGIN \n");
+    printf("print_rows() BEGIN \n");
     Row *curr = row;
     if (NULL == row) return;
     while (SQUEE_TAIL != curr->field_t) {
 
-        printf("print_row() id [%i] type [", curr->id);
+        printf("print_rows() id [%i] type [", curr->id);
         squee_print_field_type(curr->field_t);
         printf("] \n");
 
@@ -380,10 +380,10 @@ void squee_print_rows(Row *row) {
         curr = curr->next;
     }
 
-    printf("print_row() type [");
+    printf("print_rows() id [%i] type [", curr->id);
     squee_print_field_type(curr->field_t);
     printf("] \n");
-    printf("print_row() END \n");
+    printf("print_rows() END \n");
 }
 
 // Given the field type print a header
