@@ -406,6 +406,9 @@ void squee_print_field_type(Field_t field_t) {
         case SQUEE_TAIL:
             printf("SQUEE_TAIL");
             break;
+        case SQUEE_DATA:
+            printf("SQUEE_DATA");
+            break;
         default:
             printf("UK");
             break;
@@ -513,30 +516,41 @@ int squee_write_database_to_file(char *file, Database *db) {
     }
     fprintf(fd, "%c", SQUEE_END_HEADER);
 
-    //printf("squee_write_database_to_file() print_rows \n");
+    Row *curr = db->table->row;
     // squee_print_rows(row);
-    // printf("squee_write_database_to_file() [%i] \n", row->field_t);
-    Row *row = db->table->row;
+    while (SQUEE_TAIL != curr->field_t) {
+        // TODO print to file
+        printf("write_database() id [%i] type [", curr->id);
+        squee_print_field_type(curr->field_t);
+        printf("] \n");
+
+        squee_print_row(curr);
+        curr = curr->next;
+    }
+
     // Write Row
+/*
     while (SQUEE_TAIL != row->field_t) {
         printf("squee_write_database_to_file() row type [%i] \n", row->field_t);
-        RowNode *node = db->table->row->next_row_node;
-        if (NULL == node) {
-            printf("write_db() row node is null \n");
+        if (SQUEE_DATA != row->field_t) {
             row = row->next;
             continue;
         }
-        printf("squee_write_database_to_file() SQUEE_PRINT_ROW() \n");
-        squee_print_row(row);
-        // squee_print_row_node(node);
-        /*
-        while (SQUEE_TAIL != node->field_t) {
-            printf("write_db() [%i] \n", node->field_t);
-            node = node->next;
+        RowNode *node = db->table->row->next_row_node;
+        if (NULL == node) {
+            row = row->next;
+            continue;
         }
-        */
+        int c = 0;
+        while (SQUEE_TAIL != node->field_t) {
+            printf("squee_write_database_to_file() %i: ", c);
+            squee_print_row_node(node);
+            node = node->next;
+            c = c + 1;
+        }
         row = row->next;
     }
+*/
 
         /*
         while (SQUEE_TAIL != row->field_t) {
