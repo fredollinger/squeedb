@@ -375,8 +375,7 @@ void squee_print_rows(Row *row) {
         squee_print_field_type(curr->field_t);
         printf("] \n");
 
-        RowNode *node = curr->next_row_node;
-        squee_print_row_node(node);
+        squee_print_row(curr);
         curr = curr->next;
     }
 
