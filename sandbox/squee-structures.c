@@ -317,9 +317,6 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
 }
 
 void squee_print_row_node(RowNode *node) {
-    // TODO This prints one row node actually, but we need to iterate through all the rows
-    // TODO copy the row node instead of invalidating it
-    printf("squee_print_row_node() BEGIN \n");
     if (NULL == node) return;
     RowNode *curr = node;
     switch(curr->field_t) {
@@ -355,15 +352,16 @@ RowNode* squee_end_of_row(Row *row_h) {
 // print all a single row
 void squee_print_row(Row *row) {
     RowNode *node = row->next_row_node;
-    printf("squee_print_row NULL \n");
     if (NULL == node) return;
     int c = 0;
-    while (SQUEE_TAIL != node->next->field_t) {
+    while (SQUEE_TAIL != node->field_t) {
         printf("%i: ", c);
         squee_print_row_node(node);
         node = node->next;
         c = c + 1;
-    } 
+    }
+    printf("%i: ", c++);
+    squee_print_row_node(node);
 }
 
 // print a all rows
