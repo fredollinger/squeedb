@@ -82,6 +82,7 @@ void squee_print_field_type(Field_t field_t);
 void squee_print_header(Header*);
 void squee_print_table(Table*);
 void squee_print_row(Row *row);
+void squee_print_rows(Row *row);
 void squee_print_row_node(RowNode *node);
 
 // IO

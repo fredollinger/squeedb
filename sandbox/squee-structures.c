@@ -366,7 +366,6 @@ void squee_print_row(Row *row) {
 
 // print a all rows
 void squee_print_rows(Row *row) {
-    // TODO NOT DONE
     printf("print_row() BEGIN \n");
     Row *curr = row;
     if (NULL == row) return;
