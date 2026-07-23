@@ -524,48 +524,24 @@ int squee_write_database_to_file(char *file, Database *db) {
         squee_print_field_type(curr->field_t);
         printf("] \n");
 
-        squee_print_row(curr);
-        curr = curr->next;
-    }
-
-    // Write Row
-/*
-    while (SQUEE_TAIL != row->field_t) {
-        printf("squee_write_database_to_file() row type [%i] \n", row->field_t);
-        if (SQUEE_DATA != row->field_t) {
-            row = row->next;
-            continue;
-        }
-        RowNode *node = db->table->row->next_row_node;
-        if (NULL == node) {
-            row = row->next;
-            continue;
-        }
-        int c = 0;
+        RowNode *node = curr->next_row_node;
         while (SQUEE_TAIL != node->field_t) {
-            printf("squee_write_database_to_file() %i: ", c);
-            squee_print_row_node(node);
-            node = node->next;
-            c = c + 1;
-        }
-        row = row->next;
-    }
-*/
-
-        /*
-        while (SQUEE_TAIL != row->field_t) {
-            switch(row->field_t) {
+            switch(node->field_t) {
                 case SQUEE_INT:
-                    printf("squee_write_db(): INT Type [%i] Data [%i] \n", row->field_t, row->data.i);
+                    // printf("squee_write_db(): INT Type [%i] Data [%i] \n", node->field_t, node->data.i);
+                    //fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
+                    fprintf(fd, "%c%i%c", SQUEE_UNIT_SEPARATOR, node->data.i, SQUEE_RECORD_SEPARATOR);
                     break;
                 case SQUEE_FLOAT:
-                    printf("squee_write_db(): FLOAT Type [%i] Data [%f] \n", row->field_t, row->data.f);
+                    // printf("squee_write_db(): FLOAT Type [%d] Data [%f] \n", node->field_t, node->data.f);
+                    fprintf(fd, "%c%f%c", SQUEE_UNIT_SEPARATOR, node->data.f, SQUEE_RECORD_SEPARATOR);
                     break;
                 case SQUEE_STRING:
-                    printf("squee_write_db(): STRING Type [%i] Data [%s] \n", row->field_t, row->data.s);
+                    // printf("squee_write_db(): STRING Type [%i] Data [%s] \n", node->field_t, node->data.s);
+                    fprintf(fd, "%c%s%c", SQUEE_UNIT_SEPARATOR, node->data.s, SQUEE_RECORD_SEPARATOR);
                     break;
                 case SQUEE_DATE:
-                    printf("squee_write_db(): DATE Type [%i] Data [%i] \n", row->field_t, row->data.i);
+                    // printf("squee_write_db(): DATE Type [%i] Data [%i] \n", node->field_t, node->data.i);
                     break;
                 case SQUEE_HEAD:
                     break;
@@ -575,10 +551,10 @@ int squee_write_database_to_file(char *file, Database *db) {
                     // printf("UK");
                     break;
             }
-
+            // squee_print_row(curr);
+            node = node->next;
         }
     }
-        */
 
     fprintf(fd, "%c", SQUEE_END_FILE);
     fclose(fd);
