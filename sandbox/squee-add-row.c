@@ -29,11 +29,14 @@ int main(int argc, char* argv[]) {
         c = c + 1;
     }
 
-	char *cols_data[] = {"John", "Doe", "42", "4.25"};
-    Row *row = squee_create_row(db->table, cols_data, 4);
-    // squee_print_row(row);
-    
+	char *cols_data1[] = {"John", "Doe", "42", "4.25"};
+    Row *row = squee_create_row(db->table, cols_data1, 4);
     squee_append_row(db->table, row);
+
+	char *cols_data2[] = {"Bob", "Cratchet", "35", "1.01"};
+    row = squee_create_row(db->table, cols_data2, 4);
+    squee_append_row(db->table, row);
+
     squee_print_rows(db->table->row);
     squee_write_database_to_file(argv[argc - 1], db);
 
