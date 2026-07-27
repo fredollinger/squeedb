@@ -51,3 +51,7 @@ unit: unit/test-squee-structures
 smoke: smoke/test-squee-database
 	#lldb ./smoke/test-squee-database
 	./smoke/test-squee-database
+
+lib:
+	clang -Wall -Wextra -g -fPIC -c squee-structures.c -o squee-structures.o
+	clang -shared -o libsquee.so squee-structures.o
