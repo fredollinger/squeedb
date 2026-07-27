@@ -524,6 +524,11 @@ int squee_write_database_to_file(char *file, Database *db) {
         squee_print_field_type(curr->field_t);
         printf("] \n");
 
+        if (SQUEE_HEAD == curr->field_t) {
+            curr = curr->next;
+            continue;
+        }
+
         RowNode *node = curr->next_row_node;
         while (SQUEE_TAIL != node->field_t) {
             switch(node->field_t) {
@@ -554,6 +559,7 @@ int squee_write_database_to_file(char *file, Database *db) {
             // squee_print_row(curr);
             node = node->next;
         }
+        curr = curr->next;
     }
 
     fprintf(fd, "%c", SQUEE_END_FILE);
