@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -511,6 +512,13 @@ int squee_write_database_to_file(char *file, Database *db) {
     // Write Header
     Header *hdr_p = db->table->header;
     while (NULL != hdr_p) {
+        if (NULL == hdr_p->field_name) {
+            hdr_p = hdr_p->next;
+            continue;
+        }
+        printf(fd, "squee_write_database_to_file() name \n [%s] type \n [%i] \n", hdr_p->field_name, hdr_p->field_t);
+        // assert(NULL != hdr_p->field_name);
+        // assert(NULL != hdr_p->field_t);
         fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
         hdr_p = hdr_p->next;
     }
