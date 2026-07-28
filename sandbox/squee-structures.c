@@ -36,7 +36,7 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     char *endptr;
     int type = 0;
 
-    printf("squee_new_header_with_columns() begin [%i] end [%i] \n", begin, end);
+    // printf("squee_new_header_with_columns() begin [%i] end [%i] \n", begin, end);
 
     for (int i = begin; i < end; i = i + 2) {
         Header *neu = (Header*)malloc(sizeof(Header));
@@ -44,7 +44,7 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
         type = strtol(cols[i + 1], &endptr, 10);
         neu->field_t = type;
         strcpy(neu->field_name, cols[i]);
-        printf("squee_new_header_with_columns() [%s] \n", neu->field_name);
+        // printf("squee_new_header_with_columns() [%s] \n", neu->field_name);
         curr->next = neu;
         neu->next = curr->next->next;
         curr = neu;
@@ -88,7 +88,6 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
     long value; // used for string conversion
     char *endptr;
 
-    printf("\n");
     int i = 0;
     while (NULL != hdr_p) {
         if (SQUEE_HEAD == hdr_p->field_t) {
@@ -96,17 +95,8 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
             continue;
         }
 
-        // TODO IF WE MEET THIS THEN WE NEED TO CONTINUE INSTEAD OF WHAT WE ARE DOING
-        // if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
-        // printf("squee_create_row(): %i cols [%s] \n", i, cols[i]);
-        //printf("squee_create_row(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
-        //squee_print_field_type(hdr_p->field_t);
-        //printf("\n");
-
         RowNode *neu = (RowNode*)malloc(sizeof(RowNode));
         neu->field_t = hdr_p->field_t;
-
-        // printf("squee_create_row(): Field Name: %s Field value: %s ", hdr_p->field_name, cols[i]);
 
         // TODO copy col data into the Row
         switch(neu->field_t) {
@@ -119,7 +109,6 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
                 neu->data.f = (float)value;
                 break;
             case SQUEE_STRING:
-                printf("squee_create_row(): STRING %i cols [%s] \n", i, cols[i]);
                 neu->data.s = strdup(cols[i]);
                 // neu->data.s = (char*)malloc(strlen(cols[i]));
                 // strcpy(neu->data.s, cols[i]);
@@ -133,11 +122,6 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
             default:
                 break;
         }
-
-        // printf("squee_create_row() [%s] \n", hdr_p->field_name);
-        // neu->next = curr->next;
-        // curr->next = neu;
-        // curr = neu;
 
         curr->next = neu;
         neu->next = curr->next->next;
@@ -194,7 +178,6 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
     RowNode *last = row;
 
     for (int i = 0; i < len; i++) {
-        // printf("squee_create_row() Header [%s] Type [%i] Item [%s] \n", header_p->field_name, header_p->field_t, cols[i]);
         row = (RowNode*)malloc(sizeof(RowNode));
         row->field_t = header_p->field_t;
 
@@ -247,7 +230,6 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
 void squee_append_row(Table *table, Row *row) {
     Row *prev = table->row;
     while (SQUEE_TAIL != prev->next->field_t) {
-        printf("squee_append_row(): %i \n", prev->field_t);
         prev = prev->next;
     }
     Row *last = prev->next;
@@ -271,8 +253,6 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
     RowNode *last = row;
 
     for (int i = 0; i < len; i++) {
-        printf("squee_add_row() Item [%s] \n", cols[i]);
-        // printf("squee_add_row() Header [%s] Type [%i] Item [%s] \n", header_p->field_name, header_p->field_t, cols[i]);
         row = (RowNode*)malloc(sizeof(RowNode));
         row->field_t = header_p->field_t;
 
@@ -315,6 +295,20 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
     table->row = row_h;
 
     return row_h;
+}
+
+// PRINT METHODS
+
+void squee_print_table(Table *tbl) {
+    return;
+    // RowNode *node = tbl->row->next_row_node;
+
+    /*
+    while (SQUEE_TAIL != node->field_t) {
+        // print("squee_print_table() node->field_t [%i] \n", node->field_t);
+        node = node->next;
+    }
+    */
 }
 
 void squee_print_row_node(RowNode *node) {
@@ -491,7 +485,6 @@ Database* squee_read_database_from_file(char *file) {
         }
     }
 
-    printf("TODO NEED TO READ THE ROWS HERE \n");
     fclose(fd);
     // Clean up all allocated memory except the db
     return db;
@@ -516,9 +509,6 @@ int squee_write_database_to_file(char *file, Database *db) {
             hdr_p = hdr_p->next;
             continue;
         }
-        printf(fd, "squee_write_database_to_file() name \n [%s] type \n [%i] \n", hdr_p->field_name, hdr_p->field_t);
-        // assert(NULL != hdr_p->field_name);
-        // assert(NULL != hdr_p->field_t);
         fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
         hdr_p = hdr_p->next;
     }
@@ -528,9 +518,9 @@ int squee_write_database_to_file(char *file, Database *db) {
     // squee_print_rows(row);
     while (SQUEE_TAIL != curr->field_t) {
         // TODO print to file
-        printf("write_database() id [%i] type [", curr->id);
-        squee_print_field_type(curr->field_t);
-        printf("] \n");
+        // printf("write_database() id [%i] type [", curr->id);
+        // squee_print_field_type(curr->field_t);
+        // printf("] \n");
 
         if (SQUEE_HEAD == curr->field_t) {
             curr = curr->next;
@@ -541,20 +531,15 @@ int squee_write_database_to_file(char *file, Database *db) {
         while (SQUEE_TAIL != node->field_t) {
             switch(node->field_t) {
                 case SQUEE_INT:
-                    // printf("squee_write_db(): INT Type [%i] Data [%i] \n", node->field_t, node->data.i);
-                    //fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
                     fprintf(fd, "%c%i%c", SQUEE_UNIT_SEPARATOR, node->data.i, SQUEE_RECORD_SEPARATOR);
                     break;
                 case SQUEE_FLOAT:
-                    // printf("squee_write_db(): FLOAT Type [%d] Data [%f] \n", node->field_t, node->data.f);
                     fprintf(fd, "%c%f%c", SQUEE_UNIT_SEPARATOR, node->data.f, SQUEE_RECORD_SEPARATOR);
                     break;
                 case SQUEE_STRING:
-                    // printf("squee_write_db(): STRING Type [%i] Data [%s] \n", node->field_t, node->data.s);
                     fprintf(fd, "%c%s%c", SQUEE_UNIT_SEPARATOR, node->data.s, SQUEE_RECORD_SEPARATOR);
                     break;
                 case SQUEE_DATE:
-                    // printf("squee_write_db(): DATE Type [%i] Data [%i] \n", node->field_t, node->data.i);
                     break;
                 case SQUEE_HEAD:
                     break;
@@ -564,7 +549,6 @@ int squee_write_database_to_file(char *file, Database *db) {
                     // printf("UK");
                     break;
             }
-            // squee_print_row(curr);
             node = node->next;
         }
         curr = curr->next;
@@ -573,16 +557,4 @@ int squee_write_database_to_file(char *file, Database *db) {
     fprintf(fd, "%c", SQUEE_END_FILE);
     fclose(fd);
     return(0);
-}
-
-void squee_print_table(Table *tbl) {
-    return;
-    // RowNode *node = tbl->row->next_row_node;
-
-    /*
-    while (SQUEE_TAIL != node->field_t) {
-        // print("squee_print_table() node->field_t [%i] \n", node->field_t);
-        node = node->next;
-    }
-    */
 }
