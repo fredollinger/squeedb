@@ -444,10 +444,12 @@ Database* squee_read_database_from_file(char *file) {
     char buffer[buffer_size];
     char *pbuffer = buffer;
     char *tok, *col, *type_s;
-    char squee_start_of_text[2] = { SQUEE_START_HEADER, '\0' };
+    char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
     char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
     char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
-    char squee_end_of_text[2] =  { SQUEE_END_HEADER, '\0' };
+    char squee_end_of_header[2] =  { SQUEE_END_HEADER, '\0' };
+    char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
+    char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
     size_t len;
 
     FILE *fd = fopen(file, "r");
@@ -461,7 +463,7 @@ Database* squee_read_database_from_file(char *file) {
     Header *header = db->table->header;
 
     while(fgets(buffer, buffer_size, fd)) {
-        tok = strsep(&pbuffer, squee_start_of_text);
+        tok = strsep(&pbuffer, squee_start_of_header);
         tok = strsep(&pbuffer, squee_unit_separator); 
         if (NULL == tok) {
             printf("squee_read_database_from_file() DB File ended prematurely. Aborting read. \n");
@@ -480,9 +482,29 @@ Database* squee_read_database_from_file(char *file) {
                 return(NULL);
             }
             col = strsep(&type_s, squee_unit_separator);
+            printf("squee_read_database [%s] \n", col);
             type = strtol(type_s, &endptr, 10);
             header = squee_header_add_column(header, col, type);
         }
+
+        tok = strsep(&pbuffer, squee_start_of_row);
+        col = strsep(&pbuffer, squee_unit_separator); 
+        printf("squee_read_database ROW [%s] \n", col);
+
+        /*
+        while(1) {
+            type_s = strsep(&pbuffer, squee_record_separator);
+            if (type_s[0] == SQUEE_END_ROW) {
+                break;
+            }
+            else if (type_s[0] == '\0') {
+                printf("Error reading file, premature end of file \n");
+                return(NULL);
+            }
+            col = strsep(&type_s, squee_unit_separator);
+            printf("squee_read_database [%s] \n", col);
+        }
+        */
     }
 
     fclose(fd);
