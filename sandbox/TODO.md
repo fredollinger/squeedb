@@ -3,15 +3,9 @@
 ## Currently working on
 
 // Need to actually append multiple rows rather than erasing the current row
-squee-append-row()
-Reading the database
 
 Need to implement code to actually write to the file
-squee_write_database_to_file("smoke.db", db);
-
-squee-add-row.c
-
-Finish populating a new row, saving it to disk then reading the full datastructure from disk.
+squee_read_database_to_file("smoke.db", db);
 
 Add second row and repeat.
 

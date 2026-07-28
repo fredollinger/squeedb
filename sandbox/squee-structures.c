@@ -458,7 +458,7 @@ Database* squee_read_database_from_file(char *file) {
 
     Database *db = squee_new_empty_database();
     squee_print_rows(db->table->row);
-    Header *curr_header = db->table->header;
+    Header *header = db->table->header;
 
     while(fgets(buffer, buffer_size, fd)) {
         tok = strsep(&pbuffer, squee_start_of_text);
@@ -481,7 +481,7 @@ Database* squee_read_database_from_file(char *file) {
             }
             col = strsep(&type_s, squee_unit_separator);
             type = strtol(type_s, &endptr, 10);
-            curr_header = squee_header_add_column(curr_header, col, type);
+            header = squee_header_add_column(header, col, type);
         }
     }
 
