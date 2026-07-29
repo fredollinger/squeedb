@@ -311,6 +311,37 @@ void squee_print_table(Table *tbl) {
     */
 }
 
+void squee_print_delimiter(int c) {
+    switch(c) {
+        case SQUEE_UNIT_SEPARATOR:
+            printf("SQUEE_UNIT_SEPARATOR");
+            break;
+        case SQUEE_RECORD_SEPARATOR:
+            printf("SQUEE_RECORD_SEPARATOR");
+            break;
+        case SQUEE_START_HEADER:
+            printf("SQUEE_START_HEADER");
+            break;
+        case SQUEE_END_HEADER:
+            printf("SQUEE_END_HEADER");
+            break;
+        case SQUEE_START_ROW:
+            printf("SQUEE_START_ROW");
+            break;
+        case SQUEE_END_ROW:
+            printf("SQUEE_END_ROW");
+            break;
+        case SQUEE_END_FILE:
+            printf("SQUEE_END_ROW");
+            break;
+        default:
+            printf("UK");
+            break;
+    }
+}
+
+
+
 void squee_print_row_node(RowNode *node) {
     if (NULL == node) return;
     RowNode *curr = node;
@@ -437,13 +468,58 @@ void squee_print_Table(Table *tbl) {
 }
 
 // IO
+
+Database* squee_read_database_from_file2(char *file) {
+    int type = 0;
+    char *endptr = NULL;
+    char *buffer;
+    char *tok, *col, *type_s, *prev;
+    char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
+    char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
+    char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
+    char squee_end_of_header[2] =  { SQUEE_END_HEADER, '\0' };
+    char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
+    char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
+    size_t len;
+
+    FILE *fd = fopen(file, "rb");
+    Database *db = squee_new_empty_database();
+
+    if (NULL == fd) {
+        printf("Error opening file: %s \n", file);
+        return(db);
+    }
+
+    Header *header = db->table->header;
+
+    fseek(fd, 0, SEEK_END);
+    long filesize = ftell(fd);
+    rewind(fd);
+
+    buffer = malloc(filesize + 1);
+    if (buffer == NULL) {
+        fclose(fd);
+        return NULL;
+    }
+
+    fread(buffer, 1, filesize, fd);
+    buffer[filesize] = '\0';
+    fclose(fd);
+
+    char *pbuffer = buffer;
+
+    printf("buffer [%s]", buffer);
+    return db;
+}
+ 
+
 Database* squee_read_database_from_file(char *file) {
-    int buffer_size = 10000;
+    int buffer_size = 10000000;
     int type = 0;
     char *endptr = NULL;
     char buffer[buffer_size];
     char *pbuffer = buffer;
-    char *tok, *col, *type_s;
+    char *tok, *col, *type_s, *prev;
     char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
     char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
     char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
@@ -459,20 +535,23 @@ Database* squee_read_database_from_file(char *file) {
     }
 
     Database *db = squee_new_empty_database();
-    squee_print_rows(db->table->row);
+    // squee_print_rows(db->table->row);
     Header *header = db->table->header;
 
-    while(fgets(buffer, buffer_size, fd)) {
+    //while(fgets(buffer, buffer_size, fd)) {
+    fgets(buffer, buffer_size, fd);
         tok = strsep(&pbuffer, squee_start_of_header);
         tok = strsep(&pbuffer, squee_unit_separator); 
         if (NULL == tok) {
             printf("squee_read_database_from_file() DB File ended prematurely. Aborting read. \n");
+            return(NULL);
         }
         len = strlen(tok);
         db->table->name = (char*)malloc(len + 1);
         strncpy(db->table->name, tok, len);
 
         while(1) {
+            prev = pbuffer;
             type_s = strsep(&pbuffer, squee_record_separator);
             if (type_s[0] == SQUEE_END_HEADER) {
                 break;
@@ -487,25 +566,28 @@ Database* squee_read_database_from_file(char *file) {
             header = squee_header_add_column(header, col, type);
         }
 
-        tok = strsep(&pbuffer, squee_start_of_row);
-        col = strsep(&pbuffer, squee_unit_separator); 
-        printf("squee_read_database ROW [%s] \n", col);
+        // TODO
+        // tok = strsep(&type_s, squee_unit_separator);
+        // NEED to stop the data from leaking over
+        printf("squee_read_database ROW NOW [%s] \n", type_s);
+        printf("squee_read_database ROW PREV [%s] \n", prev);
+        //squee_print_delimiter(type_s[0]);
+        //printf("]\n");
 
-        /*
-        while(1) {
-            type_s = strsep(&pbuffer, squee_record_separator);
-            if (type_s[0] == SQUEE_END_ROW) {
-                break;
-            }
-            else if (type_s[0] == '\0') {
-                printf("Error reading file, premature end of file \n");
-                return(NULL);
-            }
-            col = strsep(&type_s, squee_unit_separator);
-            printf("squee_read_database [%s] \n", col);
-        }
-        */
-    }
+        // printf("squee_read_database ROW START TOK [%s] \n", tok);
+
+        //tok = strsep(&pbuffer, squee_unit_separator); 
+        //printf("squee_read_database ROW UNIT [%s] delim [", type_s);
+        //squee_print_delimiter(type_s[0]);
+        //printf("]\n");
+
+        //type_s = strsep(&pbuffer, squee_set); 
+        //squee_print_delimiter(type_s[0]);
+        // if (NULL == tok) {
+        //    printf("squee_read_database_from_file() DB File ended prematurely. Aborting read. \n");
+        //}
+        // printf("squee_read_database ROW RECORD [%s] \n", tok);
+    //}
 
     fclose(fd);
     // Clean up all allocated memory except the db
@@ -536,6 +618,8 @@ int squee_write_database_to_file(char *file, Database *db) {
     }
     fprintf(fd, "%c", SQUEE_END_HEADER);
 
+    // Write Row
+    fprintf(fd, "%c", SQUEE_START_ROW);
     Row *curr = db->table->row;
     // squee_print_rows(row);
     while (SQUEE_TAIL != curr->field_t) {
@@ -553,13 +637,13 @@ int squee_write_database_to_file(char *file, Database *db) {
         while (SQUEE_TAIL != node->field_t) {
             switch(node->field_t) {
                 case SQUEE_INT:
-                    fprintf(fd, "%c%i%c", SQUEE_UNIT_SEPARATOR, node->data.i, SQUEE_RECORD_SEPARATOR);
+                    fprintf(fd, "%i%c", node->data.i, SQUEE_UNIT_SEPARATOR);
                     break;
                 case SQUEE_FLOAT:
-                    fprintf(fd, "%c%f%c", SQUEE_UNIT_SEPARATOR, node->data.f, SQUEE_RECORD_SEPARATOR);
+                    fprintf(fd, "%f%c", node->data.f, SQUEE_UNIT_SEPARATOR);
                     break;
                 case SQUEE_STRING:
-                    fprintf(fd, "%c%s%c", SQUEE_UNIT_SEPARATOR, node->data.s, SQUEE_RECORD_SEPARATOR);
+                    fprintf(fd, "%s%c", node->data.s, SQUEE_UNIT_SEPARATOR);
                     break;
                 case SQUEE_DATE:
                     break;
@@ -571,11 +655,14 @@ int squee_write_database_to_file(char *file, Database *db) {
                     // printf("UK");
                     break;
             }
+            fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
             node = node->next;
         }
         curr = curr->next;
     }
 
+    fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
+    fprintf(fd, "%c", SQUEE_END_ROW);
     fprintf(fd, "%c", SQUEE_END_FILE);
     fclose(fd);
     return(0);
