@@ -469,50 +469,6 @@ void squee_print_Table(Table *tbl) {
 
 // IO
 
-Database* squee_read_database_from_file2(char *file) {
-    int type = 0;
-    char *endptr = NULL;
-    char *buffer;
-    char *tok, *col, *type_s, *prev;
-    char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
-    char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
-    char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
-    char squee_end_of_header[2] =  { SQUEE_END_HEADER, '\0' };
-    char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
-    char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
-    size_t len;
-
-    FILE *fd = fopen(file, "rb");
-    Database *db = squee_new_empty_database();
-
-    if (NULL == fd) {
-        printf("Error opening file: %s \n", file);
-        return(db);
-    }
-
-    Header *header = db->table->header;
-
-    fseek(fd, 0, SEEK_END);
-    long filesize = ftell(fd);
-    rewind(fd);
-
-    buffer = malloc(filesize + 1);
-    if (buffer == NULL) {
-        fclose(fd);
-        return NULL;
-    }
-
-    fread(buffer, 1, filesize, fd);
-    buffer[filesize] = '\0';
-    fclose(fd);
-
-    char *pbuffer = buffer;
-
-    printf("buffer [%s]", buffer);
-    return db;
-}
- 
-
 Database* squee_read_database_from_file(char *file) {
     int buffer_size = 10000000;
     int type = 0;
@@ -667,3 +623,114 @@ int squee_write_database_to_file(char *file, Database *db) {
     fclose(fd);
     return(0);
 }
+
+Database* squee_read_database_from_file2(char *file) {
+    int type = 0;
+    char *endptr = NULL;
+    char *buffer;
+    char *tok, *col, *type_s, *prev;
+    char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
+    char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
+    char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
+    char squee_end_of_header[2] =  { SQUEE_END_HEADER, '\0' };
+    char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
+    char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
+    size_t len;
+
+    FILE *fd = fopen(file, "rb");
+    Database *db = squee_new_empty_database();
+
+    if (NULL == fd) {
+        printf("Error opening file: %s \n", file);
+        return(db);
+    }
+
+    Header *header = db->table->header;
+
+    fseek(fd, 0, SEEK_END);
+    long filesize = ftell(fd);
+    rewind(fd);
+
+    buffer = malloc(filesize + 1);
+    if (buffer == NULL) {
+        fclose(fd);
+        return NULL;
+    }
+
+    fread(buffer, 1, filesize, fd);
+    buffer[filesize] = '\0';
+    fclose(fd);
+
+    char *pbuffer = buffer;
+
+    const char *magic = "SQUEE format 3";
+    size_t magic_len = strlen(magic);
+    
+    if (strncmp(pbuffer, magic, magic_len) != 0) {
+        printf("Invalid database file.\n");
+        free(buffer);
+        return NULL;
+    }
+
+    pbuffer += magic_len;
+
+    printf("buffer [%s] \n", buffer);
+
+    char *start = pbuffer;
+    
+    while (*pbuffer != SQUEE_UNIT_SEPARATOR)
+        pbuffer++;
+    
+    len = pbuffer - start;
+    
+    char table_name[256];
+    memcpy(table_name, start, len);
+    table_name[len] = '\0';
+    printf("table name [%s] \n", table_name);
+    
+    pbuffer++;      // Skip UNIT_SEPARATOR
+
+    while (*pbuffer != SQUEE_END_HEADER) {
+    
+/*
+        // Read field name
+        start = pbuffer;
+    
+        while (*pbuffer != SQUEE_UNIT_SEPARATOR)
+            pbuffer++;
+    
+        len = pbuffer - start;
+    
+        char field_name[256];
+        memcpy(field_name, start, len);
+        field_name[len] = '\0';
+    
+        pbuffer++;      // Skip UNIT_SEPARATOR
+    
+        // Read field type
+        start = pbuffer;
+    
+        while (*pbuffer != SQUEE_RECORD_SEPARATOR)
+            pbuffer++;
+    
+        len = pbuffer - start;
+    
+        char type_str[16];
+        memcpy(type_str, start, len);
+        type_str[len] = '\0';
+    
+        int type = atoi(type_str);
+*/
+    
+        pbuffer++;      // Skip RECORD_SEPARATOR
+    
+        // printf("%s : %d\n", field_name, type);
+    
+        // TODO:
+        // squee_append_header(db->table, field_name, type);
+    }
+
+
+    return db;
+}
+ 
