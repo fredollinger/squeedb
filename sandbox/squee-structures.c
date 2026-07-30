@@ -634,6 +634,7 @@ Database* squee_read_database_from_file2(char *file) {
     char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
     char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
     size_t len;
+    // char *endptr;
 
     FILE *fd = fopen(file, "rb");
     Database *db = squee_new_empty_database();
@@ -683,6 +684,7 @@ Database* squee_read_database_from_file2(char *file) {
     pbuffer++;      // Skip UNIT_SEPARATOR
 
     // Read Header
+    // Header* squee_new_empty_header();
     while (*pbuffer != SQUEE_END_HEADER) {
     
         // Read field name
@@ -696,7 +698,7 @@ Database* squee_read_database_from_file2(char *file) {
         char field_name[256];
         memcpy(field_name, start, len);
         field_name[len] = '\0';
-        printf("field [%i] [%s] \n", len, field_name);
+        printf("field [%zu] [%s] \n", len, field_name);
 
         start = pbuffer;
 
@@ -708,8 +710,11 @@ Database* squee_read_database_from_file2(char *file) {
         char type_str[16];
         memcpy(type_str, start, len);
         type_str[len] = '\0';
+        printf("type_str [%zu] [%s] \n", len, type_str);
+        int field_type = atoi(type_str);
+        printf("field_type [%zu] [%i] \n", len, field_type);
 
-        printf("type_str [%i] [%s] \n", len, type_str);
+        squee_header_add_column(db->table->header, field_name, field_type);
    
         // Last line
         // pbuffer++;      // Skip RECORD_SEPARATOR
