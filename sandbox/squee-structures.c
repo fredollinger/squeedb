@@ -670,26 +670,19 @@ Database* squee_read_database_from_file2(char *file) {
         return NULL;
     }
 
+    // Read Table Name
     pbuffer += magic_len;
-
-    printf("buffer [%s] \n", buffer);
-
     char *start = pbuffer;
-    
     while (*pbuffer != SQUEE_UNIT_SEPARATOR)
         pbuffer++;
-    
     len = pbuffer - start;
-    
-    //char table_name[256];
-    // memcpy(table_name, start, len);
-    // table_name[len] = '\0';
     db->table->name = (char*)malloc(len + 1);
     strncpy(db->table->name, start, len);
     printf("table name [%s] \n", db->table->name);
     
     pbuffer++;      // Skip UNIT_SEPARATOR
 
+    // Read Header
     while (*pbuffer != SQUEE_END_HEADER) {
     
         // Read field name
@@ -702,6 +695,7 @@ Database* squee_read_database_from_file2(char *file) {
     
         char field_name[256];
         memcpy(field_name, start, len);
+        field_name[len] = '\0';
         printf("field [%i] [%s] \n", len, field_name);
 
         start = pbuffer;
