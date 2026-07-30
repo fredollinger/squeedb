@@ -491,10 +491,8 @@ Database* squee_read_database_from_file(char *file) {
     }
 
     Database *db = squee_new_empty_database();
-    // squee_print_rows(db->table->row);
     Header *header = db->table->header;
 
-    //while(fgets(buffer, buffer_size, fd)) {
     fgets(buffer, buffer_size, fd);
         tok = strsep(&pbuffer, squee_start_of_header);
         tok = strsep(&pbuffer, squee_unit_separator); 
@@ -611,9 +609,9 @@ int squee_write_database_to_file(char *file, Database *db) {
                     // printf("UK");
                     break;
             }
-            fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
             node = node->next;
         }
+        fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
         curr = curr->next;
     }
 
@@ -683,16 +681,17 @@ Database* squee_read_database_from_file2(char *file) {
     
     len = pbuffer - start;
     
-    char table_name[256];
-    memcpy(table_name, start, len);
-    table_name[len] = '\0';
-    printf("table name [%s] \n", table_name);
+    //char table_name[256];
+    // memcpy(table_name, start, len);
+    // table_name[len] = '\0';
+    db->table->name = (char*)malloc(len + 1);
+    strncpy(db->table->name, start, len);
+    printf("table name [%s] \n", db->table->name);
     
     pbuffer++;      // Skip UNIT_SEPARATOR
 
     while (*pbuffer != SQUEE_END_HEADER) {
     
-/*
         // Read field name
         start = pbuffer;
     
@@ -703,33 +702,24 @@ Database* squee_read_database_from_file2(char *file) {
     
         char field_name[256];
         memcpy(field_name, start, len);
-        field_name[len] = '\0';
-    
-        pbuffer++;      // Skip UNIT_SEPARATOR
-    
-        // Read field type
+        printf("field [%i] [%s] \n", len, field_name);
+
         start = pbuffer;
-    
+
         while (*pbuffer != SQUEE_RECORD_SEPARATOR)
             pbuffer++;
-    
+ 
         len = pbuffer - start;
     
         char type_str[16];
         memcpy(type_str, start, len);
         type_str[len] = '\0';
-    
-        int type = atoi(type_str);
-*/
-    
-        pbuffer++;      // Skip RECORD_SEPARATOR
-    
-        // printf("%s : %d\n", field_name, type);
-    
-        // TODO:
-        // squee_append_header(db->table, field_name, type);
-    }
 
+        printf("type_str [%i] [%s] \n", len, type_str);
+   
+        // Last line
+        // pbuffer++;      // Skip RECORD_SEPARATOR
+    }
 
     return db;
 }
