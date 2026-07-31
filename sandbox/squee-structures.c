@@ -617,7 +617,6 @@ int squee_write_database_to_file(char *file, Database *db) {
         curr = curr->next;
     }
 
-    fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
     fprintf(fd, "%c", SQUEE_END_ROW);
     fprintf(fd, "%c", SQUEE_END_FILE);
     fclose(fd);
@@ -723,6 +722,29 @@ Database* squee_read_database_from_file2(char *file) {
         pbuffer++;      // Skip RECORD_SEPARATOR
     }
     squee_print_header(db->table->header);
+
+    while (*pbuffer != SQUEE_END_ROW) {
+        start = pbuffer;
+
+        while (*pbuffer != SQUEE_UNIT_SEPARATOR) {
+            printf("BUFFER [%i] [%s] [%x] [%x] \n", len, pbuffer, (unsigned char)*pbuffer, SQUEE_UNIT_SEPARATOR);
+            start = pbuffer;
+            pbuffer++;
+            len = pbuffer - start;
+        }
+
+
+        len = pbuffer - start;
+    
+        char field_name[256];
+        memcpy(field_name, start, len);
+        field_name[len] = '\0';
+        printf("entry [%zu] [%s] \n", len, field_name);
+
+        pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
+    }
+
+    printf("buffer [%s] [%x] \n", pbuffer, (unsigned char)*pbuffer);
 
     return db;
 }
