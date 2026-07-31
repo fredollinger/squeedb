@@ -23,10 +23,12 @@ Header* squee_new_empty_header() {
 Header* squee_header_add_column(Header *last, char *header_name, int field_type) {
     Header *neu = (Header*)malloc(sizeof(Header));
     neu->field_name = (char*)malloc(strlen(header_name) + 1);
+    printf("squee_header_add_column() adding field type [%i] \n", field_type);
     neu->field_t = field_type;
     strcpy(neu->field_name, header_name);
     neu->next = last->next;
     last->next = neu;
+    printf("squee_header_add_column() ADDED field type [%i] \n", neu->field_t);
     return neu;
 }
 
@@ -700,8 +702,9 @@ Database* squee_read_database_from_file2(char *file) {
         field_name[len] = '\0';
         printf("field [%zu] [%s] \n", len, field_name);
 
-        start = pbuffer;
+        pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
 
+        start = pbuffer;
         while (*pbuffer != SQUEE_RECORD_SEPARATOR)
             pbuffer++;
  
@@ -710,15 +713,16 @@ Database* squee_read_database_from_file2(char *file) {
         char type_str[16];
         memcpy(type_str, start, len);
         type_str[len] = '\0';
-        printf("type_str [%zu] [%s] \n", len, type_str);
+        printf("type_str [%zu] type [%s] \n", len, type_str);
         int field_type = atoi(type_str);
-        printf("field_type [%zu] [%i] \n", len, field_type);
+        printf("field_type [%i] \n", field_type);
 
         squee_header_add_column(db->table->header, field_name, field_type);
    
         // Last line
-        // pbuffer++;      // Skip RECORD_SEPARATOR
+        pbuffer++;      // Skip RECORD_SEPARATOR
     }
+    squee_print_header(db->table->header);
 
     return db;
 }
