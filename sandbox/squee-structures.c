@@ -723,16 +723,26 @@ Database* squee_read_database_from_file2(char *file) {
     }
     squee_print_header(db->table->header);
 
+    printf("Before rows: %02X\n", (unsigned char)*pbuffer);
+
+    printf("ROW POINTER:\n");
+
+    for (int i = 0; i < 20; i++) {
+        printf("%02X ", (unsigned char)pbuffer[i]);
+    }
+
+
     while (*pbuffer != SQUEE_END_ROW) {
+        // printf("BUFFER [%i] [%s] [%x] [%x] \n", len, pbuffer, (unsigned char)*pbuffer, SQUEE_UNIT_SEPARATOR);
+
         start = pbuffer;
 
         while (*pbuffer != SQUEE_UNIT_SEPARATOR) {
-            printf("BUFFER [%i] [%s] [%x] [%x] \n", len, pbuffer, (unsigned char)*pbuffer, SQUEE_UNIT_SEPARATOR);
-            start = pbuffer;
+            // printf("BUFFER [%i] [%s] [%x] [%x] \n", len, pbuffer, (unsigned char)*pbuffer, SQUEE_UNIT_SEPARATOR);
             pbuffer++;
-            len = pbuffer - start;
+            // start = pbuffer;
+            // len = pbuffer - start;
         }
-
 
         len = pbuffer - start;
     
