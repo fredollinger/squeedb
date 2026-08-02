@@ -23,12 +23,10 @@ Header* squee_new_empty_header() {
 Header* squee_header_add_column(Header *last, char *header_name, int field_type) {
     Header *neu = (Header*)malloc(sizeof(Header));
     neu->field_name = (char*)malloc(strlen(header_name) + 1);
-    printf("squee_header_add_column() adding field type [%i] \n", field_type);
     neu->field_t = field_type;
     strcpy(neu->field_name, header_name);
     neu->next = last->next;
     last->next = neu;
-    printf("squee_header_add_column() ADDED field type [%i] \n", neu->field_t);
     return neu;
 }
 
@@ -716,7 +714,7 @@ Database* squee_read_database_from_file2(char *file) {
         int field_type = atoi(type_str);
         printf("field_type [%i] \n", field_type);
 
-        squee_header_add_column(db->table->header, field_name, field_type);
+        header = squee_header_add_column(header, field_name, field_type);
    
         // Last line
         pbuffer++;      // Skip RECORD_SEPARATOR
@@ -725,34 +723,44 @@ Database* squee_read_database_from_file2(char *file) {
 
     printf("Before rows: %02X\n", (unsigned char)*pbuffer);
 
+/*
     printf("ROW POINTER:\n");
-
     for (int i = 0; i < 20; i++) {
         printf("%02X ", (unsigned char)pbuffer[i]);
     }
-
+*/
 
     while (*pbuffer != SQUEE_END_ROW) {
         // printf("BUFFER [%i] [%s] [%x] [%x] \n", len, pbuffer, (unsigned char)*pbuffer, SQUEE_UNIT_SEPARATOR);
 
-        start = pbuffer;
-
-        while (*pbuffer != SQUEE_UNIT_SEPARATOR) {
-            // printf("BUFFER [%i] [%s] [%x] [%x] \n", len, pbuffer, (unsigned char)*pbuffer, SQUEE_UNIT_SEPARATOR);
-            pbuffer++;
-            // start = pbuffer;
-            // len = pbuffer - start;
-        }
-
-        len = pbuffer - start;
+        // Begin Header Loop
+        Header *hdr_p = db->table->header;
+        while (SQUEE_TAIL != hdr_p->field_t) {
+            if (SQUEE_HEAD == hdr_p->field_t) {
+                hdr_p = hdr_p->next;
+                continue;
+            }
     
-        char field_name[256];
-        memcpy(field_name, start, len);
-        field_name[len] = '\0';
-        printf("entry [%zu] [%s] \n", len, field_name);
+            start = pbuffer;
+            while (*pbuffer != SQUEE_UNIT_SEPARATOR) {
+                pbuffer++;
+            }
+    
+            len = pbuffer - start;
 
-        pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
-    }
+            char field_name[256];
+            memcpy(field_name, start, len);
+            field_name[len] = '\0';
+            printf("header [%s] FIELD TYPE [", hdr_p->field_name);
+            squee_print_field_type(hdr_p->field_t);
+            printf("] row [%s]\n", field_name);
+            // printf("ENTRY len [%zu] [%s] HEADER [%s] \n", len, field_name, hdr_p->field_name);
+
+            pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
+            hdr_p = hdr_p->next;
+      } // END Header Loop
+      printf("\n");
+    } // END Row Loop
 
     printf("buffer [%s] [%x] \n", pbuffer, (unsigned char)*pbuffer);
 
