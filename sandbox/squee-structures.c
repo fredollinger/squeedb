@@ -730,8 +730,9 @@ Database* squee_read_database_from_file2(char *file) {
     }
 */
 
-    while (*pbuffer != SQUEE_END_ROW) {
+    while (SQUEE_RECORD_SEPARATOR != *pbuffer) {
         // printf("BUFFER [%i] [%s] [%x] [%x] \n", len, pbuffer, (unsigned char)*pbuffer, SQUEE_UNIT_SEPARATOR);
+        // if (SQUEE_RECORD_SEPARATOR == *pbuffer) break;
 
         // Begin Header Loop
         Header *hdr_p = db->table->header;
@@ -756,6 +757,7 @@ Database* squee_read_database_from_file2(char *file) {
             printf("] row [%s]\n", field_name);
             // printf("ENTRY len [%zu] [%s] HEADER [%s] \n", len, field_name, hdr_p->field_name);
 
+            printf("ENTRY pbuffer [%i] \n", *pbuffer);
             pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
             hdr_p = hdr_p->next;
       } // END Header Loop
