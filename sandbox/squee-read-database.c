@@ -20,12 +20,11 @@ int main(int argc, char* argv[]) {
 
     printf("Reading database: [%s] \n", argv[1]);
 
-    Database *db = squee_read_database_from_file(argv[1]);
-    squee_print_header(db->table->header);
+    Database *db = squee_read_database_from_file2(argv[1]);
+    // squee_print_header(db->table->header);
+    // squee_print_rows(db->table->row);
+    // printf("\nsquee_read_database.c\n");
 
-    printf("\nsquee_read_database.c\n");
-
-    squee_print_row(db->table->row);
 
     return(0);
 }

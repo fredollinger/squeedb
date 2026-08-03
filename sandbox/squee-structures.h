@@ -5,8 +5,8 @@
 
 // Delimiters
 #define SQUEE_UNIT_SEPARATOR    0x1F
-#define SQUEE_RECORD_SEPARATOR  0x1E
-#define SQUEE_UNIT_SEPARATOR    0x1F
+#define SQUEE_RECORD_SEPARATOR  0x1E // 30
+#define SQUEE_UNIT_SEPARATOR    0x1F // 31
 #define SQUEE_RECORD_SEPARATOR  0x1E
 #define SQUEE_START_HEADER      0x02
 #define SQUEE_END_HEADER        0x03
@@ -75,7 +75,8 @@ RowNode* squee_new_empty_row_node();
 // Create a new free floating row
 Row* squee_create_row(Table *table, char* cols[], int len);
 // given a table, append a row onto it
-void squee_append_row(Table *table, Row *row);
+Row* squee_append_row(Table *table, Row *row);
+void squee_append_row_node(Row *row, RowNode *node);
 
 // Print Functions
 void squee_print_field_type(Field_t field_t);

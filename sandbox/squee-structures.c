@@ -227,7 +227,7 @@ Row* squee_create_row(Table *table, char* cols[], int len) {
 
 // TODO NOT DONE FKO
 // Take a new row and add it to the linked list
-void squee_append_row(Table *table, Row *row) {
+Row* squee_append_row(Table *table, Row *row) {
     Row *prev = table->row;
     while (SQUEE_TAIL != prev->next->field_t) {
         prev = prev->next;
@@ -237,6 +237,7 @@ void squee_append_row(Table *table, Row *row) {
     row->next = last;
     table->row_id = table->row_id + 1;
     row->id = table->row_id;
+    return row;
 }
 
 // TODO NOT DONE FKO We probably need to rewrite this
@@ -723,17 +724,8 @@ Database* squee_read_database_from_file2(char *file) {
 
     printf("Before rows: %02X\n", (unsigned char)*pbuffer);
 
-/*
-    printf("ROW POINTER:\n");
-    for (int i = 0; i < 20; i++) {
-        printf("%02X ", (unsigned char)pbuffer[i]);
-    }
-*/
-
+    RowNode *node = row->next_row_node;
     while (SQUEE_RECORD_SEPARATOR != *pbuffer) {
-        // printf("BUFFER [%i] [%s] [%x] [%x] \n", len, pbuffer, (unsigned char)*pbuffer, SQUEE_UNIT_SEPARATOR);
-        // if (SQUEE_RECORD_SEPARATOR == *pbuffer) break;
-
         // Begin Header Loop
         Header *hdr_p = db->table->header;
         while (SQUEE_TAIL != hdr_p->field_t) {
@@ -749,14 +741,39 @@ Database* squee_read_database_from_file2(char *file) {
     
             len = pbuffer - start;
 
-            char field_name[256];
-            memcpy(field_name, start, len);
-            field_name[len] = '\0';
+            // char field_name[256];
+/*
             printf("header [%s] FIELD TYPE [", hdr_p->field_name);
             squee_print_field_type(hdr_p->field_t);
             printf("] row [%s]\n", field_name);
-            // printf("ENTRY len [%zu] [%s] HEADER [%s] \n", len, field_name, hdr_p->field_name);
+*/
+          
+            RowNode *node = (RowNode*)malloc(sizeof(RowNode));
 
+            // TODO copy col data into the Row
+            switch(hdr_p->field_t) {
+                case SQUEE_INT:
+                    // value = strtol(cols[i], &endptr, 10);
+                    // neu->data.i = (int)value;
+                    break;
+                case SQUEE_FLOAT:
+                    // value = strtof(cols[i], &endptr);
+                    // neu->data.f = (float)value;
+                    break;
+                case SQUEE_STRING:
+                    // neu->data.s = strdup(cols[i]);
+                    // neu->data.s = (char*)malloc(strlen(cols[i]));
+                    // strcpy(neu->data.s, cols[i]);
+                    break;
+                case SQUEE_DATE:
+                case SQUEE_HEAD:
+                case SQUEE_TAIL:
+                default:
+                    break;
+            }
+            // memcpy(row->field_name, start, len);
+            // field_name[len] = '\0';
+            row = squee_append_row(table, row);
             printf("ENTRY pbuffer [%i] \n", *pbuffer);
             pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
             hdr_p = hdr_p->next;
@@ -769,3 +786,13 @@ Database* squee_read_database_from_file2(char *file) {
     return db;
 }
  
+void squee_append_row_node(Row *row, RowNode *node) {
+    RowNode *prev = row;
+    while (SQUEE_TAIL != prev->next->field_t) {
+        prev = prev->next;
+    }
+    RowNode *last = prev->next;
+    prev->next = node;
+    node->next = last;
+    return;
+}
