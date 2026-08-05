@@ -766,15 +766,11 @@ Database* squee_read_database_from_file2(char *file) {
                     break;
             }
             squee_append_row_node(row, node);
-            squee_print_row(row);
-            // memcpy(row->field_name, start, len);
-            // field_name[len] = '\0';
-            // row = squee_append_row(db->table, row);
-            // printf("ENTRY pbuffer [%i] \n", *pbuffer);
             pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
             hdr_p = hdr_p->next;
       } // END Header Loop
-      // printf("\n");
+      squee_print_row(row);
+      printf("\n");
     } // END Row Loop
 
     // printf("buffer [%s] [%x] \n", pbuffer, (unsigned char)*pbuffer);
@@ -784,9 +780,7 @@ Database* squee_read_database_from_file2(char *file) {
  
 void squee_append_row_node(Row *row, RowNode *node) {
     RowNode *prev = row->next_row_node;
-    printf("squee_append_row_node() [%i] \n", prev->field_t);
     while (SQUEE_TAIL != prev->next->field_t) {
-        printf("squee_append_row_node() [%i] \n", prev->field_t);
         prev = prev->next;
     }
     RowNode *last = prev->next;
