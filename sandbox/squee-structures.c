@@ -634,6 +634,7 @@ Database* squee_read_database_from_file2(char *file) {
     char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
     char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
     size_t len;
+    char value_str[256];
     // char *endptr;
 
     FILE *fd = fopen(file, "rb");
@@ -740,29 +741,23 @@ Database* squee_read_database_from_file2(char *file) {
     
             len = pbuffer - start;
             RowNode *node = (RowNode*)malloc(sizeof(RowNode));
+            memcpy(value_str, start, len);
+            value_str[len] = '\0';
 
             // TODO copy col data into the Row
             switch(hdr_p->field_t) {
                 case SQUEE_INT:
                     node->field_t = SQUEE_INT;
-                    // value = strtol(cols[i], &endptr, 10);
-                    // node->data.i = (int)value;
+                    node->data.i = (int)strtol(value_str, NULL, 10);
                     break;
                 case SQUEE_FLOAT:
                     node->field_t = SQUEE_FLOAT;
-                    // value = strtof(cols[i], &endptr);
-                    // node->data.f = (float)value;
+                    node->data.f = strtof(value_str, NULL);
                     break;
                 case SQUEE_STRING:
-                    // len = pbuffer - start;
-                    // char field_name[256];
-                    // field_name[len] = '\0';
                     node->data.s = (char*)malloc(len + 1);
                     memcpy(node->data.s, start, len);
                     node->field_t = SQUEE_STRING;
-                    printf("STRING [%s] \n", node->data.s);
-                    // node->data.s = strdup(cols[i]);
-                    // strcpy(node->data.s, cols[i]);
                     break;
                 case SQUEE_DATE:
                 case SQUEE_HEAD:

@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 
     Database *db = squee_read_database_from_file2(argv[1]);
     // squee_print_header(db->table->header);
-    // squee_print_rows(db->table->row);
+    squee_print_rows(db->table->row);
     // printf("\nsquee_read_database.c\n");
 
 
