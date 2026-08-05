@@ -694,11 +694,9 @@ Database* squee_read_database_from_file2(char *file) {
             pbuffer++;
     
         len = pbuffer - start;
-    
         char field_name[256];
         memcpy(field_name, start, len);
         field_name[len] = '\0';
-        printf("field [%zu] [%s] \n", len, field_name);
 
         pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
 
@@ -711,9 +709,7 @@ Database* squee_read_database_from_file2(char *file) {
         char type_str[16];
         memcpy(type_str, start, len);
         type_str[len] = '\0';
-        printf("type_str [%zu] type [%s] \n", len, type_str);
         int field_type = atoi(type_str);
-        printf("field_type [%i] \n", field_type);
 
         header = squee_header_add_column(header, field_name, field_type);
    
@@ -748,17 +744,25 @@ Database* squee_read_database_from_file2(char *file) {
             // TODO copy col data into the Row
             switch(hdr_p->field_t) {
                 case SQUEE_INT:
+                    node->field_t = SQUEE_INT;
                     // value = strtol(cols[i], &endptr, 10);
-                    // neu->data.i = (int)value;
+                    // node->data.i = (int)value;
                     break;
                 case SQUEE_FLOAT:
+                    node->field_t = SQUEE_FLOAT;
                     // value = strtof(cols[i], &endptr);
-                    // neu->data.f = (float)value;
+                    // node->data.f = (float)value;
                     break;
                 case SQUEE_STRING:
-                    // neu->data.s = strdup(cols[i]);
-                    // neu->data.s = (char*)malloc(strlen(cols[i]));
-                    // strcpy(neu->data.s, cols[i]);
+                    // len = pbuffer - start;
+                    // char field_name[256];
+                    // field_name[len] = '\0';
+                    node->data.s = (char*)malloc(len + 1);
+                    memcpy(node->data.s, start, len);
+                    node->field_t = SQUEE_STRING;
+                    printf("STRING [%s] \n", node->data.s);
+                    // node->data.s = strdup(cols[i]);
+                    // strcpy(node->data.s, cols[i]);
                     break;
                 case SQUEE_DATE:
                 case SQUEE_HEAD:
