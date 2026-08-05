@@ -724,6 +724,7 @@ Database* squee_read_database_from_file2(char *file) {
 
     printf("Before rows: %02X\n", (unsigned char)*pbuffer);
 
+    Row *row = db->table->row;
     RowNode *node = row->next_row_node;
     while (SQUEE_RECORD_SEPARATOR != *pbuffer) {
         // Begin Header Loop
@@ -773,7 +774,7 @@ Database* squee_read_database_from_file2(char *file) {
             }
             // memcpy(row->field_name, start, len);
             // field_name[len] = '\0';
-            row = squee_append_row(table, row);
+            row = squee_append_row(db->table, row);
             printf("ENTRY pbuffer [%i] \n", *pbuffer);
             pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
             hdr_p = hdr_p->next;
@@ -787,7 +788,7 @@ Database* squee_read_database_from_file2(char *file) {
 }
  
 void squee_append_row_node(Row *row, RowNode *node) {
-    RowNode *prev = row;
+    RowNode *prev = node;
     while (SQUEE_TAIL != prev->next->field_t) {
         prev = prev->next;
     }
