@@ -769,6 +769,7 @@ Database* squee_read_database_from_file2(char *file) {
             pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
             hdr_p = hdr_p->next;
       } // END Header Loop
+      squee_append_row(db->table, row);
       squee_print_row(row);
       printf("\n");
     } // END Row Loop
