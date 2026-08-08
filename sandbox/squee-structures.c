@@ -719,7 +719,13 @@ Database* squee_read_database_from_file2(char *file) {
     squee_print_header(db->table->header);
 
     // Read Row
-    while (SQUEE_RECORD_SEPARATOR != *pbuffer) {
+    while (SQUEE_END_ROW != *(pbuffer + 1)) {
+        printf("BUFFER 0 [%i] \n", *(pbuffer)); 
+        printf("BUFFER -1 [%i] \n", *(pbuffer-1)); 
+        printf("BUFFER +1 [%i] \n", *(pbuffer+1)); 
+        if (SQUEE_RECORD_SEPARATOR == *pbuffer) {
+            // break;
+        }
         Header *hdr_p = db->table->header;
         Row *row = (Row*)malloc(sizeof(Row*));
         row->next_row_node = squee_new_empty_row_node_list();
@@ -768,7 +774,10 @@ Database* squee_read_database_from_file2(char *file) {
       squee_append_row(db->table, row);
       squee_print_row(row);
       printf("\n");
+      printf("END ROW NODE LOOP \n");
     } // END Row Loop
+
+    printf("END ROW LOOP \n");
 
     return db;
 }
