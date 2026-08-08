@@ -685,7 +685,6 @@ Database* squee_read_database_from_file2(char *file) {
     pbuffer++;      // Skip UNIT_SEPARATOR
 
     // Read Header
-    // Header* squee_new_empty_header();
     while (*pbuffer != SQUEE_END_HEADER) {
     
         // Read field name
@@ -699,7 +698,7 @@ Database* squee_read_database_from_file2(char *file) {
         memcpy(field_name, start, len);
         field_name[len] = '\0';
 
-        pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
+        pbuffer++;      // Skip SQUEE_UNIT_SEPARATOR
 
         start = pbuffer;
         while (*pbuffer != SQUEE_RECORD_SEPARATOR)
@@ -719,16 +718,14 @@ Database* squee_read_database_from_file2(char *file) {
     }
     squee_print_header(db->table->header);
 
-    // printf("Before rows: %02X\n", (unsigned char)*pbuffer);
-
-    // Row *row = db->table->row;
-    // RowNode *node = row->next_row_node;
-    // row = squee_append_row(db->table, row);
+    // Read Row
     while (SQUEE_RECORD_SEPARATOR != *pbuffer) {
         Header *hdr_p = db->table->header;
         Row *row = (Row*)malloc(sizeof(Row*));
         row->next_row_node = squee_new_empty_row_node_list();
+
         while (SQUEE_TAIL != hdr_p->field_t) {
+            // Skip Header
             if (SQUEE_HEAD == hdr_p->field_t) {
                 hdr_p = hdr_p->next;
                 continue;
@@ -744,7 +741,6 @@ Database* squee_read_database_from_file2(char *file) {
             memcpy(value_str, start, len);
             value_str[len] = '\0';
 
-            // TODO copy col data into the Row
             switch(hdr_p->field_t) {
                 case SQUEE_INT:
                     node->field_t = SQUEE_INT;
@@ -766,15 +762,13 @@ Database* squee_read_database_from_file2(char *file) {
                     break;
             }
             squee_append_row_node(row, node);
-            pbuffer++;      // <-- Skip SQUEE_UNIT_SEPARATOR
+            pbuffer++;      // Skip SQUEE_UNIT_SEPARATOR
             hdr_p = hdr_p->next;
-      } // END Header Loop
+      } // END Row Node Loop
       squee_append_row(db->table, row);
       squee_print_row(row);
       printf("\n");
     } // END Row Loop
-
-    // printf("buffer [%s] [%x] \n", pbuffer, (unsigned char)*pbuffer);
 
     return db;
 }
