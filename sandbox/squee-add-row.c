@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     }
     char *cols[argc];
 
-    Database *db = squee_read_database_from_file(argv[argc - 1]);
+    Database *db = squee_read_database_from_file2(argv[argc - 1]);
     squee_print_rows(db->table->row);
 
     int c = 0;

@@ -485,6 +485,7 @@ Database* squee_read_database_from_file(char *file) {
     char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
     size_t len;
 
+    printf("FILE [%s] \n", file);
     FILE *fd = fopen(file, "r");
     if (NULL == fd) {
         printf("Error opening file: %s \n", file);
@@ -738,9 +739,14 @@ Database* squee_read_database_from_file2(char *file) {
             }
     
             start = pbuffer;
+            // END OF FILE [3] [4] [5] [6] 
+            printf("PBUFFER: ");
             while (*pbuffer != SQUEE_UNIT_SEPARATOR) {
+                if (SQUEE_END_FILE == *pbuffer) return db;
+                printf("[%i] ", *pbuffer);
                 pbuffer++;
             }
+            printf("\n");
     
             len = pbuffer - start;
             RowNode *node = (RowNode*)malloc(sizeof(RowNode));
