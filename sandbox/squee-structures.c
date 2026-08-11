@@ -543,7 +543,7 @@ int squee_write_database_to_file(char *file, Database *db) {
     return(0);
 }
 
-Database* squee_read_database_from_file2(char *file) {
+Database* squee_read_database_from_file(char *file) {
     int type = 0;
     char *endptr = NULL;
     char *buffer;
