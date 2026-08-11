@@ -88,7 +88,6 @@ void squee_print_row_node(RowNode *node);
 void squee_print_delimiter(int);
 
 // IO
-Database* squee_read_database_from_file(char *file);
 Database* squee_read_database_from_file2(char *file);
 int squee_write_database_to_file(char *file, Database *db);
 
