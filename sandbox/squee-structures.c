@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <errno.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -36,15 +37,12 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     char *endptr;
     int type = 0;
 
-    // printf("squee_new_header_with_columns() begin [%i] end [%i] \n", begin, end);
-
     for (int i = begin; i < end; i = i + 2) {
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[i]) + 1);
         type = strtol(cols[i + 1], &endptr, 10);
         neu->field_t = type;
         strcpy(neu->field_name, cols[i]);
-        // printf("squee_new_header_with_columns() [%s] \n", neu->field_name);
         curr->next = neu;
         neu->next = curr->next->next;
         curr = neu;
@@ -164,67 +162,6 @@ Row* squee_new_empty_row_list() {
 
 }
 
-/*
-Row* squee_create_row(Table *table, char* cols[], int len) {
-    Header *header_p = table->header->next->next;
-    char *endptr; // used for string conversion
-    long value; // used for string conversion
-
-    // Header row that we need to add to the table
-    Row *row_h = (Row*)malloc(sizeof(Row));
-    RowNode *row = (RowNode*)malloc(sizeof(RowNode));
-    row_h->field_t = SQUEE_HEAD;
-    row_h->next_row_node = row;
-    RowNode *last = row;
-
-    for (int i = 0; i < len; i++) {
-        row = (RowNode*)malloc(sizeof(RowNode));
-        row->field_t = header_p->field_t;
-
-        switch(row->field_t) {
-            case SQUEE_INT:
-                value = strtol(cols[i], &endptr, 10);
-                row->data.i = (int)value;
-                break;
-            case SQUEE_FLOAT:
-                value = strtof(cols[i], &endptr);
-                row->data.f = (float)value;
-                break;
-            case SQUEE_STRING:
-                row->data.s = (char*)malloc(strlen(cols[i]));
-                strcpy(row->data.s, cols[i]);
-                break;
-            case SQUEE_DATE:
-                break;
-            case SQUEE_HEAD:
-                break;
-            case SQUEE_TAIL:
-                break;
-            default:
-                break;
-        }
-
-        last->next = row;
-        last = row;
-        header_p = header_p->next;
-    }
-    
-    // TODO: This allows for only a single row in a whole table. Need to implement more of an "insert row" here
-    // once we get a single row working.
-
-    // ADD A TAIL TO THE ROW
-    // TODO need to remove this once we get insert working
-    row = (RowNode*)malloc(sizeof(RowNode));
-    row->field_t = SQUEE_TAIL;
-    last->next = row;
-
-    // TODO remove once we get code to insert the row instead
-    table->row = row_h;
-
-    return row_h;
-}
-*/
-
 // TODO NOT DONE FKO
 // Take a new row and add it to the linked list
 Row* squee_append_row(Table *table, Row *row) {
@@ -298,8 +235,9 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
     return row_h;
 }
 
-// PRINT METHODS
+// Print Methods
 
+// FKO TODO NOT DONE
 void squee_print_table(Table *tbl) {
     return;
     // RowNode *node = tbl->row->next_row_node;
@@ -473,8 +411,7 @@ void squee_print_Table(Table *tbl) {
 int squee_write_database_to_file(char *file, Database *db) {
     FILE *fd = fopen(file, "w");
     if (NULL == fd) {
-        // TODO print errno
-        printf("Error writing to [%s] \n", file);
+        printf("Error writing to [%s] errono [%i] \n", file, errno);
         fclose(fd);
         return(1);
     }
@@ -497,13 +434,7 @@ int squee_write_database_to_file(char *file, Database *db) {
     // Write Row
     fprintf(fd, "%c", SQUEE_START_ROW);
     Row *curr = db->table->row;
-    // squee_print_rows(row);
     while (SQUEE_TAIL != curr->field_t) {
-        // TODO print to file
-        // printf("write_database() id [%i] type [", curr->id);
-        // squee_print_field_type(curr->field_t);
-        // printf("] \n");
-
         if (SQUEE_HEAD == curr->field_t) {
             curr = curr->next;
             continue;
@@ -528,7 +459,6 @@ int squee_write_database_to_file(char *file, Database *db) {
                 case SQUEE_TAIL:
                     break;
                 default:
-                    // printf("UK");
                     break;
             }
             node = node->next;
@@ -562,7 +492,6 @@ Database* squee_read_database_from_file(char *file) {
     Database *db = squee_new_empty_database();
 
     if (NULL == fd) {
-        printf("Error opening file: %s \n", file);
         return(db);
     }
 
@@ -588,7 +517,6 @@ Database* squee_read_database_from_file(char *file) {
     size_t magic_len = strlen(magic);
     
     if (strncmp(pbuffer, magic, magic_len) != 0) {
-        printf("Invalid database file.\n");
         free(buffer);
         return NULL;
     }
@@ -601,7 +529,6 @@ Database* squee_read_database_from_file(char *file) {
     len = pbuffer - start;
     db->table->name = (char*)malloc(len + 1);
     strncpy(db->table->name, start, len);
-    printf("table name [%s] \n", db->table->name);
     
     pbuffer++;      // Skip UNIT_SEPARATOR
 
@@ -641,9 +568,6 @@ Database* squee_read_database_from_file(char *file) {
 
     // Read Row
     while (SQUEE_END_ROW != *(pbuffer + 1)) {
-        printf("BUFFER 0 [%i] \n", *(pbuffer)); 
-        printf("BUFFER -1 [%i] \n", *(pbuffer-1)); 
-        printf("BUFFER +1 [%i] \n", *(pbuffer+1)); 
         if (SQUEE_RECORD_SEPARATOR == *pbuffer) {
             // break;
         }
@@ -660,13 +584,10 @@ Database* squee_read_database_from_file(char *file) {
     
             start = pbuffer;
             // END OF FILE [3] [4] [5] [6] 
-            printf("PBUFFER: ");
             while (*pbuffer != SQUEE_UNIT_SEPARATOR) {
                 if (SQUEE_END_FILE == *pbuffer) return db;
-                printf("[%i] ", *pbuffer);
                 pbuffer++;
             }
-            printf("\n");
     
             len = pbuffer - start;
             RowNode *node = (RowNode*)malloc(sizeof(RowNode));
@@ -699,12 +620,7 @@ Database* squee_read_database_from_file(char *file) {
       } // END Row Node Loop
       squee_append_row(db->table, row);
       squee_print_row(row);
-      printf("\n");
-      printf("END ROW NODE LOOP \n");
     } // END Row Loop
-
-    printf("END ROW LOOP \n");
-
     return db;
 }
  

@@ -17,6 +17,8 @@
 // The data type that the field holds
 typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_DATA, SQUEE_HEAD, SQUEE_TAIL } Field_t;
 
+// Data Structures
+
 typedef struct Row {
     struct Row *next;
     struct RowNode *next_row_node;
@@ -45,37 +47,37 @@ typedef struct Table {
     char *name;
     Header *header;
     Row *row;
-    int row_id; // the id that the next inserted row is going to get
+    int row_id; // The id that the next inserted row is going to get. TODO: Change to a pointer
 } Table;
 
-// how to have more than one table?
+// TODO: How to have more than one table?
 typedef struct Database {
     Table *table;
 } Database;
 
 // Functions
 
-// New Functions
+// Database Functions
 Database* squee_new_empty_database();
 
-// Table Creation
+// Table Functions
 Table* squee_new_empty_table();
 Table* squee_new_table_with_header(char* name, int begin, int end, char* cols[]);
 
-// Header Creation
+// Header Functions
 Header* squee_new_empty_header();
 Header* squee_new_header(int begin, int end, char* cols[]);
 Header* squee_header_add_column(Header *last, char *header_name, int field_type);
 
-// ROW CREATION
+// Row and Row Node Functions
 Row* squee_new_empty_row_list();
-RowNode* squee_new_empty_row_node_list();
-// Add a new row to a table
-// Row* squee_add_row(Table *table, char* cols[], int len);
 // Create a new free floating row
 Row* squee_create_row(Table *table, char* cols[], int len);
-// given a table, append a row onto it
+// Given a table, append a row onto it
 Row* squee_append_row(Table *table, Row *row);
+// Create an empty row node
+RowNode* squee_new_empty_row_node_list();
+// Given a row, append a row node onto it
 void squee_append_row_node(Row *row, RowNode *node);
 
 // Print Functions
