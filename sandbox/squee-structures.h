@@ -1,6 +1,10 @@
 #ifndef SQUEE_STRUCTURES_H
 #define SQUEE_STRUCTURES_H
 
+/* Squee Data Structures
+ * Note one must include inttypes.h before this header
+ */
+
 // Datatypes
 
 // Delimiters

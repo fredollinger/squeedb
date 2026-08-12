@@ -1,8 +1,9 @@
 .PHONY: force
 
 CC=clang
-CFLAGS += -g -O0 -fsanitize=address -fno-omit-frame-pointer
-LDFLAGS += -fsanitize=address
+CFLAGS += -g -O0 -wError
+#CFLAGS += -g -O0 -fsanitize=address -fno-omit-frame-pointer
+#LDFLAGS += -fsanitize=address
 
 all: squee-new-database squee-create-table squee-add-row squee-read-database squeectl
 
