@@ -50,7 +50,15 @@ void test_squee_header_add_column() {
     // Teardown
 }
 
+void test_new_empty_row_list() {
+    Row *row = squee_new_empty_row_list();
+    assert (SQUEE_HEAD == row->field_t);
+    row = row->next;
+    assert (SQUEE_TAIL == row->field_t);
+}
+
 int main() {
     test_squee_new_empty_header();
     test_squee_header_add_column();
+    test_new_empty_row_list();
 }
