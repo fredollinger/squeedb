@@ -14,6 +14,7 @@ void test_squee_new_empty_header() {
 }
 
 void test_squee_header_add_column() {
+    // Setup
     Header *header = squee_new_empty_header();
     // Keep a pointer to the header as the header var will change after
     // each call of squee_header_add_column()
@@ -23,6 +24,9 @@ void test_squee_header_add_column() {
     header = squee_header_add_column(header, "Last Name", 2);
     header = squee_header_add_column(header, "Age", 0);
     header = squee_header_add_column(header, "Hourly Rate", 1);
+
+    // Start testing
+    assert (SQUEE_HEAD == head->field_t);
 
     Header *h = head->next;
     assert (2 == h->field_t);
@@ -39,6 +43,11 @@ void test_squee_header_add_column() {
     h = h->next;
     assert (1 == h->field_t);
     assert (0 == strcmp("Hourly Rate", h->field_name));
+
+    h = h->next;
+    assert (SQUEE_TAIL == h->field_t);
+
+    // Teardown
 }
 
 int main() {
