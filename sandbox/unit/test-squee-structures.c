@@ -5,11 +5,26 @@
 
 #include "squee-structures.h"
 
+// Helper Functions
+
+// Ensure an empty Header is correct
+void check_empty_header(Header *header) {
+    assert (SQUEE_HEAD == header->field_t);
+    header = header->next;
+    assert (SQUEE_TAIL == header->field_t);
+}
+
+// Ensure an empty Row is correct
+void check_empty_row(Row *row) {
+    assert (SQUEE_HEAD == row->field_t);
+    row = row->next;
+    assert (SQUEE_TAIL == row->field_t);
+}
+
+// Unit Tests
 void test_squee_new_empty_header() {
     Header *header = squee_new_empty_header();
-    Header *next = header->next;
-    assert (SQUEE_HEAD == header->field_t);
-    assert (SQUEE_TAIL == next->field_t);
+    check_empty_header(header);
     // TODO Delete Header
 }
 
@@ -52,9 +67,12 @@ void test_squee_header_add_column() {
 
 void test_new_empty_row_list() {
     Row *row = squee_new_empty_row_list();
-    assert (SQUEE_HEAD == row->field_t);
-    row = row->next;
-    assert (SQUEE_TAIL == row->field_t);
+    check_empty_row(row);
+
+}
+
+void test_new_empty_database() {
+    Database *db = squee_new_empty_database();
 }
 
 int main() {
