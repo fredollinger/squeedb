@@ -6,6 +6,15 @@
 
 #include "squee-structures.h"
 
+/*
+  CREATE TABLE table_name (
+    column1 datatype constraint,
+    column2 datatype constraint,
+    column3 datatype constraint,
+    ....
+  ); 
+*/
+
 int main(int argc, char* argv[]) {
     printf("squeectl args [%i] \n", argc);
     if (1 >= argc) {
