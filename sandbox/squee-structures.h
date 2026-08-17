@@ -70,7 +70,6 @@ Table* squee_new_table_with_header(char* name, int begin, int end, char* cols[])
 
 // Header Functions
 Header* squee_new_empty_header();
-Header* squee_new_header(int begin, int end, char* cols[]);
 Header* squee_header_add_column(Header *last, char *header_name, int field_type);
 
 // Row and Row Node Functions
