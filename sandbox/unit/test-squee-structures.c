@@ -73,6 +73,8 @@ void test_new_empty_row_list() {
 
 void test_new_empty_database() {
     Database *db = squee_new_empty_database();
+    check_empty_row(db->table->row);
+    check_empty_header(db->table->header);
 }
 
 int main() {
