@@ -65,7 +65,7 @@ void test_squee_header_add_column() {
     // Teardown
 }
 
-void test_new_empty_row_list() {
+void test_squee_new_empty_row_list() {
     Row *row = squee_new_empty_row_list();
     check_empty_row(row);
 
@@ -77,8 +77,50 @@ void test_new_empty_database() {
     check_empty_header(db->table->header);
 }
 
+// For now this is just a wrapper on malloc so no test is needed
+void test_squee_new_empty_table() {
+    return;
+}
+
+
+void test_squee_new_header_with_columns() {
+	char *cols[] = {"John", "Doe", "42", "4.25"};
+     = squee_new_header_with_columns(begin, end, cols);
+    tbl->header = squee_new_header_with_columns(begin, end, cols);
+}
+
+/*
+void test_squee_new_table_with_header() {
+	char *cols[] = {"John", "Doe", "42", "4.25"};
+    Table *table = squee_new_table_with_header("Employees", 0, 4, cols);
+
+    squee_print_header(table->header);
+
+    Header *header = table->header->next;
+    assert (0 == strcmp("Employees", table->name));
+
+    assert (SQUEE_HEAD == table->header->field_t);
+    assert (0 == strcmp("John", header->field_name));
+
+    header = header->next;
+    printf("field name [%s] \n", header->field_name);
+    // assert (0 == strcmp("Doe", header->field_name));
+
+    header = header->next;
+    printf("field name [%s] \n", header->field_name);
+    // assert (0 == strcmp("42", header->field_name));
+
+    header = header->next;
+    assert (0 == strcmp("4.25", header->field_name));
+
+    header = header->next;
+    assert (SQUEE_TAIL == header->field_t);
+}
+*/
+
 int main() {
     test_squee_new_empty_header();
     test_squee_header_add_column();
-    test_new_empty_row_list();
+    test_squee_new_empty_row_list();
+    test_squee_new_table_with_header();
 }

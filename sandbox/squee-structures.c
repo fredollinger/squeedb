@@ -65,7 +65,6 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin, end, cols);
-    squee_print_header(tbl->header);
 
     tbl->row = squee_new_empty_row_list();
     return tbl;
@@ -564,7 +563,6 @@ Database* squee_read_database_from_file(char *file) {
         // Last line
         pbuffer++;      // Skip RECORD_SEPARATOR
     }
-    squee_print_header(db->table->header);
 
     // Read Row
     while (SQUEE_END_ROW != *(pbuffer + 1)) {
