@@ -38,6 +38,7 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     int type = 0;
 
     for (int i = begin; i < end; i = i + 2) {
+        printf("squee_new_header_with_columns() entry [%s] \n", cols[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[i]) + 1);
         type = strtol(cols[i + 1], &endptr, 10);
