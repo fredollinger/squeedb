@@ -72,11 +72,10 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
 // ROW METHODS
 
-Row* squee_create_row(Table *table, char* cols[], int len) {
+Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
     Row *row = (Row*)malloc(sizeof(Row));
     row->field_t = SQUEE_DATA;
     row->id = -1;
-    Header *hdr_p = table->header;
 
     RowNode *curr = (RowNode*)malloc(sizeof(RowNode));
     curr->field_t = SQUEE_HEAD;

@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     }
 
 	// char *cols_data1[] = {"John", "Doe", "42", "4.25"};
-    Row *row = squee_create_row(db->table, cols, 3);
+    Row *row = squee_create_row(db->table->header, cols, 3);
     squee_append_row(db->table, row);
 
     /*

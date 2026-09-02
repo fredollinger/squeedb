@@ -75,7 +75,8 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
 // Row and Row Node Functions
 Row* squee_new_empty_row_list();
 // Create a new free floating row
-Row* squee_create_row(Table *table, char* cols[], int len);
+// The header is needed to understand the structure of the row
+Row* squee_create_row(Header *header, char* cols[], int len);
 // Given a table, append a row onto it
 Row* squee_append_row(Table *table, Row *row);
 // Create an empty row node
