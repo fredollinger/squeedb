@@ -111,18 +111,17 @@ void test_squee_new_table_with_header() {
 */
 
 // squee_new_table_with_header begin: [2] end: [10]
-/*
 void test_squee_new_header_with_columns() {
 	char *cols[] = {"John", "Doe", "42", "4.25"};
     int begin = 0;
     int end = 4;
     Header *header = squee_new_header_with_columns(begin, end, cols);
 }
-*/
 
 int main() {
     test_squee_new_empty_header();
     test_squee_header_add_column();
     test_squee_new_empty_row_list();
+    test_squee_new_header_with_columns();
     // test_squee_new_table_with_header();
 }
