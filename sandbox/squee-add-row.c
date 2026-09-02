@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
         return(0);
     }
     int num = argc - 2;
+    printf("num cols [%i] \n", num);
     char **cols = malloc((num + 1) * sizeof(char *));
 
     printf("add_row() number of cols [%i] \n", num);
