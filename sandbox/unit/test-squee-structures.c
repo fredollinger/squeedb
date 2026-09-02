@@ -68,7 +68,6 @@ void test_squee_header_add_column() {
 void test_squee_new_empty_row_list() {
     Row *row = squee_new_empty_row_list();
     check_empty_row(row);
-
 }
 
 void test_new_empty_database() {
@@ -80,13 +79,6 @@ void test_new_empty_database() {
 // For now this is just a wrapper on malloc so no test is needed
 void test_squee_new_empty_table() {
     return;
-}
-
-
-void test_squee_new_header_with_columns() {
-	char *cols[] = {"John", "Doe", "42", "4.25"};
-     = squee_new_header_with_columns(begin, end, cols);
-    tbl->header = squee_new_header_with_columns(begin, end, cols);
 }
 
 /*
@@ -118,9 +110,19 @@ void test_squee_new_table_with_header() {
 }
 */
 
+// squee_new_table_with_header begin: [2] end: [10]
+/*
+void test_squee_new_header_with_columns() {
+	char *cols[] = {"John", "Doe", "42", "4.25"};
+    int begin = 0;
+    int end = 4;
+    Header *header = squee_new_header_with_columns(begin, end, cols);
+}
+*/
+
 int main() {
     test_squee_new_empty_header();
     test_squee_header_add_column();
     test_squee_new_empty_row_list();
-    test_squee_new_table_with_header();
+    // test_squee_new_table_with_header();
 }
