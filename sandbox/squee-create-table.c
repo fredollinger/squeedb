@@ -17,13 +17,15 @@ int main(int argc, char* argv[]) {
 
     Database *db = squee_new_empty_database();
     printf("argc [%i] \n", argc);
-    fko
+    // fko
     // TODO Need to actually create the columns from argv so that we weed out the 
     // type because squee_new_table_with_header() should only have columns like:
     // First_Name, Last_Name, Age, Hourly_Rate
+    /*
     for (int i = begin; i < end; i = i + 2) {
         // here we need to add this to cols[]
     }
+    */
     db->table = squee_new_table_with_header(argv[1], 2, argc - 1, argv);
     printf("create table [%s] [%i] [%i] [%s]", argv[1], 2, argc -1, argv[0]);
     //squee_print_header(db->table->header);

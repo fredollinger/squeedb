@@ -31,18 +31,35 @@ Header* squee_header_add_column(Header *last, char *header_name, int field_type)
     return neu;
 }
 
+int squee_get_field_int(char *type) {
+    if (0 == strcmp("INT", type)) {
+        return SQUEE_INT;
+    }
+    else if (0 == strcmp("FLOAT", type)) {
+        return SQUEE_FLOAT;
+    }
+    // TODO CHANGE SQUEE_STRING TO SQUEE_CHAR
+    else if (0 == strcmp("CHAR", type)) {
+        return SQUEE_STRING;
+    }
+    else if (0 == strcmp("DATE", type)) {
+        return SQUEE_DATE;
+    }
+    return -1;
+}
+
 Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
     char *endptr;
-    int type = 0;
+    // int type = 0;
 
     for (int i = begin; i < end; i = i + 2) {
         printf("squee_new_header_with_columns() entry [%s] \n", cols[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[i]) + 1);
-        type = strtol(cols[i + 1], &endptr, 10);
-        neu->field_t = type;
+        // type = strtol(cols[i + 1], &endptr, 10);
+        neu->field_t = squee_get_field_int(cols[i + 1]);
         strcpy(neu->field_name, cols[i]);
         curr->next = neu;
         neu->next = curr->next->next;

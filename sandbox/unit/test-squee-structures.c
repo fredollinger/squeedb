@@ -112,12 +112,12 @@ void test_squee_new_table_with_header() {
 
 // squee_new_table_with_header begin: [2] end: [10]
 void test_squee_new_header_with_columns() {
-	char *cols[] = {"First Name", "2", "Last Name", "2", "Age", "0", "Hourly Rate", "1"};
+	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT", "Hourly Rate", "FLOAT"};
     int begin = 0;
     int end = 4;
     Header *header = squee_new_header_with_columns(begin, end, cols);
     header = header->next;
-    fko test values here
+    // fko test values here
 }
 
 int main() {
