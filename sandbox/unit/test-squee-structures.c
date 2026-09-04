@@ -114,10 +114,20 @@ void test_squee_new_table_with_header() {
 void test_squee_new_header_with_columns() {
 	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT", "Hourly Rate", "FLOAT"};
     int begin = 0;
-    int end = 4;
+    int end = 8;
     Header *header = squee_new_header_with_columns(begin, end, cols);
+
     header = header->next;
-    // fko test values here
+    assert (0 == strcmp("First Name", header->field_name));
+    assert (SQUEE_STRING == header->field_t);
+
+    header = header->next;
+    assert (0 == strcmp("Last Name", header->field_name));
+    assert (SQUEE_STRING == header->field_t);
+
+    header = header->next;
+    assert (0 == strcmp("Age", header->field_name));
+    assert (SQUEE_INT == header->field_t);
 }
 
 int main() {
