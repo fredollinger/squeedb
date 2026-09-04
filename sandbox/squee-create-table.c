@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
         // here we need to add this to cols[]
     }
     */
-    db->table = squee_new_table_with_header(argv[1], 2, argc - 1, argv);
+    db->table = squee_new_table_with_header(argv[1], 2, (argc - 1) / 2, argv);
     printf("create table [%s] [%i] [%i] [%s]", argv[1], 2, argc -1, argv[0]);
     //squee_print_header(db->table->header);
     // squee_print_rows(db->table->row);

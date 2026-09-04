@@ -114,7 +114,7 @@ void test_squee_new_table_with_header() {
 void test_squee_new_header_with_columns() {
 	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT", "Hourly Rate", "FLOAT"};
     int begin = 0;
-    int end = 8;
+    int end = 4;
     Header *header = squee_new_header_with_columns(begin, end, cols);
 
     header = header->next;

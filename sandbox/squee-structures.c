@@ -52,13 +52,12 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
     char *endptr;
-    // int type = 0;
+    end = end * 2;
 
     for (int i = begin; i < end; i = i + 2) {
         printf("squee_new_header_with_columns() entry [%s] \n", cols[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[i]) + 1);
-        // type = strtol(cols[i + 1], &endptr, 10);
         neu->field_t = squee_get_field_int(cols[i + 1]);
         strcpy(neu->field_name, cols[i]);
         curr->next = neu;
