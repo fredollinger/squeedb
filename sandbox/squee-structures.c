@@ -102,6 +102,7 @@ Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
     row->next_row_node = curr;
 
     long value; // used for string conversion
+    float fvalue; // used for string conversion
     char *endptr;
 
     int i = 0;
@@ -121,8 +122,9 @@ Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
                 neu->data.i = (int)value;
                 break;
             case SQUEE_FLOAT:
-                value = strtof(cols[i], &endptr);
-                neu->data.f = (float)value;
+                fvalue = strtof(cols[i], &endptr);
+                neu->data.f = fvalue;
+                // printf("squee_create_row FLOAT [%s] [%s] [%f] \n", cols[i], endptr, neu->data.f);
                 break;
             case SQUEE_STRING:
                 neu->data.s = strdup(cols[i]);
@@ -200,6 +202,7 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
     Header *header_p = table->header->next->next;
     char *endptr; // used for string conversion
     long value; // used for string conversion
+    float fvalue; // used for string conversion
 
     // Header row that we need to add to the table
     Row *row_h = (Row*)malloc(sizeof(Row));
@@ -218,8 +221,9 @@ Row* squee_add_row(Table *table, char* cols[], int len) {
                 row->data.i = (int)value;
                 break;
             case SQUEE_FLOAT:
-                value = strtof(cols[i], &endptr);
-                row->data.f = (float)value;
+                fvalue = strtof(cols[i], &endptr);
+                // printf("squee_add_row FLOAT [%s] [%ld] \n", cols[i], value);
+                row->data.f = fvalue;
                 break;
             case SQUEE_STRING:
                 row->data.s = (char*)malloc(strlen(cols[i] + 1));
