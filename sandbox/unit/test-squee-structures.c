@@ -31,6 +31,36 @@ void check_empty_row(Row *row) {
     assert (SQUEE_TAIL == row->field_t);
 }
 
+void check_row(Row *row) {
+    // printf("squee_print_row_node(): INT Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
+	// char *cols[] = {"John", "Doe", "42", "4.25"};
+    printf("check_row type [%i] \n", row->field_t);
+    assert (SQUEE_DATA == row->field_t);
+    RowNode *node = row->next_row_node;
+    assert (SQUEE_HEAD == node->field_t);
+
+    node = node->next;
+    assert (SQUEE_STRING == node->field_t);
+    printf("check_row 1st [%s] \n", node->data.s);
+    assert (0 == strcmp("John", node->data.s));
+
+    node = node->next;
+    assert (SQUEE_STRING == node->field_t);
+    assert (0 == strcmp("Doe", node->data.s));
+
+    node = node->next;
+    assert (SQUEE_INT == node->field_t);
+    assert (42 == node->data.i);
+
+    node = node->next;
+    assert (SQUEE_FLOAT == node->field_t);
+    printf("check_row() [%f] \n", node->data.f);
+    assert (4.25 == node->data.f);
+
+    node = node->next;
+    assert (SQUEE_TAIL == node->field_t);
+}
+
 // Unit Tests
 void test_squee_new_empty_header() {
     Header *header = squee_new_empty_header();
@@ -147,6 +177,7 @@ void test_squee_create_row() {
     Header *header = fixture_create_header();
 	char *cols[] = {"John", "Doe", "42", "4.25"};
     Row *row = squee_create_row(header, cols, 4);
+    check_row(row);
 }
 
 int main() {
