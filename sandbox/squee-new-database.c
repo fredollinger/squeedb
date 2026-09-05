@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
         return(1);
     }
 
-    fprintf(fd, "SQUEE format 3");
+    fprintf(fd, FILE_SIGNATURE);
     fclose(fd);
 
     return(0);

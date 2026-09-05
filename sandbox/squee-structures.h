@@ -18,6 +18,9 @@
 #define SQUEE_END_ROW           0x05
 #define SQUEE_END_FILE          0x06
 
+// Defines the database
+#define FILE_SIGNATURE "SQUEE format 1"
+
 // The data type that the field holds
 typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_DATA, SQUEE_HEAD, SQUEE_TAIL } Field_t;
 
