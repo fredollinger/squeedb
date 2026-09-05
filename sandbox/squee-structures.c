@@ -197,66 +197,6 @@ Row* squee_append_row(Table *table, Row *row) {
     return row;
 }
 
-// TODO NOT DONE FKO We probably need to rewrite this
-Row* squee_add_row(Table *table, char* cols[], int len) {
-    Header *header_p = table->header->next->next;
-    char *endptr; // used for string conversion
-    long value; // used for string conversion
-    float fvalue; // used for string conversion
-
-    // Header row that we need to add to the table
-    Row *row_h = (Row*)malloc(sizeof(Row));
-    RowNode *row = (RowNode*)malloc(sizeof(RowNode));
-    row_h->field_t = SQUEE_HEAD;
-    row_h->next_row_node = row;
-    RowNode *last = row;
-
-    for (int i = 0; i < len; i++) {
-        row = (RowNode*)malloc(sizeof(RowNode));
-        row->field_t = header_p->field_t;
-
-        switch(row->field_t) {
-            case SQUEE_INT:
-                value = strtol(cols[i], &endptr, 10);
-                row->data.i = (int)value;
-                break;
-            case SQUEE_FLOAT:
-                fvalue = strtof(cols[i], &endptr);
-                // printf("squee_add_row FLOAT [%s] [%ld] \n", cols[i], value);
-                row->data.f = fvalue;
-                break;
-            case SQUEE_STRING:
-                row->data.s = (char*)malloc(strlen(cols[i] + 1));
-                strcpy(row->data.s, cols[i]);
-                break;
-            case SQUEE_DATE:
-                break;
-            case SQUEE_HEAD:
-                break;
-            case SQUEE_TAIL:
-                break;
-            default:
-                break;
-
-        }
-        last->next = row;
-        last = row;
-        header_p = header_p->next;
-    }
-    
-    RowNode *tail = (RowNode*)malloc(sizeof(RowNode));
-    tail->field_t = SQUEE_TAIL;
-    last->next = tail;
-
-    // TODO: This allows for only a single row in a whole table. Need to implement more of an "insert row" here
-    // once we get a single row working.
-
-    // TODO remove once we get code to insert the row instead
-    table->row = row_h;
-
-    return row_h;
-}
-
 // Print Methods
 
 // FKO TODO NOT DONE
