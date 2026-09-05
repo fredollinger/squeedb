@@ -15,6 +15,17 @@ Header* fixture_create_header() {
     return header;
 }
 
+Row* fixture_create_row() {
+    Header *header = fixture_create_header();
+	char *cols[] = {"John", "Doe", "42", "4.25"};
+    return squee_create_row(header, cols, 4);
+}
+
+Table* fixture_create_table() {
+	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT", "Hourly Rate", "FLOAT"};
+    return squee_new_table_with_header("Employees", 0, 4, cols);
+}
+
 // Check Functions
 
 // Ensure an empty Header is correct
@@ -34,25 +45,29 @@ void check_empty_row(Row *row) {
 void check_row(Row *row) {
     // printf("squee_print_row_node(): INT Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
 	// char *cols[] = {"John", "Doe", "42", "4.25"};
+
     printf("check_row type [%i] \n", row->field_t);
     assert (SQUEE_DATA == row->field_t);
     RowNode *node = row->next_row_node;
     assert (SQUEE_HEAD == node->field_t);
 
     node = node->next;
+    printf("check_row type [%i] \n", row->field_t);
     assert (SQUEE_STRING == node->field_t);
     printf("check_row 1st [%s] \n", node->data.s);
     assert (0 == strcmp("John", node->data.s));
 
     node = node->next;
+    printf("check_row type [%i] \n", row->field_t);
     assert (SQUEE_STRING == node->field_t);
     assert (0 == strcmp("Doe", node->data.s));
 
-    node = node->next;
+    node = node->next; printf("check_row type [%i] \n", row->field_t);
     assert (SQUEE_INT == node->field_t);
     assert (42 == node->data.i);
 
     node = node->next;
+    printf("check_row type [%i] \n", row->field_t);
     assert (SQUEE_FLOAT == node->field_t);
     printf("check_row() [%f] \n", node->data.f);
     assert (4.25 == node->data.f);
@@ -178,9 +193,11 @@ void test_squee_create_row() {
 }
 
 void test_squee_append_row() {
-    // Table *tbl = (Table*) malloc(sizeof(Table));
-    // FKO TODO
-    // Row* squee_append_row(Table *table, Row *row);
+    Table *table = fixture_create_table();
+    Row *row = fixture_create_row();
+    // check_row(row);
+    row = squee_append_row(table,row);
+    check_row(table->row);
 }
 
 
