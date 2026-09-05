@@ -7,6 +7,16 @@
 
 // Helper Functions
 
+// Fixture Functions
+
+Header* fixture_create_header() {
+	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT", "Hourly Rate", "FLOAT"};
+    Header *header = squee_new_header_with_columns(0, 4, cols);
+    return header;
+}
+
+// Check Functions
+
 // Ensure an empty Header is correct
 void check_empty_header(Header *header) {
     assert (SQUEE_HEAD == header->field_t);
@@ -112,10 +122,13 @@ void test_squee_new_table_with_header() {
 
 // squee_new_table_with_header begin: [2] end: [10]
 void test_squee_new_header_with_columns() {
+    Header *header = fixture_create_header();
+/*
 	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT", "Hourly Rate", "FLOAT"};
     int begin = 0;
     int end = 4;
     Header *header = squee_new_header_with_columns(begin, end, cols);
+*/
 
     header = header->next;
     assert (0 == strcmp("First Name", header->field_name));
@@ -130,10 +143,17 @@ void test_squee_new_header_with_columns() {
     assert (SQUEE_INT == header->field_t);
 }
 
+void test_squee_create_row() {
+    Header *header = fixture_create_header();
+	char *cols[] = {"John", "Doe", "42", "4.25"};
+    Row *row = squee_create_row(header, cols, 4);
+}
+
 int main() {
     test_squee_new_empty_header();
     test_squee_header_add_column();
     test_squee_new_empty_row_list();
     test_squee_new_header_with_columns();
+    test_squee_create_row();
     // test_squee_new_table_with_header();
 }
