@@ -177,11 +177,19 @@ void test_squee_create_row() {
     check_row(row);
 }
 
+void test_squee_append_row() {
+    // Table *tbl = (Table*) malloc(sizeof(Table));
+    // FKO TODO
+    // Row* squee_append_row(Table *table, Row *row);
+}
+
+
 int main() {
     test_squee_new_empty_header();
     test_squee_header_add_column();
     test_squee_new_empty_row_list();
     test_squee_new_header_with_columns();
     test_squee_create_row();
+    test_squee_append_row();
     // test_squee_new_table_with_header();
 }

@@ -77,7 +77,6 @@ Table* squee_new_empty_table() {
     return tbl;
 }
 
-// TODO FKO FIXME THIS IS BROKEN
 Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[]) {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
@@ -90,7 +89,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     return tbl;
 }
 
-// ROW METHODS
+// Row Methods
 
 Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
     Row *row = (Row*)malloc(sizeof(Row));
@@ -195,6 +194,18 @@ Row* squee_append_row(Table *table, Row *row) {
     table->row_id = table->row_id + 1;
     row->id = table->row_id;
     return row;
+}
+
+// Database Methods
+
+Database* squee_new_empty_database() {
+    Database *db = (Database*) malloc(sizeof(Database));
+    db->table = squee_new_empty_table();
+    db->table->row_id = 0;
+    db->table->header = squee_new_empty_header();
+    db->table->row = squee_new_empty_row_list();
+
+    return db;
 }
 
 // Print Methods
@@ -352,16 +363,6 @@ void squee_print_header(Header *hdr) {
         }
         hdr_p = hdr_p->next;
     }
-}
-
-Database* squee_new_empty_database() {
-    Database *db = (Database*) malloc(sizeof(Database));
-    db->table = squee_new_empty_table();
-    db->table->row_id = 0;
-    db->table->header = squee_new_empty_header();
-    db->table->row = squee_new_empty_row_list();
-
-    return db;
 }
 
 void squee_print_Table(Table *tbl) {
