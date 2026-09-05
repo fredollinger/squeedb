@@ -38,7 +38,6 @@ int squee_get_field_int(char *type) {
     else if (0 == strcmp("FLOAT", type)) {
         return SQUEE_FLOAT;
     }
-    // TODO CHANGE SQUEE_STRING TO SQUEE_CHAR
     else if (0 == strcmp("CHAR", type)) {
         return SQUEE_STRING;
     }
@@ -59,9 +58,10 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
         printf("squee_new_header_with_columns() entry [%s] \n", cols[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[i]) + 1);
-        type = strtol(cols[i + 1], &endptr, 10);
-        neu->field_t = type;
-        // neu->field_t = squee_get_field_int(cols[i + 1]);
+        // type = strtol(cols[i + 1], &endptr, 10);
+        // neu->field_t = type;
+        neu->field_t = squee_get_field_int(cols[i + 1]);
+        printf("squee_new_header_with_columns type [%s] [%i] \n", cols[i + 1], neu->field_t);
         strcpy(neu->field_name, cols[i]);
         curr->next = neu;
         neu->next = curr->next->next;

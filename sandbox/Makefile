@@ -38,7 +38,7 @@ print: squee-read-database
 
 test: squee-new-database squee-create-table squee-add-row squee-read-database
 	./squee-new-database file.db
-	./squee-create-table Employees First_Name 2 Last_Name 2 Age 0 Hourly_Rate 1 file.db
+	./squee-create-table Employees First_Name CHAR Last_Name CHAR Age INT Hourly_Rate FLOAT file.db
 	./squee-add-row John Doe 42 4.25 file.db
 	./squee-read-database file.db
 

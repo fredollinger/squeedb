@@ -150,18 +150,15 @@ void test_squee_new_table_with_header() {
 }
 */
 
-// squee_new_table_with_header begin: [2] end: [10]
+// Testing squee_new_header_with_columns()
 void test_squee_new_header_with_columns() {
     Header *header = fixture_create_header();
-/*
-	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT", "Hourly Rate", "FLOAT"};
-    int begin = 0;
-    int end = 4;
-    Header *header = squee_new_header_with_columns(begin, end, cols);
-*/
+
+    assert (SQUEE_HEAD == header->field_t);
 
     header = header->next;
     assert (0 == strcmp("First Name", header->field_name));
+    printf("test_squee_new_header_with_columns() [%i] \n", header->field_t);
     assert (SQUEE_STRING == header->field_t);
 
     header = header->next;
