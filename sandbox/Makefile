@@ -36,8 +36,8 @@ row: squee-add-row
 print: squee-read-database
 	./squee-read-database file.db
 
-test: squee-new-database squee-create-table squee-add-row squee-read-database
-	./squee-new-database file.db
+test: squee-new-database squee-create-table squee-add-row squee-read-database squeectl
+	./create-database.sh
 	./squee-create-table Employees First_Name CHAR Last_Name CHAR Age INT Hourly_Rate FLOAT file.db
 	./add-row.sh
 	./squee-read-database file.db

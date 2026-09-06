@@ -42,7 +42,7 @@ int create_database(char *filename) {
 
 void create(int argc, char* argv[]) {
     if (0 == strcmp("SCHEMA", argv[2]) || strcmp("DATABASE", argv[2])) {
-        exit(create_database(argv[2]));
+        exit(create_database(argv[3]));
     }
     else {
         usage();
@@ -58,7 +58,8 @@ int main(int argc, char* argv[]) {
     }
 
     if (0 == strcmp("CREATE", argv[1])) {
-        printf("Creating New Something \n");
+        printf("Creating New Something %s \n", argv[2]);
+        create(argc, argv);
     }
     else {
         usage();
