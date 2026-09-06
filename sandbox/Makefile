@@ -5,10 +5,10 @@ CFLAGS += -g -O0 -wError
 #CFLAGS += -g -O0 -fsanitize=address -fno-omit-frame-pointer
 #LDFLAGS += -fsanitize=address
 
-all: squee-new-database squee-create-table squee-add-row squee-read-database squeectl
+all: squee-create-table squee-add-row squee-read-database squeectl
 
 clean:
-	rm -f squee-new-database file.db file2.db smoke.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table squee-read-database smoke/test-squee-database
+	rm -f file.db file2.db smoke.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table squee-read-database smoke/test-squee-database
 	rm -fr *.dSYM
 	cd smoke && rm -fr *.dSYM
 
@@ -22,9 +22,6 @@ squee-read-database: force squee-structures.o
 	${CC} $@.c -g squee-structures.o -o $@
 
 squee-add-row: force squee-structures.o
-	${CC} $@.c -g squee-structures.o -o $@
-
-squee-new-database: force squee-structures.o
 	${CC} $@.c -g squee-structures.o -o $@
 
 squee-create-table: force squee-structures.o
