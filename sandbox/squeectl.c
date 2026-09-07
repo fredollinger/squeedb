@@ -7,15 +7,6 @@
 
 #include "squee-structures.h"
 
-/*
-  CREATE TABLE table_name (
-    column1 datatype constraint,
-    column2 datatype constraint,
-    column3 datatype constraint,
-    ....
-  ); 
-*/
-
 void usage() {
     printf("usage: \n");
     printf("\n");
@@ -24,7 +15,28 @@ void usage() {
 }
 
 void create_help() {
-    // TODO LIST CREATE COMMANDS
+    printf("usage: \n");
+    printf("\n");
+    printf("./squeectl CREATE DATABASE filename.db");
+    printf("\n");
+    printf("./squeectl CREATE TABLE table_name filename.db");
+    printf("\n");
+}
+
+/*
+  CREATE TABLE table_name (
+    column1 datatype constraint,
+    column2 datatype constraint,
+    column3 datatype constraint,
+    ....
+  ); filename.db
+*/
+
+int create_table(int argc, char* argv[]) {
+    printf("create_table() [%s] [%s] \n", argv[3], argv[argc]);
+    // Database* squee_read_database_from_file(argv[argc]);
+    // db->table = squee_new_table_with_header(argv[1], 2, (argc - 1) / 2, argv);
+    return 0;
 }
 
 int create_database(char *filename) {
@@ -44,8 +56,11 @@ void create(int argc, char* argv[]) {
     if (0 == strcmp("SCHEMA", argv[2]) || strcmp("DATABASE", argv[2])) {
         exit(create_database(argv[3]));
     }
+    else if (0 == strcmp("TABLE", argv[2])) {
+        exit(create_table(argc, argv));
+    }
     else {
-        usage();
+        create_help();
         exit(-1);
     }
 }
