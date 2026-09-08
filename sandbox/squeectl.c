@@ -63,9 +63,23 @@ int create_table(int argc, char* argv[]) {
         if (0 == strcmp(")", argv[i])) {
             break;
         }
-        printf("create_table type [%s] [%s] \n", argv[i], argv[i + 1]);
-        col_names[c] = strdup(argv[i]);
-        datatypes[c] = strdup(argv[i + 1]);
+        if (argv[i][0] == '(') {
+            col_names[c] = strdup(argv[i] + 1);
+            printf("starts with '(' [%s] \n", argv[i]);
+        }
+        else {
+            col_names[c] = strdup(argv[i]);
+        }
+        printf("end [%c] \n" ,argv[i + 1][strlen(argv[i + 1]) - 1]);
+        // The number of strings to cut, normally the whole length
+        int cut = strlen(argv[i + 1]);
+        // if there is a ')', we need to cut it out
+        if (')' == argv[i + 1][strlen(argv[i + 1]) - 1]) {
+            cut = strlen(argv[i + 1]) - 1;
+            printf("ENDS WITH ')' [%s] [%i] \n", argv[i + 1], cut);
+        }
+        datatypes[c] = strndup(argv[i + 1], cut);
+        printf("create_table type [%s] [%s] \n", col_names[c], datatypes[c]);
         c++;
     }
 
