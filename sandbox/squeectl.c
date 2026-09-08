@@ -34,15 +34,23 @@ void create_help() {
 
 
 int create_table(int argc, char* argv[]) {
-    printf("CREATE_TABLE() [%i] [%s] \n", argc, argv[argc - 1]);
+    int len = (argc - 6) / 2;
+    printf("CREATE_TABLE() [%i] [%s] len [%i] \n", argc, argv[argc - 1], len);
 
     if (0 != strcmp("(", argv[4])) {
         create_help();
         exit(1);
     }
 
+    char **col_names = malloc(len * sizeof(char *));
+    char **col_types = malloc(len * sizeof(char *));
+
+    int c = 0;
     for (int i = 5; i < argc - 1; i = i + 2) {
         printf("create_table type [%s] [%s] \n", argv[i], argv[i + 1]);
+        col_names[c] = strdup(argv[i]);
+        col_types[c] = strdup(argv[i + 1]);
+        c++;
     }
 
     // Database* squee_read_database_from_file(argv[argc]);
