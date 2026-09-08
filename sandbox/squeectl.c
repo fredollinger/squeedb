@@ -32,15 +32,26 @@ void create_help() {
   ); filename.db
 */
 
+
 int create_table(int argc, char* argv[]) {
-    printf("create_table() [%s] [%s] \n", argv[3], argv[argc]);
+    printf("CREATE_TABLE() [%i] [%s] \n", argc, argv[argc - 1]);
+
+    if (0 != strcmp("(", argv[4])) {
+        create_help();
+        exit(1);
+    }
+
+    for (int i = 5; i < argc - 1; i = i + 2) {
+        printf("create_table type [%s] [%s] \n", argv[i], argv[i + 1]);
+    }
+
     // Database* squee_read_database_from_file(argv[argc]);
     // db->table = squee_new_table_with_header(argv[1], 2, (argc - 1) / 2, argv);
     return 0;
 }
 
 int create_database(char *filename) {
-    printf("create_database() [%s] \n", filename);
+    printf("CREATE_DATABASE() [%s] \n", filename);
     FILE *fd = fopen(filename, "w");
     if (NULL == fd) {
         printf("Error writing to %s \n", filename);
@@ -53,7 +64,8 @@ int create_database(char *filename) {
 }
 
 void create(int argc, char* argv[]) {
-    if (0 == strcmp("SCHEMA", argv[2]) || strcmp("DATABASE", argv[2])) {
+    printf("Creating New Something %s \n", argv[2]);
+    if (0 == strcmp("SCHEMA", argv[2]) || 0 == strcmp("DATABASE", argv[2])) {
         exit(create_database(argv[3]));
     }
     else if (0 == strcmp("TABLE", argv[2])) {
@@ -73,7 +85,6 @@ int main(int argc, char* argv[]) {
     }
 
     if (0 == strcmp("CREATE", argv[1])) {
-        printf("Creating New Something %s \n", argv[2]);
         create(argc, argv);
     }
     else {

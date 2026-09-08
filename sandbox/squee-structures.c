@@ -77,6 +77,17 @@ Table* squee_new_empty_table() {
     return tbl;
 }
 
+Table* squee_create_table(char *name, int num_cols, char* cols[]) {
+    int i;
+    Table *tbl = (Table*) malloc(sizeof(Table));
+    size_t name_len = strlen(name);
+    tbl->name = (char*)malloc(name_len + 1);
+    strncpy(tbl->name, name, name_len);
+    tbl->header = squee_new_header_with_columns(0, num_cols, cols);
+    tbl->row = squee_new_empty_row_list();
+    return tbl;
+}
+
 Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[]) {
     int i;
     Table *tbl = (Table*) malloc(sizeof(Table));
