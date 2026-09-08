@@ -37,19 +37,29 @@ int create_table(int argc, char* argv[]) {
     int len = (argc - 6) / 2;
     printf("CREATE_TABLE() [%i] [%s] len [%i] \n", argc, argv[argc - 1], len);
 
-    if (0 != strcmp("(", argv[4])) {
-        create_help();
-        exit(1);
+    // Start parsing the arguments to CREATE TABLE
+    // should be column_name, datatype
+    int start = 4;
+    // If the 1st argument is "(" then we need to skip it,
+    // otherwise, they failed to put a space in between the 1st column name an "("
+    // so we need to parse "(" out of the string
+    if (0 == strcmp("(", argv[4])) {
+        start = 5;
     }
 
     char **col_names = malloc(len * sizeof(char *));
-    char **col_types = malloc(len * sizeof(char *));
+    char **datatypes = malloc(len * sizeof(char *));
 
     int c = 0;
-    for (int i = 5; i < argc - 1; i = i + 2) {
+    for (int i = start; i < argc - 1; i = i + 2) {
+        // If they have put the ")" as a separate arg, we know we have reached the end
+        // of the data.
+        if (0 == strcmp(")", argv[i])) {
+            break;
+        }
         printf("create_table type [%s] [%s] \n", argv[i], argv[i + 1]);
         col_names[c] = strdup(argv[i]);
-        col_types[c] = strdup(argv[i + 1]);
+        datatypes[c] = strdup(argv[i + 1]);
         c++;
     }
 
