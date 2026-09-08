@@ -20,6 +20,7 @@ void create_help() {
     printf("./squeectl CREATE DATABASE filename.db");
     printf("\n");
     printf("./squeectl CREATE TABLE table_name filename.db");
+    printf("./squeectl CREATE TABLE Employees ('First Name' CHAR); filename.db");
     printf("\n");
 }
 
@@ -34,6 +35,11 @@ void create_help() {
 
 
 int create_table(int argc, char* argv[]) {
+    if (argc < 7) {
+        printf("Syntax error: not enough arguments \n");
+        create_help(); 
+        exit(1);
+    }
     int len = (argc - 6) / 2;
     printf("CREATE_TABLE() [%i] [%s] len [%i] \n", argc, argv[argc - 1], len);
 
@@ -82,7 +88,6 @@ int create_database(char *filename) {
 }
 
 void create(int argc, char* argv[]) {
-    printf("Creating New Something %s \n", argv[2]);
     if (0 == strcmp("SCHEMA", argv[2]) || 0 == strcmp("DATABASE", argv[2])) {
         exit(create_database(argv[3]));
     }

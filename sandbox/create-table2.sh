@@ -9,6 +9,11 @@
 
 # ./squee-create-table Employees First_Name CHAR Last_Name CHAR Age INT Hourly_Rate FLOAT file.db
 
+# Both are valid
 ./squeectl CREATE TABLE Employees \( "First Name" CHAR \) file.db;
 echo 
-./squeectl CREATE TABLE Employees \("First Name" CHAR\) file.db;
+./squeectl CREATE TABLE Employees \('First Name' CHAR\) file.db;
+echo 
+
+# Test Invalid
+./squeectl CREATE TABLE Employees \("First Name" file.db;
