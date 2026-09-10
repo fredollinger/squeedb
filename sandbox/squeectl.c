@@ -57,10 +57,13 @@ int create_table(int argc, char* argv[]) {
     char **datatypes = malloc(len * sizeof(char *));
 
     int c = 0;
+    printf("number of cols [%i] start [%i] \n", argc - 1, start);
     for (int i = start; i < argc - 1; i = i + 2) {
         // If they have put the ")" as a separate arg, we know we have reached the end
         // of the data.
+        printf("cols [%s] [%s] \n", argv[i], argv[i + 1]);
         if (0 == strcmp(")", argv[i])) {
+            printf("break on ) \n");
             break;
         }
         if (argv[i][0] == '(') {
@@ -84,11 +87,15 @@ int create_table(int argc, char* argv[]) {
         c++;
     }
 
-    // FKO TODO Need to save the table to disk
-    Database* squee_read_database_from_file(filename);
-    Table* squee_create_table(name, num_cols, col_names, datatypes);
-
-    // db->table = squee_new_table_with_header(argv[1], 2, (argc - 1) / 2, argv);
+    printf("reading file [%s] \n", argv[argc - 1]);
+    Database *db = squee_read_database_from_file(argv[argc - 1]);
+    if (NULL == db) {
+        printf("db is NULL \n");
+        db = squee_new_empty_database();
+    }
+    db->table = squee_create_table(argv[3], c, col_names, datatypes);
+    // squee_create_table(argv[3], c, col_names, datatypes);
+    squee_write_database_to_file(argv[argc - 1], db);
     return 0;
 }
 

@@ -35,7 +35,7 @@ print: squee-read-database
 
 test: all
 	./create-database.sh
-	./squee-create-table Employees First_Name CHAR Last_Name CHAR Age INT Hourly_Rate FLOAT file.db
+	./create-table2.sh
 	./add-row.sh
 	./squee-read-database file.db
 
