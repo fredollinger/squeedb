@@ -48,7 +48,7 @@ int squee_get_field_int(char *type) {
 }
 
 // 1 FKO FINISH AND TEST
-Header* squee_create_header_with_columns(char *name, int num_cols, char* col_names[], char *datatypes[]) {
+Header* squee_create_header_with_columns(int num_cols, char* col_names[], char *datatypes[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
 
@@ -97,14 +97,9 @@ Table* squee_new_empty_table() {
 // 2 FKO FINISH AND UNIT TEST
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]) {
     Table *tbl = (Table*) malloc(sizeof(Table));
-    /*
-    int i;
-    size_t name_len = strlen(name);
-    tbl->name = (char*)malloc(name_len + 1);
-    strncpy(tbl->name, name, name_len);
-    tbl->header = squee_new_header_with_columns(0, num_cols, cols);
+    tbl->name = strdup(name);
+    tbl->header = squee_create_header_with_columns(num_cols, col_names, datatypes);
     tbl->row = squee_new_empty_row_list();
-    */
     return tbl;
 }
 

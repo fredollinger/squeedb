@@ -222,10 +222,9 @@ void test_squee_append_row() {
 }
 
 void test_squee_create_header_with_columns() {
-    // Header* squee_create_header_with_columns(int begin, int end, char* cols[]);
 	char *col_names[] = {"First Name", "Last Name", "Age", "Hourly Rate"};
 	char *datatypes[] = {"CHAR", "CHAR", "INT", "FLOAT"};
-    Header *header = squee_create_header_with_columns("Employees", 4, col_names, datatypes);
+    Header *header = squee_create_header_with_columns(4, col_names, datatypes);
     check_header(header);
 }
 

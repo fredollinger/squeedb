@@ -69,7 +69,7 @@ Database* squee_new_empty_database();
 
 // Table Functions
 Table* squee_new_empty_table();
-Header* squee_create_header_with_columns(char *name, int num_cols, char* col_names[], char *datatypes[]);
+Header* squee_create_header_with_columns(int num_cols, char* col_names[], char *datatypes[]);
 // DEPRECATED
 Table* squee_new_table_with_header(char* name, int begin, int end, char* cols[]);
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]);
