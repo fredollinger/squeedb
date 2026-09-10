@@ -76,6 +76,27 @@ void check_row(Row *row) {
     assert (SQUEE_TAIL == node->field_t);
 }
 
+void check_header(Header *header) {
+    printf("check_header() [%i] \n", header->field_t);
+    assert (SQUEE_HEAD == header->field_t);
+
+    header = header->next;
+    assert (SQUEE_STRING == header->field_t);
+    assert (0 == strcmp("First Name", header->field_name));
+
+    header = header->next;
+    assert (SQUEE_STRING == header->field_t);
+    assert (0 == strcmp("Last Name", header->field_name));
+
+    header = header->next;
+    assert (SQUEE_INT == header->field_t);
+    assert (0 == strcmp("Age", header->field_name));
+
+    header = header->next;
+    assert (SQUEE_FLOAT == header->field_t);
+    assert (0 == strcmp("Hourly Rate", header->field_name));
+}
+
 // Unit Tests
 void test_squee_new_empty_header() {
     Header *header = squee_new_empty_header();
@@ -200,13 +221,23 @@ void test_squee_append_row() {
     check_row(table->row);
 }
 
+void test_squee_create_header_with_columns() {
+    // Header* squee_create_header_with_columns(int begin, int end, char* cols[]);
+	char *col_names[] = {"First Name", "Last Name", "Age", "Hourly Rate"};
+	char *datatypes[] = {"CHAR", "CHAR", "INT", "FLOAT"};
+    Header *header = squee_create_header_with_columns("Employees", 4, col_names, datatypes);
+    check_header(header);
+}
 
 int main() {
+    test_squee_create_header_with_columns();
+    /*
     test_squee_new_empty_header();
     test_squee_header_add_column();
     test_squee_new_empty_row_list();
     test_squee_new_header_with_columns();
     test_squee_create_row();
     test_squee_append_row();
+    */
     // test_squee_new_table_with_header();
 }

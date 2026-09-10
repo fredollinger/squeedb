@@ -47,6 +47,23 @@ int squee_get_field_int(char *type) {
     return -1;
 }
 
+// 1 FKO FINISH AND TEST
+Header* squee_create_header_with_columns(char *name, int num_cols, char* col_names[], char *datatypes[]) {
+    Header *head = squee_new_empty_header();
+    Header *curr = head;
+
+    for (int i = 0; i < num_cols; i++) {
+        printf("squee_create_header_with_columns() [%s] [%s] \n", col_names[i], datatypes[i]);
+        Header *neu = (Header*)malloc(sizeof(Header));
+        neu->field_name = strdup(col_names[i]);
+        neu->field_t = squee_get_field_int(datatypes[i]);
+        curr->next = neu;
+        neu->next = curr->next->next;
+        curr = neu;
+    }
+    return head;
+}
+
 Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
@@ -77,14 +94,17 @@ Table* squee_new_empty_table() {
     return tbl;
 }
 
-Table* squee_create_table(char *name, int num_cols, char* cols[]) {
-    int i;
+// 2 FKO FINISH AND UNIT TEST
+Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]) {
     Table *tbl = (Table*) malloc(sizeof(Table));
+    /*
+    int i;
     size_t name_len = strlen(name);
     tbl->name = (char*)malloc(name_len + 1);
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(0, num_cols, cols);
     tbl->row = squee_new_empty_row_list();
+    */
     return tbl;
 }
 
