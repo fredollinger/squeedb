@@ -80,10 +80,14 @@ int create_table(int argc, char* argv[]) {
         }
         datatypes[c] = strndup(argv[i + 1], cut);
         printf("create_table type [%s] [%s] \n", col_names[c], datatypes[c]);
+
         c++;
     }
 
-    // Database* squee_read_database_from_file(argv[argc]);
+    // FKO TODO Need to save the table to disk
+    Database* squee_read_database_from_file(filename);
+    Table* squee_create_table(name, num_cols, col_names, datatypes);
+
     // db->table = squee_new_table_with_header(argv[1], 2, (argc - 1) / 2, argv);
     return 0;
 }
