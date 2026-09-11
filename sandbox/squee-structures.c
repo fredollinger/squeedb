@@ -493,7 +493,7 @@ Database* squee_read_database_from_file(char *file) {
     buffer = malloc(filesize + 1);
     if (buffer == NULL) {
         fclose(fd);
-        return NULL;
+        return(db);
     }
 
     fread(buffer, 1, filesize, fd);
@@ -507,7 +507,7 @@ Database* squee_read_database_from_file(char *file) {
     
     if (strncmp(pbuffer, magic, magic_len) != 0) {
         free(buffer);
-        return NULL;
+        return(db);
     }
 
     // Read Table Name
