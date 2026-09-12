@@ -99,6 +99,10 @@ void check_header(Header *header) {
     assert (0 == strcmp("Hourly Rate", header->field_name));
 }
 
+void check_table(Table *table) {
+    assert (0 == strcmp("Employees", table->name));
+}
+
 // Unit Tests
 void test_squee_new_empty_header() {
     Header *header = squee_new_empty_header();
@@ -232,14 +236,13 @@ void test_squee_create_header_with_columns() {
 
 
 void test_squee_create_table() {
-	char *col_names[] = {"First Name", "Last Name", "Age", "Hourly Rate"};
-	char *datatypes[] = {"CHAR", "CHAR", "INT", "FLOAT"};
-    Table *table = squee_create_table("Employees", 4, col_names, datatypes);
+    Table *table = fixture_create_table();
+    check_header(table->header);
+    check_table(table);
 }
 
 int main() {
     test_squee_create_table();
-    /*
     test_squee_create_header_with_columns();
     test_squee_new_empty_header();
     test_squee_header_add_column();
@@ -247,6 +250,5 @@ int main() {
     test_squee_new_header_with_columns();
     test_squee_create_row();
     test_squee_append_row();
-    */
     // test_squee_new_table_with_header();
 }
