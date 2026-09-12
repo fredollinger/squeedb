@@ -117,7 +117,8 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
 // Row Methods
 
-Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
+// FKO TODO NEED TO FIND THE ACTUAL TABLE TO ADD ROW TO
+Row* squee_create_row(char *table_name, Header *hdr_p, char* cols[], int len) {
     Row *row = (Row*)malloc(sizeof(Row));
     row->field_t = SQUEE_DATA;
     row->id = -1;

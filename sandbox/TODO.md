@@ -2,6 +2,10 @@
 
 ## Currently working on
 
+1. Convert the Table to a linked list
+
+===============
+
 // Need to actually append multiple rows rather than erasing the current row
 
 Need to implement code to actually write to the file
