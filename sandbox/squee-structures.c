@@ -87,9 +87,11 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
 
 // Table Methods
 Table* squee_new_empty_table() {
-    int i;
-    Table *tbl = (Table*) malloc(sizeof(Table));
-    return tbl;
+    Table *table = (Table*) malloc(sizeof(Table));
+    table->row_id = 0;
+    table->header = squee_new_empty_header();
+    table->row = squee_new_empty_row_list();
+    return table;
 }
 
 // 2 FKO FINISH AND UNIT TEST
@@ -224,9 +226,6 @@ Row* squee_append_row(Table *table, Row *row) {
 Database* squee_new_empty_database() {
     Database *db = (Database*) malloc(sizeof(Database));
     db->table = squee_new_empty_table();
-    db->table->row_id = 0;
-    db->table->header = squee_new_empty_header();
-    db->table->row = squee_new_empty_row_list();
 
     return db;
 }

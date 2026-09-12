@@ -57,6 +57,16 @@ typedef struct Table {
     int row_id; // The id that the next inserted row is going to get. TODO: Change to a pointer
 } Table;
 
+// Tables should be a linked list
+// Going to rename to Table once multi-table support is complete
+typedef struct Table2 {
+    char *name;
+    Header *header;
+    struct TableNode *next;
+    Row *row;
+    int row_id; // The id that the next inserted row is going to get. TODO: Change to a pointer
+} Table2;
+
 // TODO: How to have more than one table?
 typedef struct Database {
     Table *table;
