@@ -5,7 +5,7 @@ CFLAGS += -g -O0 -wError
 #CFLAGS += -g -O0 -fsanitize=address -fno-omit-frame-pointer
 #LDFLAGS += -fsanitize=address
 
-all: squee-create-table squee-add-row squee-read-database squeectl
+all: squee-add-row squee-read-database squeectl
 
 clean:
 	rm -f file.db file2.db smoke.db squee-structures.o unit/test-squee-structures squeectl squee-add-row squee-create-table squee-read-database smoke/test-squee-database

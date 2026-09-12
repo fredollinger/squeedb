@@ -53,7 +53,7 @@ Header* squee_create_header_with_columns(int num_cols, char* col_names[], char *
     Header *curr = head;
 
     for (int i = 0; i < num_cols; i++) {
-        printf("squee_create_header_with_columns() [%s] [%s] \n", col_names[i], datatypes[i]);
+        // printf("squee_create_header_with_columns() [%s] [%s] \n", col_names[i], datatypes[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = strdup(col_names[i]);
         neu->field_t = squee_get_field_int(datatypes[i]);
@@ -72,13 +72,11 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
     int type;
 
     for (int i = begin; i < end; i = i + 2) {
-        printf("squee_new_header_with_columns() entry [%s] \n", cols[i]);
+        // printf("squee_new_header_with_columns() entry [%s] \n", cols[i]);
         Header *neu = (Header*)malloc(sizeof(Header));
         neu->field_name = (char*)malloc(strlen(cols[i]) + 1);
-        // type = strtol(cols[i + 1], &endptr, 10);
-        // neu->field_t = type;
         neu->field_t = squee_get_field_int(cols[i + 1]);
-        printf("squee_new_header_with_columns type [%s] [%i] \n", cols[i + 1], neu->field_t);
+        // printf("squee_new_header_with_columns type [%s] [%i] \n", cols[i + 1], neu->field_t);
         strcpy(neu->field_name, cols[i]);
         curr->next = neu;
         neu->next = curr->next->next;
@@ -149,7 +147,6 @@ Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
             case SQUEE_FLOAT:
                 fvalue = strtof(cols[i], &endptr);
                 neu->data.f = fvalue;
-                // printf("squee_create_row FLOAT [%s] [%s] [%f] \n", cols[i], endptr, neu->data.f);
                 break;
             case SQUEE_STRING:
                 neu->data.s = strdup(cols[i]);

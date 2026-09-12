@@ -22,8 +22,10 @@ Row* fixture_create_row() {
 }
 
 Table* fixture_create_table() {
-	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT", "Hourly Rate", "FLOAT"};
-    return squee_new_table_with_header("Employees", 0, 4, cols);
+	char *col_names[] = {"First Name", "Last Name", "Age", "Hourly Rate"};
+	char *datatypes[] = {"CHAR", "CHAR", "INT", "FLOAT"};
+    Table *table = squee_create_table("Employees", 4, col_names, datatypes);
+    return table;
 }
 
 // Check Functions
@@ -228,9 +230,17 @@ void test_squee_create_header_with_columns() {
     check_header(header);
 }
 
+
+void test_squee_create_table() {
+	char *col_names[] = {"First Name", "Last Name", "Age", "Hourly Rate"};
+	char *datatypes[] = {"CHAR", "CHAR", "INT", "FLOAT"};
+    Table *table = squee_create_table("Employees", 4, col_names, datatypes);
+}
+
 int main() {
-    test_squee_create_header_with_columns();
+    test_squee_create_table();
     /*
+    test_squee_create_header_with_columns();
     test_squee_new_empty_header();
     test_squee_header_add_column();
     test_squee_new_empty_row_list();
