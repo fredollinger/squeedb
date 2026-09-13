@@ -87,11 +87,9 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
 
 // Table Methods
 Table* squee_new_empty_table() {
-    Table *table = (Table*) malloc(sizeof(Table));
-    table->row_id = 0;
-    table->header = squee_new_empty_header();
-    table->row = squee_new_empty_row_list();
-    return table;
+    int i;
+    Table *tbl = (Table*) malloc(sizeof(Table));
+    return tbl;
 }
 
 // 2 FKO FINISH AND UNIT TEST
@@ -117,8 +115,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
 // Row Methods
 
-// FKO TODO NEED TO FIND THE ACTUAL TABLE TO ADD ROW TO
-Row* squee_create_row(char *table_name, Header *hdr_p, char* cols[], int len) {
+Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
     Row *row = (Row*)malloc(sizeof(Row));
     row->field_t = SQUEE_DATA;
     row->id = -1;
@@ -227,6 +224,9 @@ Row* squee_append_row(Table *table, Row *row) {
 Database* squee_new_empty_database() {
     Database *db = (Database*) malloc(sizeof(Database));
     db->table = squee_new_empty_table();
+    db->table->row_id = 0;
+    db->table->header = squee_new_empty_header();
+    db->table->row = squee_new_empty_row_list();
 
     return db;
 }
