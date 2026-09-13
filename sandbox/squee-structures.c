@@ -92,13 +92,16 @@ Table* squee_new_empty_table() {
     return tbl;
 }
 
-// 2 FKO FINISH AND UNIT TEST
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]) {
     Table *tbl = (Table*) malloc(sizeof(Table));
     tbl->name = strdup(name);
     tbl->header = squee_create_header_with_columns(num_cols, col_names, datatypes);
     tbl->row = squee_new_empty_row_list();
     return tbl;
+}
+
+void squee_append_table(Database *db, Table *table) {
+    db->table = table;
 }
 
 Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[]) {

@@ -35,7 +35,7 @@ print: squee-read-database
 
 test: all
 	./create-database.sh
-	./create-table2.sh
+	./create-table.sh
 	./add-row.sh
 	# ./squee-read-database file.db
 	diff file.db data/file.db

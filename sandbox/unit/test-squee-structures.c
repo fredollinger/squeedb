@@ -45,11 +45,8 @@ void check_empty_row(Row *row) {
 }
 
 void check_row(Row *row) {
-    // printf("squee_print_row_node(): INT Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
-	// char *cols[] = {"John", "Doe", "42", "4.25"};
-
     printf("check_row type [%i] \n", row->field_t);
-    assert (SQUEE_DATA == row->field_t);
+    assert (SQUEE_HEAD == row->field_t);
     RowNode *node = row->next_row_node;
     assert (SQUEE_HEAD == node->field_t);
 

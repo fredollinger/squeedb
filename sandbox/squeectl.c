@@ -89,7 +89,8 @@ int create_table(int argc, char* argv[]) {
 
     printf("reading file [%s] \n", argv[argc - 1]);
     Database *db = squee_read_database_from_file(argv[argc - 1]);
-    db->table = squee_create_table(argv[3], c, col_names, datatypes);
+    Table *table = squee_create_table(argv[3], c, col_names, datatypes);
+    squee_append_table(db, table);
     squee_write_database_to_file(argv[argc - 1], db);
     return 0;
 }
