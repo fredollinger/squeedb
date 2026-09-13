@@ -222,8 +222,7 @@ void test_squee_create_row() {
 void test_squee_append_row() {
     Table *table = fixture_create_table();
     Row *row = fixture_create_row();
-    // check_row(row);
-    row = squee_append_row(table,row);
+    row = squee_append_row(table, row);
     check_row(table->row);
 }
 
