@@ -54,6 +54,7 @@ typedef struct Table {
     char *name;
     Header *header;
     Row *row;
+    Field_t field_t;
     int row_id; // The id that the next inserted row is going to get. TODO: Change to a pointer
 } Table;
 

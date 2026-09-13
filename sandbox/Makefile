@@ -37,7 +37,8 @@ test: all
 	./create-database.sh
 	./create-table2.sh
 	./add-row.sh
-	./squee-read-database file.db
+	# ./squee-read-database file.db
+	diff file.db data/file.db
 
 unit/test-squee-structures: squee-structures.o
 	${CC} -g -I. $@.c squee-structures.o -o $@
