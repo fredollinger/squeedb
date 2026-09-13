@@ -55,6 +55,7 @@ typedef struct Table {
     Header *header;
     Row *row;
     Field_t field_t;
+    struct Table *next;
     int row_id; // The id that the next inserted row is going to get. TODO: Change to a pointer
 } Table;
 
@@ -85,7 +86,7 @@ Row* squee_new_empty_row_list();
 // The header is needed to understand the structure of the row
 Row* squee_create_row(Header *header, char* cols[], int len);
 // Given a table, append a row onto it
-Row* squee_append_row(Table *table, Row *row);
+Row* squee_append_row(char *table_name, Database *db, Row *row);
 // Create an empty row node
 RowNode* squee_new_empty_row_node_list();
 // Given a row, append a row node onto it

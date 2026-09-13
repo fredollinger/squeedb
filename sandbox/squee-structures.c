@@ -87,9 +87,16 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
 
 // Table Methods
 Table* squee_new_empty_table() {
-    int i;
-    Table *tbl = (Table*) malloc(sizeof(Table));
-    return tbl;
+    Table *head = (Table*) malloc(sizeof(Table));
+    head->field_t = SQUEE_HEAD;
+    head->row_id = 0;
+
+    Table *tail = (Table*) malloc(sizeof(Table));
+    tail->field_t = SQUEE_TAIL;
+    tail->row_id = -1;
+    tail->next = NULL;
+    head->next = tail;
+    return head;
 }
 
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]) {
@@ -100,8 +107,12 @@ Table* squee_create_table(char *name, int num_cols, char* col_names[], char* dat
     return tbl;
 }
 
-void squee_append_table(Database *db, Table *table) {
-    db->table = table;
+// Need to actually add to the list not just replace it
+void squee_append_table(Database *db, Table *curr) {
+    Table *head = db->table;
+    Table *next = db->table->next;
+    head->next = curr;
+    curr->next = next;
 }
 
 Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[]) {
@@ -207,9 +218,21 @@ Row* squee_new_empty_row_list() {
 
 }
 
+Table* squee_get_table_by_name(char *table_name, Database *db) {
+    Table *curr = db->table;
+
+    while (SQUEE_TAIL != curr->field_t) {
+        if (0 == strcmp(table_name, curr->name)) {
+            return curr;
+        }
+    }
+    return NULL;
+}
+
 // TODO NOT DONE FKO
 // Take a new row and add it to the linked list
-Row* squee_append_row(Table *table, Row *row) {
+Row* squee_append_row(char *table_name, Database *db, Row *row) {
+    Table *table = squee_get_table_by_name(table_name, db);
     Row *prev = table->row;
     while (SQUEE_TAIL != prev->next->field_t) {
         prev = prev->next;
@@ -227,10 +250,6 @@ Row* squee_append_row(Table *table, Row *row) {
 Database* squee_new_empty_database() {
     Database *db = (Database*) malloc(sizeof(Database));
     db->table = squee_new_empty_table();
-    db->table->row_id = 0;
-    db->table->header = squee_new_empty_header();
-    db->table->row = squee_new_empty_row_list();
-
     return db;
 }
 
@@ -422,7 +441,9 @@ int squee_write_database_to_file(char *file, Database *db) {
 
     // Write Row
     fprintf(fd, "%c", SQUEE_START_ROW);
-    Row *curr = db->table->row;
+    // FKO TODO NEED TO LOOP THROUGH TABLE
+    // FOR NOW, WE WRITE THE 1st Table only
+    Row *curr = db->table->next->row;
     while (SQUEE_TAIL != curr->field_t) {
         if (SQUEE_HEAD == curr->field_t) {
             curr = curr->next;
@@ -516,7 +537,8 @@ Database* squee_read_database_from_file(char *file) {
     while (*pbuffer != SQUEE_UNIT_SEPARATOR)
         pbuffer++;
     len = pbuffer - start;
-    db->table->name = (char*)malloc(len + 1);
+    Table *table = (Table*) malloc(sizeof(Table));
+    table->name = (char*)malloc(len + 1);
     strncpy(db->table->name, start, len);
     
     pbuffer++;      // Skip UNIT_SEPARATOR
@@ -606,7 +628,7 @@ Database* squee_read_database_from_file(char *file) {
             pbuffer++;      // Skip SQUEE_UNIT_SEPARATOR
             hdr_p = hdr_p->next;
       } // END Row Node Loop
-      squee_append_row(db->table, row);
+      squee_append_row(table->name, db, row);
       squee_print_row(row);
     } // END Row Loop
     return db;

@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     printf("num cols [%i] \n", num);
     char **cols = malloc((num + 1) * sizeof(char *));
 
-    printf("add_row() number of cols [%i] \n", num);
+    printf("add_row() [%s] number of cols [%i] \n", argv[1], num);
 
     Database *db = squee_read_database_from_file(argv[argc - 1]);
 
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 
 	// char *cols_data1[] = {"John", "Doe", "42", "4.25"};
     Row *row = squee_create_row(db->table->header, cols, 3);
-    squee_append_row(db->table, row);
+    squee_append_row(argv[1], db, row);
 
     /*
 	char *cols_data2[] = {"Bob", "Cratchet", "35", "1.01"};
