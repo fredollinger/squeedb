@@ -1,6 +1,8 @@
 #ifndef SQUEE_STRUCTURES_H
 #define SQUEE_STRUCTURES_H
 
+#include <stdbool.h>
+
 /* Squee Data Structures
  * Note one must include inttypes.h before this header
  */
@@ -73,7 +75,7 @@ Database* squee_new_empty_database();
 Table* squee_new_empty_table();
 Header* squee_create_header_with_columns(int num_cols, char* col_names[], char *datatypes[]);
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]);
-void squee_append_table(Database *db, Table *table);
+bool squee_append_table(Database *db, Table *table);
 
 // Header Functions
 Header* squee_new_empty_header();

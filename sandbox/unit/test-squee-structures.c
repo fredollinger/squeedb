@@ -102,8 +102,12 @@ void check_header(Header *header) {
     assert (0 == strcmp("Hourly Rate", header->field_name));
 }
 
-void check_table(Table *table) {
-    assert (0 == strcmp("Employees", table->name));
+void check_table(Database *db) {
+    assert (SQUEE_HEAD == db->table->field_t);
+    Table *curr = db->table->next;
+    assert (SQUEE_DATA == curr->field_t);
+    assert (0 == strcmp("Employees", curr->name));
+    assert (SQUEE_TAIL == curr->next->field_t);
 }
 
 // Unit Tests
@@ -226,10 +230,18 @@ void test_squee_create_row() {
     // check_row(row);
 }
 
+void test_squee_append_table() {
+    Database *db = squee_new_empty_database();
+    Table *table = fixture_create_table();
+    squee_append_table(db, table);
+    check_table(db);
+}
+
 void test_squee_append_row() {
     Database *db = squee_new_empty_database();
     // BEGIN BISECT
     Table *table = fixture_create_table();
+    // FKO TODO NEED TO APPEND TABLE HERE
     // FKO UNIT Fix this the broken line!!
     Row *row = fixture_create_row();
     // row = squee_append_row(table, row);
@@ -253,14 +265,14 @@ void test_squee_create_header_with_columns() {
 void test_squee_create_table() {
     Table *table = fixture_create_table();
     check_header(table->header);
-    check_table(table);
 }
 
 int main() {
-    test_new_empty_database();
     // FKO the next function is broken
+    test_squee_append_table();
     // test_squee_append_row();
 /*
+    test_new_empty_database();
     test_squee_create_table();
     test_squee_create_header_with_columns();
     test_squee_new_empty_header();

@@ -100,19 +100,23 @@ Table* squee_new_empty_table() {
 }
 
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]) {
-    Table *tbl = (Table*) malloc(sizeof(Table));
-    tbl->name = strdup(name);
-    tbl->header = squee_create_header_with_columns(num_cols, col_names, datatypes);
-    tbl->row = squee_new_empty_row_list();
-    return tbl;
+    Table *table = (Table*) malloc(sizeof(Table));
+    table->name = strdup(name);
+    table->header = squee_create_header_with_columns(num_cols, col_names, datatypes);
+    table->field_t = SQUEE_DATA;
+    table->row = squee_new_empty_row_list();
+    return table;
 }
 
 // Need to actually add to the list not just replace it
-void squee_append_table(Database *db, Table *curr) {
+// FKO TEST TO ENSURE THAT WE DO NOT HAVE DUPLICATE TABLES
+// BEFORE APPENDING
+bool squee_append_table(Database *db, Table *curr) {
     Table *head = db->table;
     Table *next = db->table->next;
     head->next = curr;
     curr->next = next;
+    return true;
 }
 
 Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[]) {
@@ -149,31 +153,37 @@ Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
             continue;
         }
 
+        printf("squee_create_row() [%i] \n", hdr_p->field_t);
         RowNode *neu = (RowNode*)malloc(sizeof(RowNode));
         neu->field_t = hdr_p->field_t;
 
         // TODO copy col data into the Row
         switch(neu->field_t) {
             case SQUEE_INT:
+                printf("squee_create_row() INT [%s] \n", cols[i]);
                 value = strtol(cols[i], &endptr, 10);
                 neu->data.i = (int)value;
                 break;
             case SQUEE_FLOAT:
+                printf("squee_create_row() FLOAT [%s] \n", cols[i]);
                 fvalue = strtof(cols[i], &endptr);
                 neu->data.f = fvalue;
                 break;
             case SQUEE_STRING:
+                printf("squee_create_row() STRING [%s] \n", cols[i]);
                 neu->data.s = strdup(cols[i]);
                 // neu->data.s = (char*)malloc(strlen(cols[i]));
                 // strcpy(neu->data.s, cols[i]);
                 break;
             case SQUEE_DATE:
+                printf("squee_create_row() DATE [%s] \n", cols[i]);
                 break;
             case SQUEE_HEAD:
                 break;
             case SQUEE_TAIL:
                 break;
             default:
+                printf("squee_create_row() UNKNOWN DEFAULT [%s] \n", cols[i]);
                 break;
         }
 
@@ -220,7 +230,9 @@ Row* squee_new_empty_row_list() {
 
 Table* squee_get_table_by_name(char *table_name, Database *db) {
     Table *curr = db->table;
+    printf("squee_get_table_by_name() [%u] \n", curr->field_t);
 
+    // FKO THIS IS THE BUG
     while (SQUEE_TAIL != curr->field_t) {
         if (0 == strcmp(table_name, curr->name)) {
             return curr;
@@ -415,6 +427,11 @@ void squee_print_Table(Table *tbl) {
 }
 
 // IO
+// TODO NEED TO POPULATE THIS
+int squee_write_table_to_disk(Table *table, FILE *fd) {
+    return 0;
+}
+
 
 int squee_write_database_to_file(char *file, Database *db) {
     FILE *fd = fopen(file, "w");
@@ -425,7 +442,10 @@ int squee_write_database_to_file(char *file, Database *db) {
     }
 
     fprintf(fd, "SQUEE format 3%c", SQUEE_START_HEADER);
-    fprintf(fd, "%s%c",db->table->name, SQUEE_UNIT_SEPARATOR);
+    // FKO TODO NEED TO WRITE ALL TABLES TO DISK
+
+    // squee_write_table_to_disk(table, fd);
+    fprintf(fd, "%s%c",db->table->next->name, SQUEE_UNIT_SEPARATOR);
 
     // Write Header
     Header *hdr_p = db->table->header;
