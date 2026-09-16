@@ -233,6 +233,7 @@ void test_squee_create_row() {
 void test_squee_append_table() {
     Database *db = squee_new_empty_database();
     Table *table = fixture_create_table();
+    check_header(table->header);
     squee_append_table(db, table);
     check_table(db);
 }
