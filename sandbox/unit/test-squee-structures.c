@@ -230,14 +230,6 @@ void test_squee_create_row() {
     // check_row(row);
 }
 
-void test_squee_append_table() {
-    Database *db = squee_new_empty_database();
-    Table *table = fixture_create_table();
-    check_header(table->header);
-    squee_append_table(db, table);
-    check_table(db);
-}
-
 void test_squee_append_row() {
     Database *db = squee_new_empty_database();
     // BEGIN BISECT
@@ -266,6 +258,17 @@ void test_squee_create_header_with_columns() {
 void test_squee_create_table() {
     Table *table = fixture_create_table();
     check_header(table->header);
+}
+
+void test_squee_append_table() {
+    Database *db = squee_new_empty_database();
+    Table *table = fixture_create_table();
+    check_header(table->header);
+    assert (true == squee_append_table(db, table));
+    // Ensure we can't append the same table twice
+    table = fixture_create_table();
+    assert (false == squee_append_table(db, table));
+    // check_table(db);
 }
 
 int main() {

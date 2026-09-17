@@ -90,10 +90,12 @@ Table* squee_new_empty_table() {
     Table *head = (Table*) malloc(sizeof(Table));
     head->field_t = SQUEE_HEAD;
     head->row_id = 0;
+    head->name = strdup("");
 
     Table *tail = (Table*) malloc(sizeof(Table));
     tail->field_t = SQUEE_TAIL;
     tail->row_id = -1;
+    tail->name = strdup("");
     tail->next = NULL;
     head->next = tail;
     return head;
@@ -111,11 +113,25 @@ Table* squee_create_table(char *name, int num_cols, char* col_names[], char* dat
 // Need to actually add to the list not just replace it
 // FKO TEST TO ENSURE THAT WE DO NOT HAVE DUPLICATE TABLES
 // BEFORE APPENDING
-bool squee_append_table(Database *db, Table *curr) {
-    Table *head = db->table;
-    Table *next = db->table->next;
-    head->next = curr;
-    curr->next = next;
+bool squee_append_table(Database *db, Table *table) {
+    Table *curr = db->table;
+    while (SQUEE_TAIL != curr->next->field_t) {
+        // check to ensure that we are not trying to insert two tables
+        // with the same name
+        printf("table->field_t [%i] [%s] \n", table->field_t, table->name);
+        printf("curr->field_t [%i] [%s] \n", curr->field_t, curr->name);
+        if (0 == strcmp(table->name, curr->name)) {
+            printf("duplicate entry!! \n");
+            return false;
+        }
+        curr = curr->next;
+    }
+    printf("CURR [%s] \n", curr->name);
+    printf("TAIL [%i] \n", curr->next->field_t);
+    // insert the table
+    Table *tail = curr->next;
+    curr->next = table;
+    table->next = tail;
     return true;
 }
 
