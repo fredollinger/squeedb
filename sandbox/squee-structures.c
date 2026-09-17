@@ -284,7 +284,16 @@ Database* squee_new_empty_database() {
 // Print Methods
 
 // FKO TODO NOT DONE
-void squee_print_table(Table *tbl) {
+void squee_print_table(Table *table) {
+    Table *curr = table;
+    printf("\n");
+    printf("print_table() HEAD [%i] \n", table->field_t);
+    while (SQUEE_TAIL != curr->field_t) {
+        printf("print_table() TABLE [%s] [%i] \n", curr->name, curr->field_t);
+        curr = curr->next;
+    }
+    printf("print_table() TAIL [%i] \n\n", curr->field_t);
+
     return;
     // RowNode *node = tbl->row->next_row_node;
 

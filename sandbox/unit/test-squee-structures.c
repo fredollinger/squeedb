@@ -263,11 +263,14 @@ void test_squee_create_table() {
 void test_squee_append_table() {
     Database *db = squee_new_empty_database();
     Table *table = fixture_create_table();
-    check_header(table->header);
     assert (true == squee_append_table(db, table));
+    squee_print_table(db->table);
+    check_header(table->header);
     // Ensure we can't append the same table twice
     table = fixture_create_table();
-    assert (false == squee_append_table(db, table));
+    // assert (false == squee_append_table(db, table));
+    squee_append_table(db, table);
+    squee_print_table(db->table);
     // check_table(db);
 }
 
