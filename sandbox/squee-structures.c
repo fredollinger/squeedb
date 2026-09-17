@@ -115,7 +115,8 @@ Table* squee_create_table(char *name, int num_cols, char* col_names[], char* dat
 // BEFORE APPENDING
 bool squee_append_table(Database *db, Table *table) {
     Table *curr = db->table;
-    while (SQUEE_TAIL != curr->next->field_t) {
+    Table *prev = db->table;
+    while (SQUEE_TAIL != curr->field_t) {
         // check to ensure that we are not trying to insert two tables
         // with the same name
         printf("table->field_t [%i] [%s] \n", table->field_t, table->name);
@@ -124,14 +125,14 @@ bool squee_append_table(Database *db, Table *table) {
             printf("duplicate entry!! \n");
             return false;
         }
+        prev = curr;
         curr = curr->next;
     }
-    printf("CURR [%s] \n", curr->name);
-    printf("TAIL [%i] \n", curr->next->field_t);
+    // printf("CURR [%s] \n", curr->name);
+    // printf("TAIL [%i] \n", curr->next->field_t);
     // insert the table
-    Table *tail = curr->next;
-    curr->next = table;
-    table->next = tail;
+    table->next = curr; // curr is now the tail
+    prev->next = table;
     return true;
 }
 
