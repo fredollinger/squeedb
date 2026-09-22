@@ -160,7 +160,7 @@ void test_squee_new_empty_row_list() {
     check_empty_row(row);
 }
 
-void test_new_empty_database() {
+void test_squee_new_empty_database() {
     Database *db = squee_new_empty_database();
     check_empty_table(db->table);
     // check_empty_row(db->table->row);
@@ -232,13 +232,10 @@ void test_squee_create_row() {
 
 void test_squee_append_row() {
     Database *db = squee_new_empty_database();
-    // BEGIN BISECT
     Table *table = fixture_create_table();
-    // FKO TODO NEED TO APPEND TABLE HERE
-    // FKO UNIT Fix this the broken line!!
+    squee_append_table(db, table);
     Row *row = fixture_create_row();
-    // row = squee_append_row(table, row);
-    row = squee_append_row("Emplyees", db, row);
+    row = squee_append_row("Employees", db, row);
 /*
     printf("test_squee_append_row() \n");
     check_row(table->row);
@@ -272,20 +269,14 @@ void test_squee_append_table() {
 }
 
 int main() {
-    // FKO the next function is broken
+    test_squee_append_row();
     test_squee_append_table();
-    // test_squee_append_row();
-/*
-    test_new_empty_database();
     test_squee_create_table();
-    test_squee_create_header_with_columns();
+    test_squee_new_empty_database();
     test_squee_new_empty_header();
-    test_squee_header_add_column();
-// BISECT BEGIN
-    test_squee_new_empty_row_list();
-    test_squee_new_header_with_columns();
     test_squee_create_row();
-*/
-    // test_squee_new_table_with_header();
-// BISECT END
+    test_squee_create_header_with_columns();
+    test_squee_header_add_column();
+    test_squee_new_header_with_columns();
+    test_squee_new_empty_row_list();
 }

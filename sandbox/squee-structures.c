@@ -254,6 +254,7 @@ Table* squee_get_table_by_name(char *table_name, Database *db) {
         if (0 == strcmp(table_name, curr->name)) {
             return curr;
         }
+        curr = curr->next;
     }
     return NULL;
 }
