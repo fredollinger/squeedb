@@ -455,27 +455,17 @@ void squee_print_Table(Table *tbl) {
 
 // IO
 // TODO NEED TO POPULATE THIS
-int squee_write_table_to_disk(Table *table, FILE *fd) {
+int squee_write_table_to_file(Table *table, FILE *fd) {
     return 0;
 }
 
-
-int squee_write_database_to_file(char *file, Database *db) {
-    FILE *fd = fopen(file, "w");
-    if (NULL == fd) {
-        printf("Error writing to [%s] errono [%i] \n", file, errno);
-        fclose(fd);
-        return(1);
-    }
-
+void squee_write_header_to_file(Header *header, char *name, FILE *fd) {
     fprintf(fd, "SQUEE format 3%c", SQUEE_START_HEADER);
-    // FKO TODO NEED TO WRITE ALL TABLES TO DISK
 
-    // squee_write_table_to_disk(table, fd);
-    fprintf(fd, "%s%c",db->table->next->name, SQUEE_UNIT_SEPARATOR);
+    fprintf(fd, "%s%c", name, SQUEE_UNIT_SEPARATOR);
 
     // Write Header
-    Header *hdr_p = db->table->header;
+    Header *hdr_p = header;
     while (NULL != hdr_p) {
         if (NULL == hdr_p->field_name) {
             hdr_p = hdr_p->next;
@@ -485,6 +475,19 @@ int squee_write_database_to_file(char *file, Database *db) {
         hdr_p = hdr_p->next;
     }
     fprintf(fd, "%c", SQUEE_END_HEADER);
+    return;
+}
+
+int squee_write_database_to_file(char *file, Database *db) {
+    FILE *fd = fopen(file, "w");
+    if (NULL == fd) {
+        printf("Error writing to [%s] errono [%i] \n", file, errno);
+        fclose(fd);
+        return(1);
+    }
+
+    // TODO loop through the headers
+    squee_write_header_to_file(db->table->next->header, db->table->next->name, fd);
 
     // Write Row
     fprintf(fd, "%c", SQUEE_START_ROW);
