@@ -2,7 +2,7 @@
 
 ## Currently working on
 
-1. Convert the Table to a linked list
+./print-database.sh
 
 ===============
 

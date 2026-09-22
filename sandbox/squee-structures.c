@@ -533,16 +533,16 @@ int squee_write_database_to_file(char *file, Database *db) {
     return(0);
 }
 
-Header* squee_read_header_from_file (char *buffer, char *pbuffer) {
+Header* squee_read_header_from_file (char **buffer, char **pbuffer) {
     Header *header = squee_new_empty_header();
     // FKO TODO REMOVE
-    return header;
+    // ALSO need to return NULL if there is no header
 
     // Read Header
     while (*pbuffer != SQUEE_END_HEADER) {
-    
+        /*
         // Read field name
-        start = pbuffer;
+        char *start = pbuffer;
     
         while (*pbuffer != SQUEE_UNIT_SEPARATOR)
             pbuffer++;
@@ -568,10 +568,10 @@ Header* squee_read_header_from_file (char *buffer, char *pbuffer) {
         header = squee_header_add_column(header, field_name, field_type);
    
         // Last line
+        */
         pbuffer++;      // Skip RECORD_SEPARATOR
     }
-
-
+    return header;
 }
 
 Database* squee_read_database_from_file(char *file) {
@@ -622,7 +622,6 @@ Database* squee_read_database_from_file(char *file) {
         return(db);
     }
 
-    size_t len;
     char *start = pbuffer;
     while (*pbuffer != SQUEE_UNIT_SEPARATOR)
         pbuffer++;
@@ -634,7 +633,7 @@ Database* squee_read_database_from_file(char *file) {
     pbuffer++;      // Skip UNIT_SEPARATOR
 
     // Read header from file
-    Header *header = squee_read_header_from_file (buffer, pbuffer);
+    Header *header = squee_read_header_from_file (&buffer, &pbuffer);
 
     // Read Table Name
     pbuffer += magic_len;
@@ -644,7 +643,7 @@ Database* squee_read_database_from_file(char *file) {
         if (SQUEE_RECORD_SEPARATOR == *pbuffer) {
             // break;
         }
-        Header *hdr_p = db->table->header;
+        Header *hdr_p = header;
         Row *row = (Row*)malloc(sizeof(Row*));
         row->next_row_node = squee_new_empty_row_node_list();
 
