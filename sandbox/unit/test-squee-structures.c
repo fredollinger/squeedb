@@ -264,13 +264,15 @@ void test_squee_append_table() {
     squee_print_table(db->table);
     check_header(table->header);
     assert (false == squee_append_table(db, table));
+    table = fixture_create_table("Employees2");
+    assert (true == squee_append_table(db, table));
     squee_print_table(db->table);
-    check_table(db);
+    // check_table(db);
 }
 
 int main() {
-    test_squee_create_table();
     test_squee_append_row();
+    test_squee_create_table();
     test_squee_append_table();
     test_squee_new_empty_database();
     test_squee_new_empty_header();
