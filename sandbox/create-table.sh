@@ -20,6 +20,16 @@ CREATE TABLE Employees \
 \) \
 file.db;
 
+lldb -- \
+./squeectl \
+CREATE TABLE Employees2 \
+\( "First Name" CHAR \
+   "Last Name" CHAR \
+    "Age" INT \
+    "Hourly Rate" FLOAT \
+\) \
+file.db;
+
 #echo 
 #$3./squeectl CREATE TABLE Employees \('First Name' CHAR\) file.db;
 #echo 

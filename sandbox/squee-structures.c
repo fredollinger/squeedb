@@ -533,65 +533,10 @@ int squee_write_database_to_file(char *file, Database *db) {
     return(0);
 }
 
-Database* squee_read_database_from_file(char *file) {
-    int type = 0;
-    char *endptr = NULL;
-    char *buffer;
-    char *tok, *col, *type_s, *prev;
-    char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
-    char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
-    char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
-    char squee_end_of_header[2] =  { SQUEE_END_HEADER, '\0' };
-    char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
-    char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
-    size_t len;
-    char value_str[256];
-    // char *endptr;
-
-    FILE *fd = fopen(file, "rb");
-    Database *db = squee_new_empty_database();
-
-    if (NULL == fd) {
-        return(db);
-    }
-
-    Header *header = db->table->header;
-
-    fseek(fd, 0, SEEK_END);
-    long filesize = ftell(fd);
-    rewind(fd);
-
-    buffer = malloc(filesize + 1);
-    if (buffer == NULL) {
-        fclose(fd);
-        return(db);
-    }
-
-    fread(buffer, 1, filesize, fd);
-    buffer[filesize] = '\0';
-    fclose(fd);
-
-    char *pbuffer = buffer;
-
-    const char *magic = "SQUEE format 3";
-    size_t magic_len = strlen(magic);
-    
-    if (strncmp(pbuffer, magic, magic_len) != 0) {
-        free(buffer);
-        return(db);
-    }
-
-    // Read Table Name
-    pbuffer += magic_len;
-    char *start = pbuffer;
-    while (*pbuffer != SQUEE_UNIT_SEPARATOR)
-        pbuffer++;
-    len = pbuffer - start;
-    Table *table = (Table*) malloc(sizeof(Table));
-    table->name = (char*)malloc(len + 1);
-    strncpy(db->table->name, start, len);
-    
-    pbuffer++;      // Skip UNIT_SEPARATOR
+Header* squee_read_header_from_file (char *buffer, char *pbuffer) {
+    Header *header = squee_new_empty_header();
+    // FKO TODO REMOVE
+    return header;
 
     // Read Header
     while (*pbuffer != SQUEE_END_HEADER) {
@@ -625,6 +570,74 @@ Database* squee_read_database_from_file(char *file) {
         // Last line
         pbuffer++;      // Skip RECORD_SEPARATOR
     }
+
+
+}
+
+Database* squee_read_database_from_file(char *file) {
+    int type = 0;
+    char *endptr = NULL;
+    char *buffer;
+    char *tok, *col, *type_s, *prev;
+    char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
+    char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
+    char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
+    char squee_end_of_header[2] =  { SQUEE_END_HEADER, '\0' };
+    char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
+    char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
+    size_t len;
+    char value_str[256];
+    char *pbuffer = NULL;
+
+    FILE *fd = fopen(file, "rb");
+    Database *db = squee_new_empty_database();
+
+    if (NULL == fd) {
+        return(db);
+    }
+
+    // TODO, we need to read ahead to even see if we need a header
+    // Header *header = db->table->header;
+
+    fseek(fd, 0, SEEK_END);
+    long filesize = ftell(fd);
+    rewind(fd);
+
+    buffer = malloc(filesize + 1);
+    if (buffer == NULL) {
+        fclose(fd);
+        return(db);
+    }
+
+    fread(buffer, 1, filesize, fd);
+    buffer[filesize] = '\0';
+    fclose(fd);
+
+    pbuffer = buffer;
+    const char *magic = "SQUEE format 3";
+    size_t magic_len = strlen(magic);
+    
+    if (strncmp(pbuffer, magic, magic_len) != 0) {
+        free(buffer);
+        return(db);
+    }
+
+    size_t len;
+    char *start = pbuffer;
+    while (*pbuffer != SQUEE_UNIT_SEPARATOR)
+        pbuffer++;
+    len = pbuffer - start;
+
+    Table *table = (Table*) malloc(sizeof(Table));
+    table->name = (char*)malloc(len + 1);
+    strncpy(table->name, start, len);
+    pbuffer++;      // Skip UNIT_SEPARATOR
+
+    // Read header from file
+    Header *header = squee_read_header_from_file (buffer, pbuffer);
+
+    // Read Table Name
+    pbuffer += magic_len;
 
     // Read Row
     while (SQUEE_END_ROW != *(pbuffer + 1)) {
