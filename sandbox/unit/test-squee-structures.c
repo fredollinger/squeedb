@@ -21,10 +21,10 @@ Row* fixture_create_row() {
     return squee_create_row(header, cols, 4);
 }
 
-Table* fixture_create_table() {
+Table* fixture_create_table(char *name) {
 	char *col_names[] = {"First Name", "Last Name", "Age", "Hourly Rate"};
 	char *datatypes[] = {"CHAR", "CHAR", "INT", "FLOAT"};
-    Table *table = squee_create_table("Employees", 4, col_names, datatypes);
+    Table *table = squee_create_table(name, 4, col_names, datatypes);
     return table;
 }
 
@@ -232,7 +232,7 @@ void test_squee_create_row() {
 
 void test_squee_append_row() {
     Database *db = squee_new_empty_database();
-    Table *table = fixture_create_table();
+    Table *table = fixture_create_table("Employees");
     squee_append_table(db, table);
     Row *row = fixture_create_row();
     row = squee_append_row("Employees", db, row);
@@ -253,13 +253,13 @@ void test_squee_create_header_with_columns() {
 
 // Tests: Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]);
 void test_squee_create_table() {
-    Table *table = fixture_create_table();
+    Table *table = fixture_create_table("Employees");
     check_header(table->header);
 }
 
 void test_squee_append_table() {
     Database *db = squee_new_empty_database();
-    Table *table = fixture_create_table();
+    Table *table = fixture_create_table("Employees");
     assert (true == squee_append_table(db, table));
     squee_print_table(db->table);
     check_header(table->header);
@@ -269,9 +269,9 @@ void test_squee_append_table() {
 }
 
 int main() {
+    test_squee_create_table();
     test_squee_append_row();
     test_squee_append_table();
-    test_squee_create_table();
     test_squee_new_empty_database();
     test_squee_new_empty_header();
     test_squee_create_row();
