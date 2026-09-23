@@ -89,12 +89,12 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
 Table* squee_new_empty_table() {
     Table *head = (Table*) malloc(sizeof(Table));
     head->field_t = SQUEE_HEAD;
-    head->row_id = 0;
+    head->row_id = -1;
     head->name = strdup("");
 
     Table *tail = (Table*) malloc(sizeof(Table));
     tail->field_t = SQUEE_TAIL;
-    tail->row_id = -1;
+    tail->row_id = -2;
     tail->name = strdup("");
     tail->next = NULL;
     head->next = tail;
@@ -119,8 +119,8 @@ bool squee_append_table(Database *db, Table *table) {
     while (SQUEE_TAIL != curr->field_t) {
         // check to ensure that we are not trying to insert two tables
         // with the same name
-        printf("table->field_t [%i] [%s] \n", table->field_t, table->name);
-        printf("curr->field_t [%i] [%s] \n", curr->field_t, curr->name);
+        printf("squee_append_table() table->field_t [%i] [%s] \n", table->field_t, table->name);
+        printf("squee_append_table() curr->field_t [%i] [%s] \n", curr->field_t, curr->name);
         if (0 == strcmp(table->name, curr->name)) {
             printf("duplicate entry!! \n");
             return false;
@@ -150,7 +150,9 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 
 // Row Methods
 
-Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
+// there's a bug here, check chat gpt logs
+Row* squee_create_row(Header *header, char* cols[], int len) {
+    Header *hdr_p = header;
     Row *row = (Row*)malloc(sizeof(Row));
     row->field_t = SQUEE_DATA;
     row->id = -1;
@@ -189,8 +191,6 @@ Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
             case SQUEE_STRING:
                 printf("squee_create_row() STRING [%s] \n", cols[i]);
                 neu->data.s = strdup(cols[i]);
-                // neu->data.s = (char*)malloc(strlen(cols[i]));
-                // strcpy(neu->data.s, cols[i]);
                 break;
             case SQUEE_DATE:
                 printf("squee_create_row() DATE [%s] \n", cols[i]);
@@ -216,7 +216,6 @@ Row* squee_create_row(Header *hdr_p, char* cols[], int len) {
     RowNode *tail = (RowNode*)malloc(sizeof(RowNode));
     tail->field_t = SQUEE_TAIL;
     curr->next = tail;
-
     return row;
 }
 
@@ -251,6 +250,7 @@ Table* squee_get_table_by_name(char *table_name, Database *db) {
 
     // FKO THIS IS THE BUG
     while (SQUEE_TAIL != curr->field_t) {
+        printf("squee_get_table_by_name [%i] [%s] \n", curr->field_t, curr->name);
         if (0 == strcmp(table_name, curr->name)) {
             return curr;
         }
@@ -262,6 +262,7 @@ Table* squee_get_table_by_name(char *table_name, Database *db) {
 // TODO NOT DONE FKO
 // Take a new row and add it to the linked list
 Row* squee_append_row(char *table_name, Database *db, Row *row) {
+    squee_print_table(db->table);
     Table *table = squee_get_table_by_name(table_name, db);
     Row *prev = table->row;
     while (SQUEE_TAIL != prev->next->field_t) {
@@ -289,22 +290,21 @@ Database* squee_new_empty_database() {
 void squee_print_table(Table *table) {
     Table *curr = table;
     printf("\n");
-    printf("print_table() HEAD [%i] \n", table->field_t);
     while (SQUEE_TAIL != curr->field_t) {
-        printf("print_table() TABLE [%s] [%i] \n", curr->name, curr->field_t);
+       printf(
+            "curr=%p name=%p [%s] type=%i row_id=%i next=%p\n",
+            (void *)curr,
+            (void *)curr->name,
+            curr->name,
+            curr->field_t,
+            curr->row_id,
+            (void *)curr->next
+        );
+        printf("print_table() TABLE name [%s] type [%i] row id [%i] \n", curr->name, curr->field_t, curr->row_id);
         curr = curr->next;
     }
     printf("print_table() TAIL [%i] \n\n", curr->field_t);
-
     return;
-    // RowNode *node = tbl->row->next_row_node;
-
-    /*
-    while (SQUEE_TAIL != node->field_t) {
-        // print("squee_print_table() node->field_t [%i] \n", node->field_t);
-        node = node->next;
-    }
-    */
 }
 
 void squee_print_delimiter(int c) {
