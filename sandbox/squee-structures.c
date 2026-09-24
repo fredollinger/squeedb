@@ -151,49 +151,42 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 // Row Methods
 
 // there's a bug here, check chat gpt logs
-Row* squee_create_row(Header *header, char* cols[], int len) {
+RowNode* squee_create_row(Header *header, char* cols[], int len) {
     Header *hdr_p = header;
-    Row *row = (Row*)malloc(sizeof(Row));
-    row->field_t = SQUEE_DATA;
-    row->id = -1;
 
     RowNode *curr = (RowNode*)malloc(sizeof(RowNode));
     curr->field_t = SQUEE_HEAD;
-    row->next_row_node = curr;
+    curr->next = NULL;
+    RowNode *head = curr;
 
     long value; // used for string conversion
     float fvalue; // used for string conversion
     char *endptr;
 
-    int i = 0;
-    while (NULL != hdr_p) {
-        if (SQUEE_HEAD == hdr_p->field_t) {
-            hdr_p = hdr_p->next;
-            continue;
-        }
+    // Skip over header
+    if (hdr_p->field_t == SQUEE_HEAD) {
+        hdr_p = hdr_p->next;
+    }
 
-        printf("squee_create_row() [%i] \n", hdr_p->field_t);
+    int i = 0;
+    for(int i = 0; i < len; i++) {
         RowNode *neu = (RowNode*)malloc(sizeof(RowNode));
         neu->field_t = hdr_p->field_t;
 
         // TODO copy col data into the Row
-        switch(neu->field_t) {
+        switch(hdr_p->field_t) {
             case SQUEE_INT:
-                printf("squee_create_row() INT [%s] \n", cols[i]);
                 value = strtol(cols[i], &endptr, 10);
                 neu->data.i = (int)value;
                 break;
             case SQUEE_FLOAT:
-                printf("squee_create_row() FLOAT [%s] \n", cols[i]);
                 fvalue = strtof(cols[i], &endptr);
                 neu->data.f = fvalue;
                 break;
             case SQUEE_STRING:
-                printf("squee_create_row() STRING [%s] \n", cols[i]);
                 neu->data.s = strdup(cols[i]);
                 break;
             case SQUEE_DATE:
-                printf("squee_create_row() DATE [%s] \n", cols[i]);
                 break;
             case SQUEE_HEAD:
                 break;
@@ -203,20 +196,15 @@ Row* squee_create_row(Header *header, char* cols[], int len) {
                 printf("squee_create_row() UNKNOWN DEFAULT [%s] \n", cols[i]);
                 break;
         }
-
         curr->next = neu;
-        neu->next = curr->next->next;
         curr = neu;
-
-        i = i + 1;
         hdr_p = hdr_p->next;
-
     }
 
     RowNode *tail = (RowNode*)malloc(sizeof(RowNode));
     tail->field_t = SQUEE_TAIL;
     curr->next = tail;
-    return row;
+    return head;
 }
 
 RowNode* squee_new_empty_row_node_list() {
@@ -262,7 +250,6 @@ Table* squee_get_table_by_name(char *table_name, Database *db) {
 // TODO NOT DONE FKO
 // Take a new row and add it to the linked list
 Row* squee_append_row(char *table_name, Database *db, Row *row) {
-    squee_print_table(db->table);
     Table *table = squee_get_table_by_name(table_name, db);
     Row *prev = table->row;
     while (SQUEE_TAIL != prev->next->field_t) {
@@ -291,6 +278,7 @@ void squee_print_table(Table *table) {
     Table *curr = table;
     printf("\n");
     while (SQUEE_TAIL != curr->field_t) {
+    /*
        printf(
             "curr=%p name=%p [%s] type=%i row_id=%i next=%p\n",
             (void *)curr,
@@ -300,6 +288,7 @@ void squee_print_table(Table *table) {
             curr->row_id,
             (void *)curr->next
         );
+    */
         printf("print_table() TABLE name [%s] type [%i] row id [%i] \n", curr->name, curr->field_t, curr->row_id);
         curr = curr->next;
     }

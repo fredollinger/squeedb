@@ -13,7 +13,6 @@ int main() {
     squee_append_table(db, table);
     squee_print_table(db->table);
     Row *row = squee_create_row(table->header, cols_data, 4);
-    squee_print_table(db->table);
     squee_append_row("Employees", db->table, row);
     squee_write_database_to_file("smoke.db", db);
 }

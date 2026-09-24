@@ -226,8 +226,7 @@ void test_squee_create_row() {
     check_header(header);
 	char *cols[] = {"John", "Doe", "42", "4.25"};
     Row *row = squee_create_row(header, cols, 4);
-    // printf("test_squee_create_row() \n");
-    // check_row(row);
+    check_row(row);
 }
 
 void test_squee_append_row() {
@@ -271,12 +270,12 @@ void test_squee_append_table() {
 }
 
 int main() {
+    test_squee_create_row();
     test_squee_append_row();
     test_squee_create_table();
     test_squee_append_table();
     test_squee_new_empty_database();
     test_squee_new_empty_header();
-    test_squee_create_row();
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
     test_squee_new_header_with_columns();
