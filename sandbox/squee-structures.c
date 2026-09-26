@@ -116,7 +116,7 @@ Table* squee_create_table(char *name, int num_cols, char* col_names[], char* dat
 bool squee_append_table(Database *db, Table *table) {
     Table *curr = db->table;
     Table *prev = db->table;
-    while (SQUEE_TAIL != curr->field_t) {
+    while (NULL != curr) {
         // check to ensure that we are not trying to insert two tables
         // with the same name
         printf("squee_append_table() table->field_t [%i] [%s] \n", table->field_t, table->name);
@@ -131,7 +131,7 @@ bool squee_append_table(Database *db, Table *table) {
     // printf("CURR [%s] \n", curr->name);
     // printf("TAIL [%i] \n", curr->next->field_t);
     // insert the table
-    table->next = curr; // curr is now the tail
+    db->table->next = curr; // curr is now the tail
     prev->next = table;
     return true;
 }
@@ -277,7 +277,7 @@ Database* squee_new_empty_database() {
 void squee_print_table(Table *table) {
     Table *curr = table;
     printf("\n");
-    while (SQUEE_TAIL != curr->field_t) {
+    while (NULL != curr) {
     /*
        printf(
             "curr=%p name=%p [%s] type=%i row_id=%i next=%p\n",
@@ -292,7 +292,7 @@ void squee_print_table(Table *table) {
         printf("print_table() TABLE name [%s] type [%i] row id [%i] \n", curr->name, curr->field_t, curr->row_id);
         curr = curr->next;
     }
-    printf("print_table() TAIL [%i] \n\n", curr->field_t);
+    // printf("print_table() TAIL [%i] \n\n", curr->field_t);
     return;
 }
 

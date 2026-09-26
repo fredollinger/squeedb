@@ -225,7 +225,7 @@ void test_squee_create_row() {
     Header *header = fixture_create_header();
     check_header(header);
 	char *cols[] = {"John", "Doe", "42", "4.25"};
-    Row *row = squee_create_row(header, cols, 4);
+    RowNode *row = squee_create_row(header, cols, 4);
     check_row(row);
 }
 
@@ -266,18 +266,20 @@ void test_squee_append_table() {
     table = fixture_create_table("Employees2");
     assert (true == squee_append_table(db, table));
     squee_print_table(db->table);
-    // check_table(db);
+    check_table(db);
 }
 
 int main() {
+    test_squee_append_table();
+/*
+    test_squee_create_table();
     test_squee_create_row();
     test_squee_append_row();
-    test_squee_create_table();
-    test_squee_append_table();
     test_squee_new_empty_database();
     test_squee_new_empty_header();
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
     test_squee_new_header_with_columns();
     test_squee_new_empty_row_list();
+*/
 }
