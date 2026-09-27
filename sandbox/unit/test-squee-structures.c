@@ -259,28 +259,32 @@ void test_squee_create_table() {
 void test_squee_append_table() {
     Database *db = squee_new_empty_database();
     Table *table = fixture_create_table("Employees");
+    check_header(table->header);
     assert (true == squee_append_table(db, table));
     squee_print_table(db->table);
-    check_header(table->header);
-    bool res = squee_append_table(db, table);
-    assert (false == res);
+    assert (false == squee_append_table(db, table));
+    squee_print_table(db->table);
     check_table(db);
     table = fixture_create_table("Employees2");
     assert (true == squee_append_table(db, table));
+    assert (SQUEE_HEAD == db->table->field_t);
+    Table *curr = db->table->next;
+    assert (SQUEE_DATA == curr->field_t);
+    curr = curr->next;
+    assert (0 == strcmp("Employees2", curr->name));
+    assert (SQUEE_TAIL == curr->next->field_t);
     squee_print_table(db->table);
 }
 
 int main() {
+    // test_squee_append_row();
     test_squee_append_table();
-/*
     test_squee_create_table();
     test_squee_create_row();
-    test_squee_append_row();
     test_squee_new_empty_database();
     test_squee_new_empty_header();
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
     test_squee_new_header_with_columns();
     test_squee_new_empty_row_list();
-*/
 }
