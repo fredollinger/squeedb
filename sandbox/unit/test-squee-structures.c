@@ -264,10 +264,10 @@ void test_squee_append_table() {
     check_header(table->header);
     bool res = squee_append_table(db, table);
     assert (false == res);
+    check_table(db);
     table = fixture_create_table("Employees2");
     assert (true == squee_append_table(db, table));
     squee_print_table(db->table);
-    check_table(db);
 }
 
 int main() {
