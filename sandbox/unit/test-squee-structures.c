@@ -262,7 +262,8 @@ void test_squee_append_table() {
     assert (true == squee_append_table(db, table));
     squee_print_table(db->table);
     check_header(table->header);
-    assert (false == squee_append_table(db, table));
+    bool res = squee_append_table(db, table);
+    assert (false == res);
     table = fixture_create_table("Employees2");
     assert (true == squee_append_table(db, table));
     squee_print_table(db->table);
