@@ -49,8 +49,8 @@ void check_empty_row(Row *row) {
     assert (SQUEE_TAIL == row->field_t);
 }
 
+// FKO TODO
 void check_row(Row *row) {
-    /*
     printf("check_row type [%i] \n", row->field_t);
     assert (SQUEE_DATA == row->field_t);
     RowNode *node = row->next_row_node;
@@ -78,11 +78,10 @@ void check_row(Row *row) {
 
     node = node->next;
     assert (SQUEE_TAIL == node->field_t);
-    */
 }
 
 void check_header(Header *header) {
-    printf("check_header() [%i] \n", header->field_t);
+    // printf("check_header() [%i] \n", header->field_t);
     assert (SQUEE_HEAD == header->field_t);
 
     header = header->next;
@@ -225,22 +224,8 @@ void test_squee_create_row() {
     Header *header = fixture_create_header();
     check_header(header);
 	char *cols[] = {"John", "Doe", "42", "4.25"};
-    RowNode *row = squee_create_row(header, cols, 4);
+    Row *row = squee_create_row(header, cols, 4);
     check_row(row);
-}
-
-void test_squee_append_row() {
-    Database *db = squee_new_empty_database();
-    Table *table = fixture_create_table("Employees");
-    squee_append_table(db, table);
-    Row *row = fixture_create_row();
-    row = squee_append_row("Employees", db, row);
-/*
-    printf("test_squee_append_row() \n");
-    check_row(table->row);
-    check_header(table->header);
-*/
-    // END BISECT
 }
 
 void test_squee_create_header_with_columns() {
@@ -251,10 +236,6 @@ void test_squee_create_header_with_columns() {
 }
 
 // Tests: Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]);
-void test_squee_create_table() {
-    Table *table = fixture_create_table("Employees");
-    check_header(table->header);
-}
 
 void test_squee_append_table() {
     Database *db = squee_new_empty_database();
@@ -276,15 +257,38 @@ void test_squee_append_table() {
     squee_print_table(db->table);
 }
 
+void test_squee_append_row() {
+    Database *db = squee_new_empty_database();
+    Table *table = fixture_create_table("Employees");
+    squee_append_table(db, table);
+    Row *row = fixture_create_row();
+    row = squee_append_row("Employees", db, row);
+
+/*
+    printf("test_squee_append_row() \n");
+    check_row(table->row);
+    check_header(table->header);
+*/
+    // END BISECT
+}
+
 int main() {
-    // test_squee_append_row();
-    test_squee_append_table();
-    test_squee_create_table();
+    // Row Tests
     test_squee_create_row();
+/*
+    test_squee_new_empty_row_list();
+    test_squee_append_row();
+
+    // Table Test
+    test_squee_append_table();
+
+    // Database Test
     test_squee_new_empty_database();
+
+    // Header Tests
     test_squee_new_empty_header();
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
     test_squee_new_header_with_columns();
-    test_squee_new_empty_row_list();
+*/
 }

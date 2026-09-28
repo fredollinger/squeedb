@@ -47,7 +47,6 @@ int squee_get_field_int(char *type) {
     return -1;
 }
 
-// 1 FKO FINISH AND TEST
 Header* squee_create_header_with_columns(int num_cols, char* col_names[], char *datatypes[]) {
     Header *head = squee_new_empty_header();
     Header *curr = head;
@@ -148,13 +147,13 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
 // Row Methods
 
 // there's a bug here, check chat gpt logs
-RowNode* squee_create_row(Header *header, char* cols[], int len) {
+Row* squee_create_row(Header *header, char* cols[], int len) {
     Header *hdr_p = header;
 
     RowNode *curr = (RowNode*)malloc(sizeof(RowNode));
     curr->field_t = SQUEE_HEAD;
     curr->next = NULL;
-    RowNode *head = curr;
+    RowNode *head_node = curr;
 
     long value; // used for string conversion
     float fvalue; // used for string conversion
@@ -201,7 +200,10 @@ RowNode* squee_create_row(Header *header, char* cols[], int len) {
     RowNode *tail = (RowNode*)malloc(sizeof(RowNode));
     tail->field_t = SQUEE_TAIL;
     curr->next = tail;
-    return head;
+    Row *row = (Row*)malloc(sizeof(Row));
+    row->field_t = SQUEE_DATA;
+    row->next_row_node = head_node;
+    return row;
 }
 
 RowNode* squee_new_empty_row_node_list() {
@@ -472,8 +474,8 @@ int squee_write_database_to_file(char *file, Database *db) {
         return(1);
     }
 
-    // TODO loop through the headers
-    squee_write_header_to_file(db->table->next->header, db->table->next->name, fd);
+    // TODO loop through the tables
+    // squee_write_header_to_file(db->table->next->header, db->table->next->name, fd);
 
     // Write Row
     fprintf(fd, "%c", SQUEE_START_ROW);
@@ -525,12 +527,12 @@ Header* squee_read_header_from_file (char **buffer, char **pbuffer) {
     // ALSO need to return NULL if there is no header
 
     // Read Header
-    while (*pbuffer != SQUEE_END_HEADER) {
+    while (**pbuffer != SQUEE_END_HEADER) {
         /*
         // Read field name
         char *start = pbuffer;
     
-        while (*pbuffer != SQUEE_UNIT_SEPARATOR)
+        while (**pbuffer != SQUEE_UNIT_SEPARATOR)
             pbuffer++;
     
         len = pbuffer - start;
