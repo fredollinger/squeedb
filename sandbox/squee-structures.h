@@ -76,6 +76,7 @@ Table* squee_new_empty_table();
 Header* squee_create_header_with_columns(int num_cols, char* col_names[], char *datatypes[]);
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]);
 bool squee_append_table(Database *db, Table *table);
+Table* squee_get_table_by_name(char *table_name, Database *db);
 
 // Header Functions
 Header* squee_new_empty_header();
