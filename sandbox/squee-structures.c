@@ -454,33 +454,10 @@ int squee_write_table_header_to_file(Header *header, char *name, FILE *fd) {
     return 0;
 }
 
-int squee_write_database_to_file(char *file, Database *db) {
-    FILE *fd = fopen(file, "w");
-    if (NULL == fd) {
-        printf("Error writing to [%s] errono [%i] \n", file, errno);
-        fclose(fd);
-        return(1);
-    }
-
-    fprintf(fd, "SQUEE format 3");
-
-    Table *tbl = db->table->next;
-    while (SQUEE_TAIL != tbl->field_t) {
-        printf("squee_write_database_to_file [%s] [%i] \n", tbl->name, tbl->field_t);
-        // TODO Check Error code
-        squee_write_table_header_to_file(tbl->header, tbl->name, fd);
-        tbl = tbl->next;
-    }
-    return 0;
-
-    // TODO loop through the tables
-    // squee_write_header_to_file(db->table->next->header, db->table->next->name, fd);
-
-    // Write Row
+int squee_write_row_to_file(Row *row, FILE *fd) {
     fprintf(fd, "%c", SQUEE_START_ROW);
-    // FKO TODO NEED TO LOOP THROUGH TABLE
-    // FOR NOW, WE WRITE THE 1st Table only
-    Row *curr = db->table->next->row;
+/*
+    Row *curr = row->next->row;
     while (SQUEE_TAIL != curr->field_t) {
         if (SQUEE_HEAD == curr->field_t) {
             curr = curr->next;
@@ -513,8 +490,41 @@ int squee_write_database_to_file(char *file, Database *db) {
         fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
         curr = curr->next;
     }
+*/
 
     fprintf(fd, "%c", SQUEE_END_ROW);
+    return 0;
+}
+
+int squee_write_rows_to_file(Row *row, FILE *fd) {
+    Row *curr = row;
+    while(SQUEE_TAIL != curr->field_t) {
+        squee_write_row_to_file(curr, fd);
+        curr = curr->next; 
+    }
+    return 0;
+}
+
+int squee_write_database_to_file(char *file, Database *db) {
+    FILE *fd = fopen(file, "w");
+    if (NULL == fd) {
+        printf("Error writing to [%s] errono [%i] \n", file, errno);
+        fclose(fd);
+        return(1);
+    }
+
+    fprintf(fd, "SQUEE format 3");
+
+    Table *tbl = db->table->next;
+    while (SQUEE_TAIL != tbl->field_t) {
+        printf("squee_write_database_to_file [%s] [%i] \n", tbl->name, tbl->field_t);
+        // TODO Check Error code
+        squee_write_table_header_to_file(tbl->header, tbl->name, fd);
+        squee_write_rows_to_file(tbl->row, fd);
+        tbl = tbl->next;
+    }
+    return 0;
+
     fprintf(fd, "%c", SQUEE_END_FILE);
     fclose(fd);
     return(0);
