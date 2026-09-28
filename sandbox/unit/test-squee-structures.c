@@ -263,6 +263,12 @@ void test_squee_append_table() {
     assert (0 == strcmp("Employees2", curr->name));
     assert (SQUEE_TAIL == curr->next->field_t);
     squee_print_table(db->table);
+
+    table = squee_get_table_by_name("Employees", db);
+    assert (0 == strcmp("Employees", table->name));
+
+    table = squee_get_table_by_name("Employees2", db);
+    assert (0 == strcmp("Employees2", table->name));
 }
 
 void test_squee_append_row() {
@@ -272,13 +278,6 @@ void test_squee_append_row() {
     Row *row = fixture_create_row();
     row = squee_append_row("Employees", db, row);
     check_row_list(table->row);
-
-/*
-    printf("test_squee_append_row() \n");
-    check_row(table->row);
-    check_header(table->header);
-*/
-    // END BISECT
 }
 
 int main() {
