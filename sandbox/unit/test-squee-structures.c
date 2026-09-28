@@ -49,7 +49,6 @@ void check_empty_row(Row *row) {
     assert (SQUEE_TAIL == row->field_t);
 }
 
-// FKO TODO
 void check_row(Row *row) {
     printf("check_row type [%i] \n", row->field_t);
     assert (SQUEE_DATA == row->field_t);
@@ -78,6 +77,15 @@ void check_row(Row *row) {
 
     node = node->next;
     assert (SQUEE_TAIL == node->field_t);
+}
+
+void check_row_list(Row *row) {
+    assert (SQUEE_HEAD == row->field_t);
+    Row *curr = row->next;
+    assert (SQUEE_DATA == curr->field_t);
+    check_row(curr);
+    curr = curr->next;
+    assert (SQUEE_TAIL == curr->field_t);
 }
 
 void check_header(Header *header) {
@@ -263,6 +271,7 @@ void test_squee_append_row() {
     squee_append_table(db, table);
     Row *row = fixture_create_row();
     row = squee_append_row("Employees", db, row);
+    check_row_list(table->row);
 
 /*
     printf("test_squee_append_row() \n");
@@ -275,7 +284,6 @@ void test_squee_append_row() {
 int main() {
     // Row Tests
     test_squee_create_row();
-/*
     test_squee_new_empty_row_list();
     test_squee_append_row();
 
@@ -290,5 +298,4 @@ int main() {
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
     test_squee_new_header_with_columns();
-*/
 }
