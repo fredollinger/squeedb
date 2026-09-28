@@ -277,21 +277,9 @@ void squee_print_table(Table *table) {
     Table *curr = table;
     printf("\n");
     while (NULL != curr) {
-    /*
-       printf(
-            "curr=%p name=%p [%s] type=%i row_id=%i next=%p\n",
-            (void *)curr,
-            (void *)curr->name,
-            curr->name,
-            curr->field_t,
-            curr->row_id,
-            (void *)curr->next
-        );
-    */
         printf("print_table() TABLE name [%s] type [%i] row id [%i] \n", curr->name, curr->field_t, curr->row_id);
         curr = curr->next;
     }
-    // printf("print_table() TAIL [%i] \n\n", curr->field_t);
     return;
 }
 
@@ -447,8 +435,8 @@ int squee_write_table_to_file(Table *table, FILE *fd) {
     return 0;
 }
 
-void squee_write_header_to_file(Header *header, char *name, FILE *fd) {
-    fprintf(fd, "SQUEE format 3%c", SQUEE_START_HEADER);
+int squee_write_table_header_to_file(Header *header, char *name, FILE *fd) {
+    fprintf(fd, "%c", SQUEE_START_HEADER);
 
     fprintf(fd, "%s%c", name, SQUEE_UNIT_SEPARATOR);
 
@@ -463,7 +451,7 @@ void squee_write_header_to_file(Header *header, char *name, FILE *fd) {
         hdr_p = hdr_p->next;
     }
     fprintf(fd, "%c", SQUEE_END_HEADER);
-    return;
+    return 0;
 }
 
 int squee_write_database_to_file(char *file, Database *db) {
@@ -473,6 +461,17 @@ int squee_write_database_to_file(char *file, Database *db) {
         fclose(fd);
         return(1);
     }
+
+    fprintf(fd, "SQUEE format 3");
+
+    Table *tbl = db->table->next;
+    while (SQUEE_TAIL != tbl->field_t) {
+        printf("squee_write_database_to_file [%s] [%i] \n", tbl->name, tbl->field_t);
+        // TODO Check Error code
+        squee_write_table_header_to_file(tbl->header, tbl->name, fd);
+        tbl = tbl->next;
+    }
+    return 0;
 
     // TODO loop through the tables
     // squee_write_header_to_file(db->table->next->header, db->table->next->name, fd);
