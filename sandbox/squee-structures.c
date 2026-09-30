@@ -430,41 +430,17 @@ void squee_print_Table(Table *tbl) {
 }
 
 // IO
-// TODO NEED TO POPULATE THIS
-int squee_write_table_to_file(Table *table, FILE *fd) {
-    return 0;
-}
-
-int squee_write_table_header_to_file(Header *header, char *name, FILE *fd) {
-    fprintf(fd, "%c", SQUEE_START_HEADER);
-
-    fprintf(fd, "%s%c", name, SQUEE_UNIT_SEPARATOR);
-
-    // Write Header
-    Header *hdr_p = header;
-    while (NULL != hdr_p) {
-        if (NULL == hdr_p->field_name) {
-            hdr_p = hdr_p->next;
-            continue;
-        }
-        fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
-        hdr_p = hdr_p->next;
-    }
-    fprintf(fd, "%c", SQUEE_END_HEADER);
-    return 0;
-}
 
 int squee_write_row_to_file(Row *row, FILE *fd) {
     fprintf(fd, "%c", SQUEE_START_ROW);
-/*
-    Row *curr = row->next->row;
+    RowNode *curr = row->next_row_node;
     while (SQUEE_TAIL != curr->field_t) {
         if (SQUEE_HEAD == curr->field_t) {
             curr = curr->next;
             continue;
         }
 
-        RowNode *node = curr->next_row_node;
+        RowNode *node = curr->next;
         while (SQUEE_TAIL != node->field_t) {
             switch(node->field_t) {
                 case SQUEE_INT:
@@ -490,7 +466,6 @@ int squee_write_row_to_file(Row *row, FILE *fd) {
         fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
         curr = curr->next;
     }
-*/
 
     fprintf(fd, "%c", SQUEE_END_ROW);
     return 0;
@@ -499,9 +474,36 @@ int squee_write_row_to_file(Row *row, FILE *fd) {
 int squee_write_rows_to_file(Row *row, FILE *fd) {
     Row *curr = row;
     while(SQUEE_TAIL != curr->field_t) {
-        squee_write_row_to_file(curr, fd);
+        if (SQUEE_HEAD != curr->field_t) {
+            squee_write_row_to_file(curr, fd);
+        }
         curr = curr->next; 
     }
+    return 0;
+}
+
+// TODO NEED TO POPULATE THIS
+int squee_write_table_to_file(Table *table, FILE *fd) {
+
+    return 0;
+}
+
+int squee_write_table_header_to_file(Header *header, char *name, FILE *fd) {
+    fprintf(fd, "%c", SQUEE_START_HEADER);
+
+    fprintf(fd, "%s%c", name, SQUEE_UNIT_SEPARATOR);
+
+    // Write Header
+    Header *hdr_p = header;
+    while (NULL != hdr_p) {
+        if (NULL == hdr_p->field_name) {
+            hdr_p = hdr_p->next;
+            continue;
+        }
+        fprintf(fd, "%s%c%i%c", hdr_p->field_name, SQUEE_UNIT_SEPARATOR, hdr_p->field_t, SQUEE_RECORD_SEPARATOR);
+        hdr_p = hdr_p->next;
+    }
+    fprintf(fd, "%c", SQUEE_END_HEADER);
     return 0;
 }
 
