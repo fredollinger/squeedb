@@ -23,4 +23,5 @@ int main() {
     row = squee_create_row(table->header, cols_data2, 4);
     squee_append_row("Employees", db, row);
     squee_write_database_to_file("smoke.db", db);
+    db = squee_read_database_from_file("smoke.db");
 }
