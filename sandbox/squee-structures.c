@@ -689,6 +689,13 @@ Database* squee_read_database_from_file(char *file) {
         free(buffer);
         return(db);
     }
+    
+    printf("squee_read_db(): ");
+    while (pbuffer != SQUEE_END_HEADER) {
+        printf("[%i] ", (int)pbuffer);
+        pbuffer++;
+    }
+    printf("\n");
 
     // TODO Loop through tables and read them all
     // 1st just print out the Table Names
