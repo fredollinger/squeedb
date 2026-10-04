@@ -170,12 +170,13 @@ void test_squee_new_empty_row_list() {
 void test_squee_new_empty_database() {
     Database *db = squee_new_empty_database();
     check_empty_table(db->table);
-    // check_empty_row(db->table->row);
-    // check_empty_header(db->table->header);
+    assert(0 == db->number_of_tables);
 }
 
 // For now this is just a wrapper on malloc so no test is needed
 void test_squee_new_empty_table() {
+    Table *table = squee_new_empty_table();
+    assert(0 == table->number_of_rows);
     return;
 }
 
@@ -287,6 +288,7 @@ int main() {
     test_squee_append_row();
 
     // Table Test
+    test_squee_new_empty_table();
     test_squee_append_table();
 
     // Database Test
@@ -297,4 +299,5 @@ int main() {
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
     test_squee_new_header_with_columns();
+
 }

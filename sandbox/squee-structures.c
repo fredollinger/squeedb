@@ -90,6 +90,7 @@ Table* squee_new_empty_table() {
     head->field_t = SQUEE_HEAD;
     head->row_id = -1;
     head->name = strdup("");
+    head->number_of_rows = 0;
 
     Table *tail = (Table*) malloc(sizeof(Table));
     tail->field_t = SQUEE_TAIL;
@@ -266,6 +267,7 @@ Row* squee_append_row(char *table_name, Database *db, Row *row) {
 Database* squee_new_empty_database() {
     Database *db = (Database*) malloc(sizeof(Database));
     db->table = squee_new_empty_table();
+    db->number_of_tables = 0;
     return db;
 }
 
@@ -699,8 +701,6 @@ Database* squee_read_database_from_file(char *file) {
     // TODO Loop through tables and read them all
     // 1st just print out the Table Names
     // squee_read_table_from_file()
-    
-
     return db;
 }
  
