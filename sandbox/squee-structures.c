@@ -8,6 +8,13 @@
 
 #include "squee-structures.h"
 
+static const char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
+static const char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
+static const char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
+static const char squee_end_of_header[2] =  { SQUEE_END_HEADER, '\0' };
+static const char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
+static const char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
+
 // HEADER METHODS
 Header* squee_new_empty_header() {
     Header *head = (Header*)malloc(sizeof(Header));
@@ -342,12 +349,6 @@ void squee_print_row_node(RowNode *node) {
     }
 }
 
-// Given a row, find the last element (before the tail)
-// DELETE ME
-RowNode* squee_end_of_row(Row *row_h) {
-    return NULL;
-}
-
 // print all a single row
 void squee_print_row(Row *row) {
     RowNode *node = row->next_row_node;
@@ -516,7 +517,9 @@ int squee_write_database_to_file(char *file, Database *db) {
         return(1);
     }
 
-    fprintf(fd, "SQUEE format 3");
+    // fprintf(fd, SQUEE_FILE_SIGNATURE);
+    fwrite(SQUEE_FILE_SIGNATURE, sizeof(SQUEE_FILE_SIGNATURE) - 1, 1, fd);
+    fwrite(&db->number_of_tables, sizeof(db->number_of_tables), 1, fd);
 
     Table *tbl = db->table->next;
     while (SQUEE_TAIL != tbl->field_t) {
@@ -648,12 +651,7 @@ Database* squee_read_database_from_file(char *file) {
     char *endptr = NULL;
     char *buffer;
     char *tok, *col, *type_s, *prev;
-    char squee_start_of_header[2] = { SQUEE_START_HEADER, '\0' };
-    char squee_unit_separator[2] = { SQUEE_UNIT_SEPARATOR, '\0' };
-    char squee_record_separator[2] = { SQUEE_RECORD_SEPARATOR, '\0' };
-    char squee_end_of_header[2] =  { SQUEE_END_HEADER, '\0' };
-    char squee_start_of_row[2] = { SQUEE_START_ROW, '\0' };
-    char squee_end_of_row[2] = { SQUEE_END_ROW, '\0' };
+
     size_t len;
     char value_str[256];
     char *pbuffer = NULL;
