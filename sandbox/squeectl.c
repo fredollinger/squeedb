@@ -103,7 +103,7 @@ int create_database(char *filename) {
         return(1);
     }
 
-    fprintf(fd, FILE_SIGNATURE);
+    fprintf(fd, SQUEE_FILE_SIGNATURE);
     fclose(fd);
     return(0);
 }

@@ -129,6 +129,7 @@ bool squee_append_table(Database *db, Table *table) {
     }
     table->next = curr; // curr is now the tail
     prev->next = table;
+    db->number_of_tables++;
     return true;
 }
 
@@ -221,14 +222,11 @@ Row* squee_new_empty_row_list() {
     Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
     tail_row->next_row_node = NULL;
-
     Row *head_row = (Row*) malloc(sizeof(Row));
     head_row->field_t = SQUEE_HEAD;
     head_row->next_row_node = NULL;
     head_row->next = tail_row;
-
     return head_row;
-
 }
 
 Table* squee_get_table_by_name(char *table_name, Database *db) {
@@ -259,6 +257,7 @@ Row* squee_append_row(char *table_name, Database *db, Row *row) {
     row->next = last;
     table->row_id = table->row_id + 1;
     row->id = table->row_id;
+    table->number_of_rows++;
     return row;
 }
 
@@ -682,7 +681,7 @@ Database* squee_read_database_from_file(char *file) {
     fclose(fd);
 
     pbuffer = buffer;
-    const char *magic = "SQUEE format 3";
+    const char *magic = SQUEE_FILE_SIGNATURE;
     size_t magic_len = strlen(magic);
     
     if (strncmp(pbuffer, magic, magic_len) != 0) {

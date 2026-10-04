@@ -21,7 +21,7 @@
 #define SQUEE_END_FILE          0x06
 
 // Defines the database
-#define FILE_SIGNATURE "SQUEE format 1"
+#define SQUEE_FILE_SIGNATURE "SQUEE format 1"
 
 // The data type that the field holds
 typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_DATA, SQUEE_HEAD, SQUEE_TAIL } Field_t;
@@ -55,15 +55,17 @@ typedef struct Header {
 typedef struct Table {
     char *name;
     Header *header;
-    Row *row;
+    Row *row; // Next Row to insert behind
     Field_t field_t;
     struct Table *next;
-    int row_id; // The id that the next inserted row is going to get. TODO: Change to a pointer
+    int number_of_rows;
+    int row_id;
 } Table;
 
 // TODO: How to have more than one table?
 typedef struct Database {
-    Table *table;
+    Table *table; // Head node of a linked list of tables
+    int number_of_tables;
 } Database;
 
 // Functions
