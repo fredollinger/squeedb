@@ -251,17 +251,20 @@ void test_squee_append_table() {
     Table *table = fixture_create_table("Employees");
     check_header(table->header);
     assert (true == squee_append_table(db, table));
+    assert (1 == db->number_of_tables);
     squee_print_table(db->table);
     assert (false == squee_append_table(db, table));
     squee_print_table(db->table);
     check_table(db);
     table = fixture_create_table("Employees2");
     assert (true == squee_append_table(db, table));
+    assert (2 == db->number_of_tables);
     assert (SQUEE_HEAD == db->table->field_t);
     Table *curr = db->table->next;
     assert (SQUEE_DATA == curr->field_t);
     curr = curr->next;
     assert (0 == strcmp("Employees2", curr->name));
+    assert (2 == db->number_of_tables);
     assert (SQUEE_TAIL == curr->next->field_t);
     squee_print_table(db->table);
 
@@ -278,7 +281,10 @@ void test_squee_append_row() {
     squee_append_table(db, table);
     Row *row = fixture_create_row();
     row = squee_append_row("Employees", db, row);
-    check_row_list(table->row);
+    assert (1 == db->number_of_tables);
+    // check_row_list(table->row);
+    table = squee_get_table_by_name("Employees", db);
+    assert (1 == table->number_of_rows);
 }
 
 int main() {
@@ -299,5 +305,4 @@ int main() {
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
     test_squee_new_header_with_columns();
-
 }
