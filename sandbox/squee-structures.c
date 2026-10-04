@@ -434,7 +434,7 @@ void squee_print_Table(Table *tbl) {
 // IO
 
 int squee_write_row_to_file(Row *row, FILE *fd) {
-    fprintf(fd, "%c", SQUEE_START_ROW);
+    fwrite(&squee_start_of_row, sizeof(squee_start_of_row), 1, fd);
     RowNode *curr = row->next_row_node;
     while (SQUEE_TAIL != curr->field_t) {
         if (SQUEE_HEAD == curr->field_t) {
@@ -446,13 +446,19 @@ int squee_write_row_to_file(Row *row, FILE *fd) {
         while (SQUEE_TAIL != node->field_t) {
             switch(node->field_t) {
                 case SQUEE_INT:
-                    fprintf(fd, "%i%c", node->data.i, SQUEE_UNIT_SEPARATOR);
+                    // fprintf(fd, "%i%c", node->data.i, SQUEE_UNIT_SEPARATOR);
+                    fwrite(&node->data.i, sizeof(node->data.i), 1, fd);
+                    fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_FLOAT:
-                    fprintf(fd, "%f%c", node->data.f, SQUEE_UNIT_SEPARATOR);
+                    // fprintf(fd, "%f%c", node->data.f, SQUEE_UNIT_SEPARATOR);
+                    fwrite(&node->data.f, sizeof(node->data.f), 1, fd);
+                    fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_STRING:
-                    fprintf(fd, "%s%c", node->data.s, SQUEE_UNIT_SEPARATOR);
+                    // fprintf(fd, "%s%c", node->data.s, SQUEE_UNIT_SEPARATOR);
+                    fwrite(&node->data.s, sizeof(node->data.s), 1, fd);
+                    fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_DATE:
                     break;
@@ -465,11 +471,13 @@ int squee_write_row_to_file(Row *row, FILE *fd) {
             }
             node = node->next;
         }
-        fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
+        // fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
+        fwrite(&squee_record_separator, sizeof(squee_record_separator), 1, fd);
         curr = curr->next;
     }
 
-    fprintf(fd, "%c", SQUEE_END_ROW);
+    // fprintf(fd, "%c", SQUEE_END_ROW);
+    fwrite(&squee_end_of_row, sizeof(squee_end_of_row), 1, fd);
     return 0;
 }
 
