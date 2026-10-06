@@ -498,10 +498,10 @@ int squee_write_table_to_file(Table *table, FILE *fd) {
     return 0;
 }
 
-int squee_write_table_header_to_file(Header *header, char *name, FILE *fd) {
+int squee_write_table_header_to_file(Header *header, char *name, int number_of_rows, FILE *fd) {
     fprintf(fd, "%c", SQUEE_START_HEADER);
-
     fprintf(fd, "%s%c", name, SQUEE_UNIT_SEPARATOR);
+    fprintf(fd, "%i%c", number_of_rows, SQUEE_UNIT_SEPARATOR);
 
     // Write Header
     Header *hdr_p = header;
@@ -532,7 +532,7 @@ int squee_write_database_to_file(char *file, Database *db) {
     while (SQUEE_TAIL != tbl->field_t) {
         printf("squee_write_database_to_file [%s] [%i] \n", tbl->name, tbl->field_t);
         // TODO Check Error code
-        squee_write_table_header_to_file(tbl->header, tbl->name, fd);
+        squee_write_table_header_to_file(tbl->header, tbl->name, tbl->number_of_rows, fd);
         squee_write_rows_to_file(tbl->row, fd);
         fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
         tbl = tbl->next;
