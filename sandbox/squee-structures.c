@@ -525,9 +525,8 @@ int squee_write_database_to_file(char *file, Database *db) {
         return(1);
     }
 
-    // fprintf(fd, SQUEE_FILE_SIGNATURE);
     fwrite(SQUEE_FILE_SIGNATURE, sizeof(SQUEE_FILE_SIGNATURE) - 1, 1, fd);
-    fprintf(fd, "%i", db->number_of_tables);
+    fprintf(fd, "%c%i%c", SQUEE_RECORD_SEPARATOR, db->number_of_tables, SQUEE_RECORD_SEPARATOR);
 
     Table *tbl = db->table->next;
     while (SQUEE_TAIL != tbl->field_t) {
