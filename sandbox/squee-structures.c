@@ -446,19 +446,19 @@ int squee_write_row_to_file(Row *row, FILE *fd) {
         while (SQUEE_TAIL != node->field_t) {
             switch(node->field_t) {
                 case SQUEE_INT:
-                    // fprintf(fd, "%i%c", node->data.i, SQUEE_UNIT_SEPARATOR);
-                    fwrite(&node->data.i, sizeof(node->data.i), 1, fd);
-                    fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
+                    fprintf(fd, "%i%c", node->data.i, SQUEE_UNIT_SEPARATOR);
+                    // fwrite(&node->data.i, sizeof(node->data.i), 1, fd);
+                    // fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_FLOAT:
-                    // fprintf(fd, "%f%c", node->data.f, SQUEE_UNIT_SEPARATOR);
-                    fwrite(&node->data.f, sizeof(node->data.f), 1, fd);
-                    fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
+                    fprintf(fd, "%f%c", node->data.f, SQUEE_UNIT_SEPARATOR);
+                    // fwrite(&node->data.f, sizeof(node->data.f), 1, fd);
+                    // fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_STRING:
-                    // fprintf(fd, "%s%c", node->data.s, SQUEE_UNIT_SEPARATOR);
-                    fwrite(&node->data.s, sizeof(node->data.s), 1, fd);
-                    fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
+                    fprintf(fd, "%s%c", node->data.s, SQUEE_UNIT_SEPARATOR);
+                    // fwrite(&node->data.s, sizeof(node->data.s), 1, fd);
+                    // fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_DATE:
                     break;
@@ -527,7 +527,7 @@ int squee_write_database_to_file(char *file, Database *db) {
 
     // fprintf(fd, SQUEE_FILE_SIGNATURE);
     fwrite(SQUEE_FILE_SIGNATURE, sizeof(SQUEE_FILE_SIGNATURE) - 1, 1, fd);
-    fwrite(&db->number_of_tables, sizeof(db->number_of_tables), 1, fd);
+    fprintf(fd, "%i", db->number_of_tables);
 
     Table *tbl = db->table->next;
     while (SQUEE_TAIL != tbl->field_t) {
