@@ -526,7 +526,7 @@ int squee_write_database_to_file(char *file, Database *db) {
     }
 
     fwrite(SQUEE_FILE_SIGNATURE, sizeof(SQUEE_FILE_SIGNATURE) - 1, 1, fd);
-    fprintf(fd, "%c%i%c", SQUEE_RECORD_SEPARATOR, db->number_of_tables, SQUEE_RECORD_SEPARATOR);
+    fprintf(fd, "%c%i%c", SQUEE_UNIT_SEPARATOR, db->number_of_tables, SQUEE_UNIT_SEPARATOR);
 
     Table *tbl = db->table->next;
     while (SQUEE_TAIL != tbl->field_t) {
@@ -545,11 +545,13 @@ int squee_write_database_to_file(char *file, Database *db) {
 
 Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
     Table *table = (Table*) malloc(sizeof(Table));
-/*
-    char *start = pbuffer;
-    while (*pbuffer != SQUEE_UNIT_SEPARATOR)
-        pbuffer++;
 
+    char *start = *pbuffer;
+
+    while (**pbuffer != SQUEE_UNIT_SEPARATOR)
+        (*pbuffer)++;
+
+/*
     len = pbuffer - start;
     table->name = (char*)malloc(len + 1);
     strncpy(table->name, start, len);
@@ -590,7 +592,9 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
         // Last line
         pbuffer++;      // Skip RECORD_SEPARATOR
     }
+*/
 
+    /*
     // Read Table Name
     pbuffer += magic_len;
 
@@ -649,19 +653,20 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
       squee_append_row(table->name, db, row);
       squee_print_row(row);
     } // END Row Loop
-*/
+    */
     return table;
 }
 
 Database* squee_read_database_from_file(char *file) {
-    int type = 0;
+    int type, num_tables = 0;
     char *endptr = NULL;
-    char *buffer;
+    char *buffer; // pointer to read entire file into memory
+    char *pbuffer = NULL; // pointer to current working character
     char *tok, *col, *type_s, *prev;
+    const char *magic = SQUEE_FILE_SIGNATURE;
 
     size_t len;
     char value_str[256];
-    char *pbuffer = NULL;
 
     FILE *fd = fopen(file, "rb");
     Database *db = squee_new_empty_database();
@@ -669,9 +674,6 @@ Database* squee_read_database_from_file(char *file) {
     if (NULL == fd) {
         return(db);
     }
-
-    // TODO, we need to read ahead to even see if we need a header
-    // Header *header = db->table->header;
 
     fseek(fd, 0, SEEK_END);
     long filesize = ftell(fd);
@@ -688,24 +690,37 @@ Database* squee_read_database_from_file(char *file) {
     fclose(fd);
 
     pbuffer = buffer;
-    const char *magic = SQUEE_FILE_SIGNATURE;
     size_t magic_len = strlen(magic);
     
     if (strncmp(pbuffer, magic, magic_len) != 0) {
         free(buffer);
         return(db);
     }
-    
+
     printf("squee_read_db(): ");
-    while (pbuffer != SQUEE_END_HEADER) {
-        printf("[%i] ", (int)pbuffer);
+
+    int c = 0;
+    while (SQUEE_UNIT_SEPARATOR != *pbuffer) {
+        printf("[%c] \n", (char)*pbuffer);
         pbuffer++;
+        c++;
     }
     printf("\n");
 
+    pbuffer++;
+    num_tables = (int)*pbuffer - 48;
+    printf("number of tables [%i] \n", num_tables);
+    
+    for (int i = 0; i < num_tables; i++) {
+        printf("read_table() [%i] \n", i);
+        squee_read_table_from_file(&buffer, &pbuffer);
+        // TODO APPEND TABLE TO DATABASE
+    }
+
+    exit(0);
+
     // TODO Loop through tables and read them all
     // 1st just print out the Table Names
-    // squee_read_table_from_file()
     return db;
 }
  
