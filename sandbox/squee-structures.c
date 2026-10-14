@@ -547,16 +547,23 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
     Table *table = (Table*) malloc(sizeof(Table));
 
     char *start = *pbuffer;
-    while (**pbuffer != SQUEE_UNIT_SEPARATOR)
+    while (**pbuffer != SQUEE_UNIT_SEPARATOR) {
         // printf("[%c] \n", (char)*pbuffer);
         (*pbuffer)++;
+    }
+
+    printf("start:  %p\n", (void *)start);
+    printf("cursor: %p\n", (void *)*pbuffer);
+    printf("start string: %.20s\n", start);
+    printf("current char: %d\n", (unsigned char)**pbuffer);
 
     size_t len = *pbuffer - start;
     table->name = (char*)malloc(len + 1);
     strncpy(table->name, start, len);
     table->name[len] = '\0';
     pbuffer++;      // Skip UNIT_SEPARATOR
-    printf("read table name [%s] \n", table->name);
+    printf("read table start [%s] [%i] \n", start, len);
+    printf("read table name [%s] [%i] \n", table->name, len);
 
 /*
     len = pbuffer - start;
@@ -717,6 +724,7 @@ Database* squee_read_database_from_file(char *file) {
     pbuffer++;
     num_tables = (int)*pbuffer - 48;
     printf("number of tables [%i] \n", num_tables);
+    pbuffer = pbuffer + 2; // skip past the number and delimiter
     
     for (int i = 0; i < num_tables; i++) {
         printf("read_table() [%i] \n", i);
