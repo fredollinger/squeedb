@@ -547,9 +547,16 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
     Table *table = (Table*) malloc(sizeof(Table));
 
     char *start = *pbuffer;
-
     while (**pbuffer != SQUEE_UNIT_SEPARATOR)
+        // printf("[%c] \n", (char)*pbuffer);
         (*pbuffer)++;
+
+    size_t len = *pbuffer - start;
+    table->name = (char*)malloc(len + 1);
+    strncpy(table->name, start, len);
+    table->name[len] = '\0';
+    pbuffer++;      // Skip UNIT_SEPARATOR
+    printf("read table name [%s] \n", table->name);
 
 /*
     len = pbuffer - start;
