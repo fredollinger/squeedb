@@ -548,7 +548,6 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
 
     char *start = *pbuffer;
     while (**pbuffer != SQUEE_UNIT_SEPARATOR) {
-        // printf("[%c] \n", (char)*pbuffer);
         (*pbuffer)++;
     }
 
@@ -561,22 +560,125 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
     table->name = (char*)malloc(len + 1);
     strncpy(table->name, start, len);
     table->name[len] = '\0';
-    pbuffer++;      // Skip UNIT_SEPARATOR
-    printf("read table start [%s] [%i] \n", start, len);
-    printf("read table name [%s] [%i] \n", table->name, len);
+    (*pbuffer)++;      // Skip UNIT_SEPARATOR
+    int num_rows = (int)**pbuffer - 48;
+    printf("read table start [%s] [%zu] \n", start, len);
+    printf("read table name [%s] [%zu] \n", table->name, len);
+    printf("number of rows [%i] \n", num_rows);
 
-/*
-    len = pbuffer - start;
-    table->name = (char*)malloc(len + 1);
-    strncpy(table->name, start, len);
-    pbuffer++;      // Skip UNIT_SEPARATOR
-
-    Header *header = squee_new_empty_header();
-    // FKO TODO REMOVE
-    // ALSO need to return NULL if there is no header
+    // Read the header
+    table->header = squee_new_empty_header();
 
     // Read Header
     while (**pbuffer != SQUEE_END_HEADER) {
+        // Read field name
+        start = *pbuffer;
+    
+        while (**pbuffer != SQUEE_UNIT_SEPARATOR)
+            (*pbuffer)++;
+    
+        len = *pbuffer - start;
+        char field_name[256];
+        memcpy(field_name, start, len);
+        field_name[len] = '\0';
+
+        (*pbuffer)++;
+
+        start = *pbuffer;
+        while (**pbuffer != SQUEE_RECORD_SEPARATOR)
+            (*pbuffer)++;
+ 
+        len = *pbuffer - start;
+    
+        char type_str[16];
+        memcpy(type_str, start, len);
+        type_str[len] = '\0';
+        int field_type = atoi(type_str);
+
+        table->header = squee_header_add_column(table->header, field_name, field_type);
+   
+        (*pbuffer)++;
+    } // END READ HEADER
+
+    // TODO READ TABLE
+    if (0 == num_rows) {
+        printf("zero rows, returning [%i] \n", num_rows);
+        return table;
+    }
+/*
+// Delimiters
+#define SQUEE_UNIT_SEPARATOR    0x1F
+#define SQUEE_RECORD_SEPARATOR  0x1E // 30
+#define SQUEE_UNIT_SEPARATOR    0x1F // 31
+#define SQUEE_START_HEADER      0x02
+#define SQUEE_END_HEADER        0x03
+#define SQUEE_START_ROW         0x04
+#define SQUEE_END_ROW           0x05
+#define SQUEE_END_FILE          0x06
+*/
+
+    // Read Row
+    // printf("READ ROW \n");
+    // while (SQUEE_END_ROW != **pbuffer) {
+        // printf("%u\n", (unsigned char)**pbuffer);
+/*
+        if (SQUEE_RECORD_SEPARATOR == *pbuffer) {
+            break;
+        }
+        Header *hdr_p = header;
+        Row *row = (Row*)malloc(sizeof(Row*));
+        row->next_row_node = squee_new_empty_row_node_list();
+
+        while (SQUEE_TAIL != hdr_p->field_t) {
+            // Skip Header
+            if (SQUEE_HEAD == hdr_p->field_t) {
+                hdr_p = hdr_p->next;
+                continue;
+            }
+    
+            start = pbuffer;
+            // END OF FILE [3] [4] [5] [6] 
+            while (*pbuffer != SQUEE_UNIT_SEPARATOR) {
+                if (SQUEE_END_FILE == *pbuffer) return db;
+                pbuffer++;
+            }
+    
+            len = pbuffer - start;
+            RowNode *node = (RowNode*)malloc(sizeof(RowNode));
+            memcpy(value_str, start, len);
+            value_str[len] = '\0';
+
+            switch(hdr_p->field_t) {
+                case SQUEE_INT:
+                    node->field_t = SQUEE_INT;
+                    node->data.i = (int)strtol(value_str, NULL, 10);
+                    break;
+                case SQUEE_FLOAT:
+                    node->field_t = SQUEE_FLOAT;
+                    node->data.f = strtof(value_str, NULL);
+                    break;
+                case SQUEE_STRING:
+                    node->data.s = (char*)malloc(len + 1);
+                    memcpy(node->data.s, start, len);
+                    node->field_t = SQUEE_STRING;
+                    break;
+                case SQUEE_DATE:
+                case SQUEE_HEAD:
+                case SQUEE_TAIL:
+                default:
+                    break;
+            }
+            squee_append_row_node(row, node);
+*/
+            // (*pbuffer)++;
+            // hdr_p = hdr_p->next;
+      // } // END Row Node Loop
+      // squee_append_row(table->name, db, row);
+      // squee_print_row(row);
+
+    return table;
+}
+    /*
         // Read field name
         char *start = pbuffer;
     
@@ -606,7 +708,7 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
         // Last line
         pbuffer++;      // Skip RECORD_SEPARATOR
     }
-*/
+    */
 
     /*
     // Read Table Name
@@ -668,8 +770,6 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
       squee_print_row(row);
     } // END Row Loop
     */
-    return table;
-}
 
 Database* squee_read_database_from_file(char *file) {
     int type, num_tables = 0;
@@ -726,9 +826,12 @@ Database* squee_read_database_from_file(char *file) {
     printf("number of tables [%i] \n", num_tables);
     pbuffer = pbuffer + 2; // skip past the number and delimiter
     
+    Table *table;
     for (int i = 0; i < num_tables; i++) {
         printf("read_table() [%i] \n", i);
-        squee_read_table_from_file(&buffer, &pbuffer);
+        table = squee_read_table_from_file(&buffer, &pbuffer);
+        printf("TABLE: \n");
+        squee_print_table(table);
         // TODO APPEND TABLE TO DATABASE
     }
 
