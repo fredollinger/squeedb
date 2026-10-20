@@ -132,10 +132,10 @@ void test_squee_header_add_column() {
     // each call of squee_header_add_column()
     Header *head = header;
 
-    header = squee_header_add_column(header, "First Name", 2);
-    header = squee_header_add_column(header, "Last Name", 2);
-    header = squee_header_add_column(header, "Age", 0);
-    header = squee_header_add_column(header, "Hourly Rate", 1);
+    squee_header_add_column(header, "First Name", 2);
+    squee_header_add_column(header, "Last Name", 2);
+    squee_header_add_column(header, "Age", 0);
+    squee_header_add_column(header, "Hourly Rate", 1);
 
     // Start testing
     assert (SQUEE_HEAD == head->field_t);
