@@ -81,7 +81,7 @@ Table* squee_get_table_by_name(char *table_name, Database *db);
 
 // Header Functions
 Header* squee_new_empty_header();
-Header* squee_header_add_column(Header *last, char *header_name, int field_type);
+void squee_header_add_column(Header *last, char *header_name, int field_type);
 Header* squee_new_header_with_columns(int begin, int end, char* cols[]);
 
 // Row and Row Node Functions

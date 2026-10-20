@@ -28,14 +28,13 @@ Header* squee_new_empty_header() {
     return head;
 }
 
-Header* squee_header_add_column(Header *last, char *header_name, int field_type) {
+void squee_header_add_column(Header *last, char *header_name, int field_type) {
     Header *neu = (Header*)malloc(sizeof(Header));
     neu->field_name = (char*)malloc(strlen(header_name) + 1);
     neu->field_t = field_type;
     strcpy(neu->field_name, header_name);
     neu->next = last->next;
     last->next = neu;
-    return neu;
 }
 
 int squee_get_field_int(char *type) {
@@ -417,13 +416,15 @@ void squee_print_field_type(Field_t field_t) {
 
 void squee_print_header(Header *hdr) {
     Header *hdr_p = hdr;
+    int c = 0;
     while (NULL != hdr_p) {
         if (SQUEE_TAIL != hdr_p->field_t && SQUEE_HEAD != hdr_p->field_t) {
-            printf("squee_print_header(): Field Name: %s Field Type: %i ", hdr_p->field_name, hdr_p->field_t);
+            printf("squee_print_header(): %i Field Name: [%s] Field Type: [%i] \n", c, hdr_p->field_name, hdr_p->field_t);
             squee_print_field_type(hdr_p->field_t);
             printf("\n");
         }
         hdr_p = hdr_p->next;
+        c++;
     }
 }
 
@@ -643,6 +644,7 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
     printf("read table start [%s] [%zu] \n", start, len);
     printf("read table name [%s] [%zu] \n", table->name, len);
     printf("number of rows [%i] \n", num_rows);
+    (*pbuffer) = (*pbuffer) + 2;      // Skip past num_rows
 
     // Read the header
     table->header = squee_new_empty_header();
@@ -673,7 +675,8 @@ Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
         type_str[len] = '\0';
         int field_type = atoi(type_str);
 
-        table->header = squee_header_add_column(table->header, field_name, field_type);
+        printf("squee_read_table_from_file() adding header [%s] \n", field_name);
+        squee_header_add_column(table->header, field_name, field_type);
    
         (*pbuffer)++;
     } // END READ HEADER
