@@ -557,19 +557,63 @@ int squee_write_database_to_file(char *file, Database *db) {
 #define SQUEE_END_FILE          0x06
 */
 
-void squee_read_row(Table *table, char **pbuffer) {
-
+Row* squee_read_row(Table *table, char **pbuffer) {
     // Read Row
-    printf("READ ROW \n");
+    char value_str[256];
+    size_t len;
+    Row *row = (Row*)malloc(sizeof(Row));
+    row->next_row_node = squee_new_empty_row_node_list();
+
+    printf("READ ROW %u\n", (unsigned char)**pbuffer);
+
+    while (SQUEE_END_ROW != **pbuffer) {
+        (*pbuffer)++;
+    }
+
+    if (SQUEE_RECORD_SEPARATOR == **pbuffer) {
+        printf("squee_read_row() END OF RECORD \n");
+        return row;
+    }
+
+    Header *hdr_p = table->header;
+    char *start = *pbuffer;
+    // size_t len = pbuffer - start;
+
+    while (SQUEE_TAIL != hdr_p->field_t) {
+        // Skip Header
+        if (SQUEE_HEAD == hdr_p->field_t) {
+            hdr_p = hdr_p->next;
+            continue;
+        }
+        printf("squee_read_row HEADER [%s] \n", hdr_p->field_name);
+
+        start = *pbuffer;
+        // END OF FILE [3] [4] [5] [6] 
+         while (**pbuffer != SQUEE_UNIT_SEPARATOR) {
+            if (SQUEE_END_FILE == **pbuffer) return row;
+            (*pbuffer)++;
+         }
+    
+         len = *pbuffer - start;
+         RowNode *node = (RowNode*)malloc(sizeof(RowNode));
+         memcpy(value_str, start, len);
+         value_str[len] = '\0';
+
+        // TODO ADD SWITCH HERE
+
+        (*pbuffer)++;
+        hdr_p = hdr_p->next;
+     }
+     return row;
+}
+ 
+
 /*
     while (SQUEE_END_ROW != **pbuffer) {
         printf("%u\n", (unsigned char)**pbuffer);
     }
 */
 /*
-        if (SQUEE_RECORD_SEPARATOR == *pbuffer) {
-            break;
-        }
         Header *hdr_p = header;
         Row *row = (Row*)malloc(sizeof(Row*));
         row->next_row_node = squee_new_empty_row_node_list();
@@ -620,7 +664,6 @@ void squee_read_row(Table *table, char **pbuffer) {
       // } // END Row Node Loop
       // squee_append_row(table->name, db, row);
       // squee_print_row(row);
-}
 
 Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
     Table *table = (Table*) malloc(sizeof(Table));
