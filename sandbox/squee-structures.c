@@ -283,7 +283,12 @@ Database* squee_new_empty_database() {
 void squee_print_table(Table *table) {
     Table *curr = table;
     printf("\n");
+    // printf("print_table() TABLE name [%s] \n", curr->name);
     while (NULL != curr) {
+        if (SQUEE_HEAD == curr->field_t) {
+            curr = curr->next;
+            continue;
+        }
         printf("print_table() TABLE name [%s] type [%i] row id [%i] \n", curr->name, curr->field_t, curr->row_id);
         curr = curr->next;
     }
@@ -599,7 +604,27 @@ Row* squee_read_row(Table *table, char **pbuffer) {
          memcpy(value_str, start, len);
          value_str[len] = '\0';
 
-        // TODO ADD SWITCH HERE
+          switch(hdr_p->field_t) {
+              case SQUEE_INT:
+                node->field_t = SQUEE_INT;
+                  node->data.i = (int)strtol(value_str, NULL, 10);
+                  break;
+              case SQUEE_FLOAT:
+                  node->field_t = SQUEE_FLOAT;
+                  node->data.f = strtof(value_str, NULL);
+                  break;
+              case SQUEE_STRING:
+                  node->data.s = (char*)malloc(len + 1);
+                  memcpy(node->data.s, start, len);
+                  node->field_t = SQUEE_STRING;
+                  break;
+              case SQUEE_DATE:
+              case SQUEE_HEAD:
+              case SQUEE_TAIL:
+              default:
+                  break;
+          }
+          squee_append_row_node(row, node);
 
         (*pbuffer)++;
         hdr_p = hdr_p->next;
@@ -658,6 +683,7 @@ Row* squee_read_row(Table *table, char **pbuffer) {
                     break;
             }
             squee_append_row_node(row, node);
+
 */
             // (*pbuffer)++;
             // hdr_p = hdr_p->next;
