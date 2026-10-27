@@ -91,6 +91,9 @@ Row* squee_new_empty_row_list();
 Row* squee_create_row(Header *header, char* cols[], int len);
 // Given a table, append a row onto it
 Row* squee_append_row(char *table_name, Database *db, Row *row);
+
+// Given a table, append a row to it
+Row* squee_append_row_to_table(Table *table, Row *row);
 // Create an empty row node
 RowNode* squee_new_empty_row_node_list();
 // Given a row, append a row node onto it
