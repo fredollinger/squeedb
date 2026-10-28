@@ -936,13 +936,9 @@ Database* squee_read_database_from_file(char *file) {
         table = squee_read_table_from_file(&buffer, &pbuffer);
         printf("TABLE: \n");
         squee_print_table(table);
-        // TODO APPEND TABLE TO DATABASE
+        squee_append_table(db, table);
     }
 
-    exit(0);
-
-    // TODO Loop through tables and read them all
-    // 1st just print out the Table Names
     return db;
 }
  

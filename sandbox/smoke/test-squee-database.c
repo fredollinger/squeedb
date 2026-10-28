@@ -24,4 +24,6 @@ int main() {
     squee_append_row("Employees", db, row);
     squee_write_database_to_file("smoke.db", db);
     db = squee_read_database_from_file("smoke.db");
+    squee_write_database_to_file("smoke2.db", db);
 }
+
