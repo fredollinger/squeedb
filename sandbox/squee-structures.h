@@ -73,7 +73,7 @@ typedef struct Database {
 Database* squee_new_empty_database();
 
 // Table Functions
-Table* squee_new_empty_table();
+Table* squee_new_empty_table_list();
 Header* squee_create_header_with_columns(int num_cols, char* col_names[], char *datatypes[]);
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]);
 bool squee_append_table(Database *db, Table *table);

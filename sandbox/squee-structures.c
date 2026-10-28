@@ -91,7 +91,7 @@ Header* squee_new_header_with_columns(int begin, int end, char* cols[]) {
 }
 
 // Table Methods
-Table* squee_new_empty_table() {
+Table* squee_new_empty_table_list() {
     Table *head = (Table*) malloc(sizeof(Table));
     head->field_t = SQUEE_HEAD;
     head->row_id = -1;
@@ -107,17 +107,13 @@ Table* squee_new_empty_table() {
     return head;
 }
 
-Row * squee_new_empty_row() {
-    // TODO
-}
-
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]) {
     Table *table = (Table*) malloc(sizeof(Table));
     table->name = strdup(name);
     table->header = squee_create_header_with_columns(num_cols, col_names, datatypes);
     table->field_t = SQUEE_DATA;
     // FKO TODO NEED TO MAKE A squee_new_empty_row instead of this
-    table->row = squee_new_empty_row_ list();
+    table->row = squee_new_empty_row_list();
     return table;
 }
 
@@ -229,7 +225,6 @@ RowNode* squee_new_empty_row_node_list() {
 }
 
 Row* squee_new_empty_row_list() {
-
     // Create empty row list
     Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
@@ -291,7 +286,7 @@ Row* squee_append_row_to_table(Table *table, Row *row) {
 
 Database* squee_new_empty_database() {
     Database *db = (Database*) malloc(sizeof(Database));
-    db->table = squee_new_empty_table();
+    db->table = squee_new_empty_table_list();
     db->number_of_tables = 0;
     return db;
 }
@@ -713,7 +708,8 @@ Row* squee_read_row(Table *table, char **pbuffer) {
       // squee_print_row(row);
 
 Table* squee_read_table_from_file (char **buffer, char **pbuffer) {
-    Table *table = squee_new_empty_table();
+    Table *table = (Table*)malloc(sizeof(Table));
+    table->row = squee_new_empty_row_list();
 
     char *start = *pbuffer;
     while (**pbuffer != SQUEE_UNIT_SEPARATOR) {
