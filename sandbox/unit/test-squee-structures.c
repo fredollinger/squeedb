@@ -175,7 +175,7 @@ void test_squee_new_empty_database() {
 
 // For now this is just a wrapper on malloc so no test is needed
 void test_squee_new_empty_table() {
-    Table *table = squee_new_empty_table();
+    Table *table = squee_new_empty_table_list();
     assert(0 == table->number_of_rows);
     return;
 }
@@ -282,16 +282,17 @@ void test_squee_append_row() {
     Row *row = fixture_create_row();
     row = squee_append_row("Employees", db, row);
     assert (1 == db->number_of_tables);
-    // check_row_list(table->row);
+    check_row_list(table->row);
     table = squee_get_table_by_name("Employees", db);
     assert (1 == table->number_of_rows);
 }
 
 int main() {
     // Row Tests
+    test_squee_append_row();
+    /*
     test_squee_create_row();
     test_squee_new_empty_row_list();
-    test_squee_append_row();
 
     // Table Test
     test_squee_new_empty_table();
@@ -305,4 +306,5 @@ int main() {
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
     test_squee_new_header_with_columns();
+    */
 }

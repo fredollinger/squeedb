@@ -304,6 +304,7 @@ void squee_print_table(Table *table) {
             continue;
         }
         printf("print_table() TABLE name [%s] type [%i] row id [%i] \n", curr->name, curr->field_t, curr->row_id);
+        squee_print_rows(table->row);
         curr = curr->next;
     }
     return;
@@ -607,45 +608,49 @@ Row* squee_read_row(Table *table, char **pbuffer) {
 
         start = *pbuffer;
         // END OF FILE [3] [4] [5] [6] 
-         while (**pbuffer != SQUEE_UNIT_SEPARATOR) {
+        while (**pbuffer != SQUEE_UNIT_SEPARATOR) {
             if (SQUEE_END_FILE == **pbuffer) return row;
             (*pbuffer)++;
-         }
+        }
     
-         len = *pbuffer - start;
-         RowNode *node = (RowNode*)malloc(sizeof(RowNode));
-         memcpy(value_str, start, len);
-         value_str[len] = '\0';
+        len = *pbuffer - start;
+        RowNode *node = (RowNode*)malloc(sizeof(RowNode));
+        memcpy(value_str, start, len);
+        value_str[len] = '\0';
 
-         switch(hdr_p->field_t) {
-             case SQUEE_INT:
-                 node->field_t = SQUEE_INT;
-                 node->data.i = (int)strtol(value_str, NULL, 10);
-                 printf("squee_read_row INT [%i] \n", node->data.i);
-                 break;
-             case SQUEE_FLOAT:
-                 node->field_t = SQUEE_FLOAT;
-                 node->data.f = strtof(value_str, NULL);
-                 printf("squee_read_row INT [%f] \n", node->data.f);
-                 break;
-             case SQUEE_STRING:
-                 node->data.s = (char*)malloc(len + 1);
-                 memcpy(node->data.s, start, len);
-                 printf("squee_read_row STRING [%s] \n", node->data.s);
-                 node->field_t = SQUEE_STRING;
-                 break;
-             case SQUEE_DATE:
-             case SQUEE_HEAD:
-             case SQUEE_TAIL:
-             default:
-                 break;
-          }
-          squee_append_row_node(row, node);
+        switch(hdr_p->field_t) {
+            case SQUEE_INT:
+                node->field_t = SQUEE_INT;
+                node->data.i = (int)strtol(value_str, NULL, 10);
+                printf("squee_read_row INT [%i] \n", node->data.i);
+                break;
+            case SQUEE_FLOAT:
+                node->field_t = SQUEE_FLOAT;
+                node->data.f = strtof(value_str, NULL);
+                printf("squee_read_row INT [%f] \n", node->data.f);
+                break;
+            case SQUEE_STRING:
+                node->data.s = (char*)malloc(len + 1);
+                memcpy(node->data.s, start, len);
+                printf("squee_read_row STRING [%s] \n", node->data.s);
+                node->field_t = SQUEE_STRING;
+                break;
+            case SQUEE_DATE:
+            case SQUEE_HEAD:
+            case SQUEE_TAIL:
+            default:
+                break;
+        }
+        squee_append_row_node(row, node);
+        printf("==============  BEGIN squee_read_row() \n");
+        squee_print_row(row);
+        printf("=============== END squee_read_row() \n");
 
-          (*pbuffer)++;
-          hdr_p = hdr_p->next;
-     }
-     return row;
+        (*pbuffer)++;
+        hdr_p = hdr_p->next;
+    }
+    
+    return row;
 }
  
 
