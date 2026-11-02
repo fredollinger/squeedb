@@ -111,5 +111,7 @@ void squee_print_delimiter(int);
 // IO
 Database* squee_read_database_from_file(char *file);
 int squee_write_database_to_file(char *file, Database *db);
+// IO Methods for Testing
+int squee_write_single_row_to_file(Row *row, FILE *fd);
 
 #endif
