@@ -7,17 +7,17 @@
 int main() {
 	char *cols_names[] = {"First Name", "Last Name", "Age", "Hourly Rate"};
 	char *datatypes[] = {"CHAR", "CHAR", "INT", "FLOAT"};
-	char *cols_data[] = {"John", "Doe", "42", "4.25"};
-	char *cols_data2[] = {"John", "Doe", "42", "4.25"};
+	char *cols_data[] = {"John", "Doe", "42", "20.20"};
+	char *cols_data2[] = {"Robert", "Cratchet", "25", "1.25"};
     Database *db = squee_new_empty_database();
 
     Table *table2 = squee_create_table("Employees2", 4, cols_names, datatypes);
     squee_append_table(db, table2);
 
     Table *table = squee_create_table("Employees", 4, cols_names, datatypes);
-    squee_print_table(db->table);
+    // squee_print_table(db->table);
     squee_append_table(db, table);
-    squee_print_table(db->table);
+    // squee_print_table(db->table);
 
     Row *row = squee_create_row(table->header, cols_data, 4);
     squee_append_row("Employees", db, row);
