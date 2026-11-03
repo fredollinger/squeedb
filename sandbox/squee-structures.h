@@ -54,7 +54,7 @@ typedef struct Header {
 typedef struct Table {
     char *name;
     Header *header;
-    Row *row; // Next Row to insert behind
+    Row *row_list;
     Field_t field_t;
     struct Table *next;
     int number_of_rows;

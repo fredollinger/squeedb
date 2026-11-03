@@ -56,3 +56,9 @@ smoke: smoke/test-squee-database
 lib:
 	clang -Wall -Wextra -g -fPIC -c squee-structures.c -o squee-structures.o
 	clang -shared -o libsquee.so squee-structures.o
+
+smoke/test-save-row: squee-structures.o force
+	${CC} -g -I. $@.c squee-structures.o -o $@
+
+test-save-row: smoke/test-save-row
+	./smoke/test-save-row

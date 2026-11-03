@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     printf("Reading database: [%s] \n", argv[1]);
 
     Database *db = squee_read_database_from_file(argv[1]);
-    squee_print_rows(db->table->row);
+    squee_print_rows(db->table->row_list);
     // tests to see if we can write the db back in the same way that we had read it
     squee_write_database_to_file("file2.db", db);
 

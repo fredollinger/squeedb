@@ -113,7 +113,7 @@ Table* squee_create_table(char *name, int num_cols, char* col_names[], char* dat
     table->header = squee_create_header_with_columns(num_cols, col_names, datatypes);
     table->field_t = SQUEE_DATA;
     // FKO TODO NEED TO MAKE A squee_new_empty_row instead of this
-    table->row = squee_new_empty_row_list();
+    table->row_list = squee_new_empty_row_list();
     return table;
 }
 
@@ -149,7 +149,7 @@ Table* squee_new_table_with_header(char *name, int begin, int end, char* cols[])
     strncpy(tbl->name, name, name_len);
     tbl->header = squee_new_header_with_columns(begin, end, cols);
 
-    tbl->row = squee_new_empty_row_list();
+    tbl->row_list = squee_new_empty_row_list();
     return tbl;
 }
 
@@ -254,7 +254,7 @@ Table* squee_get_table_by_name(char *table_name, Database *db) {
 // Take a new row and add it to the linked list
 Row* squee_append_row(char *table_name, Database *db, Row *row) {
     Table *table = squee_get_table_by_name(table_name, db);
-    Row *prev = table->row;
+    Row *prev = table->row_list;
     while (SQUEE_TAIL != prev->next->field_t) {
         prev = prev->next;
     }
@@ -268,7 +268,7 @@ Row* squee_append_row(char *table_name, Database *db, Row *row) {
 }
 
 Row* squee_append_row_to_table(Table *table, Row *row) {
-    Row *prev = table->row;
+    Row *prev = table->row_list;
     while (SQUEE_TAIL != prev->next->field_t) {
         prev = prev->next;
     }
@@ -303,7 +303,7 @@ void squee_print_table(Table *table) {
             continue;
         }
         printf("print_table() TABLE name [%s] type [%i] row id [%i] \n", curr->name, curr->field_t, curr->row_id);
-        squee_print_rows(table->row);
+        squee_print_rows(table->row_list);
         curr = curr->next;
     }
     return;
@@ -546,10 +546,8 @@ int squee_write_database_to_file(char *file, Database *db) {
 
     Table *tbl = db->table->next;
     while (SQUEE_TAIL != tbl->field_t) {
-        // printf("squee_write_database_to_file [%s] [%i] \n", tbl->name, tbl->field_t);
-        // TODO Check Error code
         squee_write_table_header_to_file(tbl->header, tbl->name, tbl->number_of_rows, fd);
-        squee_write_rows_to_file(tbl->row, fd);
+        squee_write_rows_to_file(tbl->row_list, fd);
         fprintf(fd, "%c", SQUEE_RECORD_SEPARATOR);
         tbl = tbl->next;
     }
@@ -558,19 +556,6 @@ int squee_write_database_to_file(char *file, Database *db) {
     fclose(fd);
     return(0);
 }
-
-
-/*
-// Delimiters
-#define SQUEE_UNIT_SEPARATOR    0x1F
-#define SQUEE_RECORD_SEPARATOR  0x1E // 30
-#define SQUEE_UNIT_SEPARATOR    0x1F // 31
-#define SQUEE_START_HEADER      0x02
-#define SQUEE_END_HEADER        0x03
-#define SQUEE_START_ROW         0x04
-#define SQUEE_END_ROW           0x05
-#define SQUEE_END_FILE          0x06
-*/
 
 Row* squee_read_row(Table *table, char **pbuffer) {
     // Read Row
@@ -650,7 +635,7 @@ Row* squee_read_row(Table *table, char **pbuffer) {
 
 Table* squee_parse_table_from_buffer (char **buffer, char **pbuffer) {
     Table *table = (Table*)malloc(sizeof(Table));
-    table->row = squee_new_empty_row_list();
+    table->row_list = squee_new_empty_row_list();
 
     char *start = *pbuffer;
     while (**pbuffer != SQUEE_UNIT_SEPARATOR) {
