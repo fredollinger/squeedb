@@ -248,23 +248,6 @@ Table* squee_get_table_by_name(char *table_name, Database *db) {
     return NULL;
 }
 
-// TODO NOT DONE FKO
-// Take a new row and add it to the row linked list
-Row* squee_append_row(char *table_name, Database *db, Row *row) {
-    Table *table = squee_get_table_by_name(table_name, db);
-    Row *prev = table->row_list->first_row;
-    while (SQUEE_TAIL != prev->next->field_t) {
-        prev = prev->next;
-    }
-    Row *last = prev->next;
-    prev->next = row;
-    row->next = last;
-    table->row_id = table->row_id + 1;
-    row->id = table->row_id;
-    table->number_of_rows++;
-    return row;
-}
-
 Row* squee_append_row_to_table(Table *table, Row *row) {
     // Special case where the list is empty
     if (SQUEE_TAIL == table->row_list->first_row->field_t) {
@@ -284,6 +267,12 @@ Row* squee_append_row_to_table(Table *table, Row *row) {
     row->id = table->row_id;
     table->number_of_rows++;
     return row;
+}
+
+// Take a new row and add it to the row linked list
+Row* squee_append_row(char *table_name, Database *db, Row *row) {
+    Table *table = squee_get_table_by_name(table_name, db);
+    return squee_append_row_to_table(table, row);
 }
 
 // Database Methods
