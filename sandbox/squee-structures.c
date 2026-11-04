@@ -224,15 +224,13 @@ RowNode* squee_new_empty_row_node_list() {
     return head_row;
 }
 
-Row* squee_new_empty_row_list() {
+RowList* squee_new_empty_row_list() {
     Row *tail_row = (Row*) malloc(sizeof(Row));
     tail_row->field_t = SQUEE_TAIL;
     tail_row->next_row_node = NULL;
-    Row *head_row = (Row*) malloc(sizeof(Row));
-    head_row->field_t = SQUEE_HEAD;
-    head_row->next_row_node = NULL;
-    head_row->next = tail_row;
-    return head_row;
+    RowList *row_list = (RowList*) malloc(sizeof(RowList));
+    row_list->first_row = tail_row;
+    return row_list;
 }
 
 Table* squee_get_table_by_name(char *table_name, Database *db) {
@@ -251,10 +249,10 @@ Table* squee_get_table_by_name(char *table_name, Database *db) {
 }
 
 // TODO NOT DONE FKO
-// Take a new row and add it to the linked list
+// Take a new row and add it to the row linked list
 Row* squee_append_row(char *table_name, Database *db, Row *row) {
     Table *table = squee_get_table_by_name(table_name, db);
-    Row *prev = table->row_list;
+    Row *prev = table->row_list->first_row;
     while (SQUEE_TAIL != prev->next->field_t) {
         prev = prev->next;
     }
@@ -268,7 +266,14 @@ Row* squee_append_row(char *table_name, Database *db, Row *row) {
 }
 
 Row* squee_append_row_to_table(Table *table, Row *row) {
-    Row *prev = table->row_list;
+    // Special case where the list is empty
+    if (SQUEE_TAIL == table->row_list->first_row->field_t) {
+        Row *last = table->row_list->first_row;
+        table->row_list->first_row = row;
+        row->next = last;
+    }
+
+    Row *prev = table->row_list->first_row;
     while (SQUEE_TAIL != prev->next->field_t) {
         prev = prev->next;
     }
@@ -383,10 +388,10 @@ void squee_print_row(Row *row) {
 }
 
 // print all rows
-void squee_print_rows(Row *row) {
+void squee_print_rows(RowList *row_list) {
     printf("print_rows() BEGIN \n");
-    Row *curr = row;
-    if (NULL == row) return;
+    Row *curr = row_list->first_row;
+    // if (NULL == row) return;
     while (SQUEE_TAIL != curr->field_t) {
 
         printf("print_rows() id [%i] type [", curr->id);
@@ -498,12 +503,10 @@ int squee_write_single_row_to_file(Row *row, FILE *fd) {
     return 0;
 }
 
-int squee_write_rows_to_file(Row *row, FILE *fd) {
-    Row *curr = row;
+int squee_write_rows_to_file(RowList *row_list, FILE *fd) {
+    Row *curr = row_list->first_row;
     while(SQUEE_TAIL != curr->field_t) {
-        if (SQUEE_HEAD != curr->field_t) {
-            squee_write_single_row_to_file(curr, fd);
-        }
+        squee_write_single_row_to_file(curr, fd);
         curr = curr->next; 
     }
     return 0;

@@ -27,6 +27,11 @@ typedef enum { SQUEE_INT, SQUEE_FLOAT, SQUEE_STRING, SQUEE_DATE, SQUEE_DATA, SQU
 
 // Data Structures
 
+typedef struct RowList {
+    struct Row *first_row;
+    int id;
+} RowList;
+
 typedef struct Row {
     struct Row *next;
     struct RowNode *next_row_node;
@@ -54,7 +59,7 @@ typedef struct Header {
 typedef struct Table {
     char *name;
     Header *header;
-    Row *row_list;
+    RowList *row_list;
     Field_t field_t;
     struct Table *next;
     int number_of_rows;
@@ -84,8 +89,8 @@ Header* squee_new_empty_header();
 void squee_header_add_column(Header *last, char *header_name, int field_type);
 Header* squee_new_header_with_columns(int begin, int end, char* cols[]);
 
-// Row and Row Node Functions
-Row* squee_new_empty_row_list();
+// Row, RowList, and RowNode Functions
+RowList* squee_new_empty_row_list();
 // Create a new free floating row
 // The header is needed to understand the structure of the row
 Row* squee_create_row(Header *header, char* cols[], int len);
@@ -104,7 +109,7 @@ void squee_print_field_type(Field_t field_t);
 void squee_print_header(Header*);
 void squee_print_table(Table*);
 void squee_print_row(Row *row);
-void squee_print_rows(Row *row);
+void squee_print_rows(RowList *row_list);
 void squee_print_row_node(RowNode *node);
 void squee_print_delimiter(int);
 
