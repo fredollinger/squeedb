@@ -458,16 +458,19 @@ int squee_write_single_row_to_file(Row *row, FILE *fd) {
             switch(node->field_t) {
                 case SQUEE_INT:
                     fprintf(fd, "%i%c", node->data.i, SQUEE_UNIT_SEPARATOR);
+                    printf("%i \n", node->data.i);
                     // fwrite(&node->data.i, sizeof(node->data.i), 1, fd);
                     // fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_FLOAT:
                     fprintf(fd, "%f%c", node->data.f, SQUEE_UNIT_SEPARATOR);
+                    printf("%f \n", node->data.f);
                     // fwrite(&node->data.f, sizeof(node->data.f), 1, fd);
                     // fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_STRING:
                     fprintf(fd, "%s%c", node->data.s, SQUEE_UNIT_SEPARATOR);
+                    printf("%s \n", node->data.s);
                     // fwrite(&node->data.s, sizeof(node->data.s), 1, fd);
                     // fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
