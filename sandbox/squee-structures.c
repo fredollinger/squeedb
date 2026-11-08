@@ -160,7 +160,8 @@ Row* squee_create_row(Header *header, char* cols[], int len) {
     Header *hdr_p = header;
 
     RowNode *curr = (RowNode*)malloc(sizeof(RowNode));
-    curr->field_t = SQUEE_HEAD;
+    // curr->field_t = SQUEE_HEAD;
+    curr->field_t = SQUEE_NULL;
     curr->next = NULL;
     RowNode *head_node = curr;
 
@@ -169,9 +170,11 @@ Row* squee_create_row(Header *header, char* cols[], int len) {
     char *endptr;
 
     // Skip over header
+    /*
     if (hdr_p->field_t == SQUEE_HEAD) {
         hdr_p = hdr_p->next;
     }
+    */
 
     int i = 0;
     for(int i = 0; i < len; i++) {
@@ -192,8 +195,6 @@ Row* squee_create_row(Header *header, char* cols[], int len) {
                 neu->data.s = strdup(cols[i]);
                 break;
             case SQUEE_DATE:
-                break;
-            case SQUEE_HEAD:
                 break;
             case SQUEE_TAIL:
                 break;
@@ -350,9 +351,6 @@ void squee_print_row_node(RowNode *node) {
         case SQUEE_DATE:
             printf("squee_print_row_node(): DATE Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
             break;
-        case SQUEE_HEAD:
-            printf("squee_print_row_node(): HEAD Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
-            break;
         case SQUEE_TAIL:
             printf("squee_print_row_node(): TAIL Type [%i] Data [%i] \n", curr->field_t, curr->data.i);
             break;
@@ -412,9 +410,6 @@ void squee_print_field_type(Field_t field_t) {
         case SQUEE_DATE:
             printf("DATE");
             break;
-        case SQUEE_HEAD:
-            printf("SQUEE_HEAD");
-            break;
         case SQUEE_TAIL:
             printf("SQUEE_TAIL");
             break;
@@ -448,10 +443,12 @@ int squee_write_single_row_to_file(Row *row, FILE *fd) {
     fwrite(&squee_start_of_row, sizeof(squee_start_of_row), 1, fd);
     RowNode *curr = row->next_row_node;
     while (SQUEE_TAIL != curr->field_t) {
+        /*
         if (SQUEE_HEAD == curr->field_t) {
             curr = curr->next;
             continue;
         }
+        */
 
         RowNode *node = curr->next;
         while (SQUEE_TAIL != node->field_t) {
@@ -475,8 +472,6 @@ int squee_write_single_row_to_file(Row *row, FILE *fd) {
                     // fwrite(&squee_unit_separator, sizeof(squee_unit_separator), 1, fd);
                     break;
                 case SQUEE_DATE:
-                    break;
-                case SQUEE_HEAD:
                     break;
                 case SQUEE_TAIL:
                     break;
@@ -574,10 +569,12 @@ Row* squee_read_row(Table *table, char **pbuffer) {
     char *start = *pbuffer;
 
     while (SQUEE_TAIL != hdr_p->field_t) {
+        /*
         if (SQUEE_HEAD == hdr_p->field_t) {
             hdr_p = hdr_p->next;
             continue;
         }
+        */
 
         // printf("squee_read_row HEADER [%s] \n", hdr_p->field_name);
 
@@ -611,7 +608,6 @@ Row* squee_read_row(Table *table, char **pbuffer) {
                 node->field_t = SQUEE_STRING;
                 break;
             case SQUEE_DATE:
-            case SQUEE_HEAD:
             case SQUEE_TAIL:
             default:
                 break;
