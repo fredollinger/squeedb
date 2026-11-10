@@ -55,7 +55,7 @@ void check_row(Row *row) {
     RowNode *node = row->next_row_node;
 
     node = node->next;
-    printf("check_row type [%i] \n", row->field_t);
+    printf("check_row type [%i] == 2 \n", row->field_t);
     assert (SQUEE_STRING == node->field_t);
     printf("check_row 1st [%s] \n", node->data.s);
     assert (0 == strcmp("John", node->data.s));
@@ -287,6 +287,8 @@ void test_squee_append_row() {
 }
 
 int main() {
+    // Header Tests
+    test_squee_new_header_with_columns();
     // Row Tests
     test_squee_append_row();
     /*
@@ -304,6 +306,5 @@ int main() {
     test_squee_new_empty_header();
     test_squee_create_header_with_columns();
     test_squee_header_add_column();
-    test_squee_new_header_with_columns();
     */
 }

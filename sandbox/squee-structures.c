@@ -170,11 +170,9 @@ Row* squee_create_row(Header *header, char* cols[], int len) {
     char *endptr;
 
     // Skip over header
-    /*
     if (hdr_p->field_t == SQUEE_HEAD) {
         hdr_p = hdr_p->next;
     }
-    */
 
     int i = 0;
     for(int i = 0; i < len; i++) {
