@@ -43,10 +43,10 @@ void check_empty_header(Header *header) {
 }
 
 // Ensure an empty Row is correct
-void check_empty_row(Row *row) {
-    assert (SQUEE_HEAD == row->field_t);
-    row = row->next;
+void check_empty_row_list(RowList *row_list) {
+    Row *row = row_list->first_row;
     assert (SQUEE_TAIL == row->field_t);
+    assert (NULL == row->next);
 }
 
 void check_row(Row *row) {
@@ -79,9 +79,8 @@ void check_row(Row *row) {
     assert (SQUEE_TAIL == node->field_t);
 }
 
-void check_row_list(Row *row) {
-    assert (SQUEE_HEAD == row->field_t);
-    Row *curr = row->next;
+void check_row_list(RowList *row_list) {
+    Row *curr = row_list->first_row;
     assert (SQUEE_DATA == curr->field_t);
     check_row(curr);
     curr = curr->next;
@@ -163,8 +162,8 @@ void test_squee_header_add_column() {
 }
 
 void test_squee_new_empty_row_list() {
-    Row *row = squee_new_empty_row_list();
-    check_empty_row(row);
+    RowList *row_list = squee_new_empty_row_list();
+    check_empty_row_list(row_list);
 }
 
 void test_squee_new_empty_database() {
@@ -282,7 +281,7 @@ void test_squee_append_row() {
     Row *row = fixture_create_row();
     row = squee_append_row("Employees", db, row);
     assert (1 == db->number_of_tables);
-    check_row_list(table->row);
+    check_row_list(table->row_list);
     table = squee_get_table_by_name("Employees", db);
     assert (1 == table->number_of_rows);
 }
