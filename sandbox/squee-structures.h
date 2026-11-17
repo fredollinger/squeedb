@@ -119,4 +119,7 @@ int squee_write_database_to_file(char *file, Database *db);
 // IO Methods for Testing
 int squee_write_single_row_to_file(Row *row, FILE *fd);
 
+// Comparison
+bool squee_compare_databases(Database*, Database*);
+
 #endif

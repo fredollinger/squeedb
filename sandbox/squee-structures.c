@@ -777,3 +777,9 @@ void squee_append_row_node(Row *row, RowNode *node) {
     node->next = last;
     return;
 }
+
+// Comparison
+
+bool squee_compare_databases(Database *db, Database *db2) {
+    return true;
+}

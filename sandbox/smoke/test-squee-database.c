@@ -10,6 +10,7 @@ int main() {
 	char *cols_data[] = {"John", "Doe", "42", "20.20"};
 	char *cols_data2[] = {"Robert", "Cratchet", "25", "1.25"};
     Database *db = squee_new_empty_database();
+    Database *db2 = squee_new_empty_database();
 
     Table *table2 = squee_create_table("Employees2", 4, cols_names, datatypes);
     squee_append_table(db, table2);
@@ -26,5 +27,6 @@ int main() {
     squee_write_database_to_file("smoke.db", db);
     db = squee_read_database_from_file("smoke.db");
     squee_write_database_to_file("smoke2.db", db);
+    db2 = squee_read_database_from_file("smoke2.db");
+    squee_compare_databases(db, db2);
 }
-
