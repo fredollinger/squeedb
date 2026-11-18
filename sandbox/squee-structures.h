@@ -66,7 +66,6 @@ typedef struct Table {
     int row_id;
 } Table;
 
-// TODO: How to have more than one table?
 typedef struct Database {
     Table *table; // Head node of a linked list of tables
     int number_of_tables;
@@ -120,6 +119,8 @@ int squee_write_database_to_file(char *file, Database *db);
 int squee_write_single_row_to_file(Row *row, FILE *fd);
 
 // Comparison
+bool squee_compare_headers(Header*, Header*);
+bool squee_compare_tables(Table*, Table*);
 bool squee_compare_databases(Database*, Database*);
 
 #endif

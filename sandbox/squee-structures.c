@@ -780,6 +780,27 @@ void squee_append_row_node(Row *row, RowNode *node) {
 
 // Comparison
 
-bool squee_compare_databases(Database *db, Database *db2) {
+bool squee_compare_headers(Header *header1, Header *header2) {
+    Header *hdr1 = header1;
+    Header *hdr2 = header2;
+    while (NULL != hdr1) {
+        if (0 != strcmp(hdr1->field_name, hdr2->field_name)) {
+            return false;
+        }
+    }
     return true;
+}
+
+bool squee_compare_tables(Table *table1, Table *table2) {
+    if (0 != strcmp(table1->name, table2->name)) {
+        return false;
+    }
+    if (false == squee_compare_headers(table1->header, table2->header)) {
+        return false;
+    }
+    return true;
+}
+
+bool squee_compare_databases(Database *db, Database *db2) {
+    return false;
 }
