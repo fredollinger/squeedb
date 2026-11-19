@@ -15,6 +15,18 @@ Header* fixture_create_header() {
     return header;
 }
 
+Header* fixture_create_header2() {
+	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT"};
+    Header *header = squee_new_header_with_columns(0, 4, cols);
+    return header;
+}
+
+Header* fixture_create_header3() {
+	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Bob", "CHAR"};
+    Header *header = squee_new_header_with_columns(0, 4, cols);
+    return header;
+}
+
 Row* fixture_create_row() {
     Header *header = fixture_create_header();
 	char *cols[] = {"John", "Doe", "42", "4.25"};
@@ -286,8 +298,19 @@ void test_squee_append_row() {
     assert (1 == table->number_of_rows);
 }
 
+void test_squee_compare_headers() {
+    Header *header1 = fixture_create_header();
+    Header *header2 = fixture_create_header2();
+    Header *header3 = fixture_create_header3();
+    assert (false == squee_compare_headers(header1, header2));
+    assert (false == squee_compare_headers(header1, header3));
+    assert (false == squee_compare_headers(header2, header3));
+    assert (true == squee_compare_headers(header2, header2));
+}
+
 int main() {
     // Header Tests
+    test_squee_compare_headers();
     test_squee_new_header_with_columns();
     // Row Tests
     test_squee_append_row();

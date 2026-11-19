@@ -781,12 +781,21 @@ void squee_append_row_node(Row *row, RowNode *node) {
 // Comparison
 
 bool squee_compare_headers(Header *header1, Header *header2) {
-    Header *hdr1 = header1;
-    Header *hdr2 = header2;
+    if (SQUEE_HEAD != header1->field_t || SQUEE_HEAD != header2->field_t) return false;
+    Header *hdr1 = header1->next;
+    Header *hdr2 = header2->next;
     while (NULL != hdr1) {
+        if (NULL == hdr2) {
+            return false;
+        }
         if (0 != strcmp(hdr1->field_name, hdr2->field_name)) {
             return false;
         }
+        if (hdr1->field_t != hdr2->field_t) {
+            return false;
+        }
+        hdr1 = hdr1->next;
+        hdr2 = hdr2->next;
     }
     return true;
 }
