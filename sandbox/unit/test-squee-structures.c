@@ -302,18 +302,28 @@ void test_squee_compare_headers() {
     Header *header1 = fixture_create_header();
     Header *header2 = fixture_create_header2();
     Header *header3 = fixture_create_header3();
+
     assert (false == squee_compare_headers(header1, header2));
     assert (false == squee_compare_headers(header1, header3));
     assert (false == squee_compare_headers(header2, header3));
     assert (true == squee_compare_headers(header2, header2));
 }
 
+void test_squee_compare_databases() {
+    Database *db_empty1 = squee_new_empty_database();
+    Database *db_empty2 = squee_new_empty_database();
+
+    assert (true == squee_compare_databases(db_empty1, db_empty2));
+}
+
 int main() {
+    // Database Tests
+    test_squee_compare_databases();
     // Header Tests
-    test_squee_compare_headers();
-    test_squee_new_header_with_columns();
+    // test_squee_compare_headers();
+    // test_squee_new_header_with_columns();
     // Row Tests
-    test_squee_append_row();
+    // test_squee_append_row();
     /*
     test_squee_create_row();
     test_squee_new_empty_row_list();

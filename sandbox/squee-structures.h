@@ -119,8 +119,8 @@ int squee_write_database_to_file(char *file, Database *db);
 int squee_write_single_row_to_file(Row *row, FILE *fd);
 
 // Comparison
-bool squee_compare_headers(Header*, Header*);
-bool squee_compare_tables(Table*, Table*);
-bool squee_compare_databases(Database*, Database*);
+bool squee_compare_headers(Header *header1, Header *header2);
+bool squee_compare_tables(Table *table1, Table *table2);
+bool squee_compare_databases(Database *db1, Database *db2);
 
 #endif

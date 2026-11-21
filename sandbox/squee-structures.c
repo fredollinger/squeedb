@@ -801,15 +801,32 @@ bool squee_compare_headers(Header *header1, Header *header2) {
 }
 
 bool squee_compare_tables(Table *table1, Table *table2) {
-    if (0 != strcmp(table1->name, table2->name)) {
-        return false;
+    Table *tbl1 = table1;
+    Table *tbl2 = table2;
+
+    while (SQUEE_TAIL != tbl1->field_t) {
+        if (0 != strcmp(tbl1->name, tbl2->name)) {
+            printf("Table names are not the same [%s] [%s] \n", tbl1->name, tbl2->name);
+            return false;
+        }
+        if (!squee_compare_headers(tbl1->header, tbl2->header)) {
+            printf("Headers are not the same \n");
+            return false;
+        }
+        tbl1 = tbl1->next;
+        tbl2 = tbl2->next;
     }
-    if (false == squee_compare_headers(table1->header, table2->header)) {
-        return false;
-    }
+
     return true;
 }
 
-bool squee_compare_databases(Database *db, Database *db2) {
+bool squee_compare_databases(Database *database1, Database *database2) {
+    if (database1->number_of_tables != database2->number_of_tables)  {
+        return false;
+    }
+    if (!squee_compare_tables(database1->table, database2->table)) {
+        printf("Tables are not the same \n");
+        return false;
+    }
     return false;
 }
