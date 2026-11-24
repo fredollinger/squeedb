@@ -781,9 +781,11 @@ void squee_append_row_node(Row *row, RowNode *node) {
 // Comparison
 
 bool squee_compare_headers(Header *header1, Header *header2) {
-    if (SQUEE_HEAD != header1->field_t || SQUEE_HEAD != header2->field_t) return false;
+    if (NULL == header1 && NULL == header2) return true;
     Header *hdr1 = header1->next;
     Header *hdr2 = header2->next;
+    // If both headers are NULL then they are equal
+    if (NULL == hdr1 && NULL == hdr2) return true;
     while (NULL != hdr1) {
         if (NULL == hdr2) {
             return false;
@@ -809,6 +811,7 @@ bool squee_compare_tables(Table *table1, Table *table2) {
             printf("Table names are not the same [%s] [%s] \n", tbl1->name, tbl2->name);
             return false;
         }
+        printf("");
         if (!squee_compare_headers(tbl1->header, tbl2->header)) {
             printf("Headers are not the same \n");
             return false;
