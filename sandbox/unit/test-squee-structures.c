@@ -17,13 +17,13 @@ Header* fixture_create_header() {
 
 Header* fixture_create_header2() {
 	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Age", "INT"};
-    Header *header = squee_new_header_with_columns(0, 4, cols);
+    Header *header = squee_new_header_with_columns(0, 3, cols);
     return header;
 }
 
 Header* fixture_create_header3() {
 	char *cols[] = {"First Name", "CHAR", "Last Name", "CHAR", "Bob", "CHAR"};
-    Header *header = squee_new_header_with_columns(0, 4, cols);
+    Header *header = squee_new_header_with_columns(0, 3, cols);
     return header;
 }
 
@@ -318,9 +318,9 @@ void test_squee_compare_databases() {
 
 int main() {
     // Database Tests
-    test_squee_compare_databases();
+    // test_squee_compare_databases();
     // Header Tests
-    // test_squee_compare_headers();
+    test_squee_compare_headers();
     // test_squee_new_header_with_columns();
     // Row Tests
     // test_squee_append_row();
