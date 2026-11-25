@@ -317,19 +317,21 @@ void test_squee_compare_databases() {
 }
 
 int main() {
+    // Broken Test
+    test_squee_header_add_column();
     // Database Tests
-    // test_squee_compare_databases();
+    test_squee_compare_databases();
     // Header Tests
     test_squee_compare_headers();
-    // test_squee_new_header_with_columns();
+    test_squee_new_header_with_columns();
     // Row Tests
-    // test_squee_append_row();
-    /*
+    test_squee_append_row();
     test_squee_create_row();
     test_squee_new_empty_row_list();
 
     // Table Test
     test_squee_new_empty_table();
+/*
     test_squee_append_table();
 
     // Database Test
@@ -338,6 +340,5 @@ int main() {
     // Header Tests
     test_squee_new_empty_header();
     test_squee_create_header_with_columns();
-    test_squee_header_add_column();
-    */
+*/
 }
