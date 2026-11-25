@@ -107,6 +107,7 @@ Table* squee_new_empty_table_list() {
     return head;
 }
 
+// FKO TODO, no HEAD NOR TAIL?
 Table* squee_create_table(char *name, int num_cols, char* col_names[], char* datatypes[]) {
     Table *table = (Table*) malloc(sizeof(Table));
     table->name = strdup(name);
@@ -831,5 +832,5 @@ bool squee_compare_databases(Database *database1, Database *database2) {
         printf("Tables are not the same \n");
         return false;
     }
-    return false;
+    return true;
 }

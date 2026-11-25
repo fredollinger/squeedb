@@ -47,6 +47,7 @@ smoke/test-squee-database: squee-structures.o force
 	${CC} -g -I. $@.c squee-structures.o -o $@
 
 unit: unit/test-squee-structures
+	# lldb ./unit/test-squee-structures
 	./unit/test-squee-structures
 
 smoke: smoke/test-squee-database
